@@ -24,8 +24,8 @@ class Vector2 {
  * Below the displayed dungeon room will be a map of the entire dungeon,
  * like so:
  *
- * | v> || v><||   <|
- * |^   |@ ^> @|   <|
+ * | v >||<v >||<   |
+ * | ^  |@ ^ >@|<   |
  *
  * |    | indicates a room
  * @    @ indicates the room that you are in
@@ -198,6 +198,10 @@ public class Dungeon {
 		final char[] doorChars = {
 			'^', 'v', '>', '<'
 		};
+		final int[][] dirList = {
+			{3, 0, 1, 2},
+			{3, 1, 0, 2}
+		};
 
 		for (int i = 0; i < m_roomPlanGrid.length; i++) {
 			System.out.print(i);
@@ -207,9 +211,10 @@ public class Dungeon {
 				}
 				else {
 					System.out.print(i == m_currentRoomCoordinates.getX() && j == m_currentRoomCoordinates.getY() ? "@" : "|");
-					for (int k = 0; k < 4; k++) {
-						System.out.print(m_roomPlanGrid[i][j].hasDoorInThe(k) ? doorChars[k] : " ");
-					}
+					
+					for (int k = 0; k < dirList[0].length; k++)
+						System.out.print(m_roomPlanGrid[i][j].hasDoorInThe(dirList[i%2][k]) ? doorChars[dirList[i%2][k]] : " ");
+
 					System.out.print(i == m_currentRoomCoordinates.getX() && j == m_currentRoomCoordinates.getY() ? "@" : "|");
 				}
 			}
