@@ -12,13 +12,38 @@ class Vector2 {
 	public int  getY() { return y; }
 }
 
+/* Dungeon
+ * Author: Sean Rapp
+ *
+ * Run it to generate a full dungeon and explore it.
+ * Move with wasd, but it's buffered input of course,
+ * so really move with <w | a | s | d> , <Enter>
+ * e.g. press w then Enter to move up one cell.
+ * The @@ is you, .. is floor, XX is wall, DD is door, CC is chest.
+ * Two characters are used per cell so that the proportions are retained.
+ * Below the displayed dungeon room will be a map of the entire dungeon,
+ * like so:
+ *
+ * | v> || v><||   <|
+ * |^   |@ ^> @|   <|
+ *
+ * |    | indicates a room
+ * @    @ indicates the room that you are in
+ * ^ in a room indicates that that room contains a door to the northern room,
+ * v in a room indicates that that room contains a door to the southern room,
+ * etc. for <, >.
+ *
+ * You will start out at the southern door of the middle-ish room. Navigate to
+ * a door in the current room to change rooms. The dungeon map will update accordingly.
+ */
+
 public class Dungeon {
 	//private DungeonRoom 		m_currentRoom;
 	private Vector2 			m_currentRoomCoordinates;
 	private DungeonRoomPlan[][] m_roomPlanGrid;
 
 	public static void main(String[] args) {
-		Dungeon d = new Dungeon(4, Theme.CAVE);
+		Dungeon d = new Dungeon(8, Theme.CAVE);
 		d.test();
 	}
 
@@ -122,7 +147,7 @@ public class Dungeon {
 		roomQueue.add(m_currentRoomCoordinates);
 		// Add the door to the Overworld at the South end of the room
 		m_roomPlanGrid[x][y] = new DungeonRoomPlan(Direction.SOUTH, difficulty, theme, false);
-		printPlanGrid();
+
 		while (!roomQueue.isEmpty()) {
 			Vector2 currentRoom = roomQueue.remove();
 
@@ -136,8 +161,11 @@ public class Dungeon {
 
 					// If this room would be off of the grid, skip
 					if (newX < 0 || newX >= m_roomPlanGrid.length ||
-							newY < 0 || newY >= m_roomPlanGrid[0].length)
+							newY < 0 || newY >= m_roomPlanGrid[0].length) {
+							m_roomPlanGrid[currentRoom.getX()][currentRoom.getY()]
+								.removeDoor(i);
 						continue;
+					}
 
 					// If there's already a room there, this door goes to a room that
 					// has already been made, so don't make a new room there.
@@ -153,42 +181,17 @@ public class Dungeon {
 						
 					// Create the new room
 					m_roomPlanGrid[newX][newY] = new DungeonRoomPlan(Direction.opposite(i),
-							difficulty, theme, Math.random() * 100 > 80);
+							difficulty, theme, Math.random() * 5 > 4);
 					// Add it to the queue
 					roomQueue.add(new Vector2(newX, newY));
-
-					// TODO remove
-					printPlanGrid();
 				}
 			}
 		}
 
-		trimOuterDoors();
-	}
-
-	/* trimOuterDoors
-	 * Removes doors from rooms at the edge of the dungeon grid that
-	 * lead beyond the grid, i.e.
-	 *  43
-	 * 12
-	 * 567
-	 *
-	 * An eastern door in room 7 leads beyond the grid, and will be trimmed.
-	 */
-	private void trimOuterDoors() {
-		for (int i = 0; i < m_roomPlanGrid.length; i++) {
-			if (m_roomPlanGrid[0][i] != null)
-				m_roomPlanGrid[0][i].removeDoor(Direction.NORTH);
-			if (m_roomPlanGrid[m_roomPlanGrid.length - 1][i] != null)
-				m_roomPlanGrid[m_roomPlanGrid.length - 1][i].removeDoor(Direction.SOUTH);
-		}
-
-		for (int i = 0; i < m_roomPlanGrid[0].length; i++) {
-			if (m_roomPlanGrid[i][m_roomPlanGrid[0].length - 1] != null)
-				m_roomPlanGrid[i][m_roomPlanGrid[0].length - 1].removeDoor(Direction.EAST);
-			if (m_roomPlanGrid[i][0] != null)
-				m_roomPlanGrid[i][0].removeDoor(Direction.WEST);
-		}
+		// TODO add Exit door (i.e. door that ends the dungeon) and the start door/location
+		// (where the player is put when they enter dungeon from overworld)
+		// Consider distance from the start room when placing deciding which room is
+		// the final room, perhaps make that a boss room?
 	}
 
 	private void printPlanGrid() {

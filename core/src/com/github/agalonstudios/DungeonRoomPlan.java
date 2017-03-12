@@ -3,6 +3,12 @@ import java.util.*;
 import java.io.*;
 
 
+/* DungeonRoomPlan
+ * Author: Sean Rapp
+ *
+ * Run it to see a generated room.
+ */
+
 public class DungeonRoomPlan {
 	public DungeonRoomPlanItem[][] grid;
 	private int[][] doors;
@@ -73,8 +79,7 @@ public class DungeonRoomPlan {
 	
 		placeWalls(difficulty, theme, open);
 		placeDoors(difficulty, theme, dir);
-		placeEnemySpawnPoints(difficulty, theme);
-		placeChests(difficulty, theme);
+		placeEnemySpawnPointsAndChests(difficulty, theme);
 	}
 
 	private void allocateGrid(int difficulty, Theme theme) {
@@ -109,8 +114,6 @@ public class DungeonRoomPlan {
 			grid[grid.length - 1][i] = WallItem.getInstance();
 			grid[i][grid[0].length - 1] = WallItem.getInstance();
 		}
-
-
 
 		fillSmallRegions();
 	}
@@ -149,8 +152,6 @@ public class DungeonRoomPlan {
 		// Label grid
 		int[][] labelGrid = new int[grid.length][grid[0].length];
 		// used for adding coords to queue <huge meme>
-
-
 
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[0].length; j++) {
@@ -193,16 +194,12 @@ public class DungeonRoomPlan {
 			}
 		}
 
-		print();
-		System.out.println();
-
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[0].length; j++) {
 				if (labelGrid[i][j] != maxLabel)
 					grid[i][j] = WallItem.getInstance();
 			}
 		}
-
 	}
 
 	private void populateRandomly(boolean isopen) {
@@ -230,23 +227,41 @@ public class DungeonRoomPlan {
 		return returnValue;
 	}
 
+	private boolean hasChestNeighbor(int i, int j) {
+		for (int c = i - 1; c <= i + 1; c++) {
+			for (int r = j - 1; r <= j + 1; r++) {
+				if (c == i && r == j) continue;
+				if (c >= 0 && r >= 0 && c < grid.length && r < grid[0].length) {
+					if (grid[c][r] instanceof ChestItem)
+						return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
 	private void placeDoors(int difficulty, Theme theme, int fromDir) {
 		for (int i = 0; i < Direction.dxdy.length; i++) {
-			if (i != fromDir && Math.random() * 5 > 2)
+			if (i != fromDir && Math.random() * 10 > 3)
 				continue;
 			addDoorInThe(i);
 		}
 	}
-	private void placeEnemySpawnPoints(int difficulty, Theme theme) {
-		;
-	}
+	private void placeEnemySpawnPointsAndChests(int difficulty, Theme theme) {
+		int neighbors;
 
-	private void placeChests(int difficulty, Theme theme) {
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[0].length; j++) {
-				if (countNeighbors(i, j) >= TREASURELIM && grid[i][j] instanceof FloorItem) {
+				neighbors = countNeighbors(i, j);
+				if (!hasChestNeighbor(i, j) && neighbors >= TREASURELIM && grid[i][j] instanceof FloorItem) {
 					grid[i][j] = new ChestItem(difficulty, theme);
 				}
+				// TODO Come up with how to place enemy spawn points
+				// For example, if there's a chest then maybe place one or two spawn points
+				// If there's a door, place some spawn points nearish to door
+				// place spawn points randomly
+				// etc
 			}
 		}
 	}
