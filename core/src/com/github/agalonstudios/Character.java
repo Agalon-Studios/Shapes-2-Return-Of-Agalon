@@ -28,9 +28,9 @@ public abstract class Character extends Entity {
         m_acceleration = new Vector2();
     }
 
-    public Character(int h, int ms, int l) {
-        super(0, 0, 32, 32);
-        m_health = h;
+    public Character(int x, int y, int w, int h, int health, int ms, int l) {
+        super(x, y, w, h);
+        m_health = health;
         m_maxHealth = h;
         m_maxSpeed = ms;
         m_level = l;

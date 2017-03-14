@@ -3,6 +3,7 @@ package com.github.agalonstudios;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 
 /**
@@ -10,8 +11,11 @@ import com.badlogic.gdx.utils.Array;
  * Author: Sean Rapp
  */
 public class DungeonRoom extends World {
-    Array<Door> m_doors;
-    Dungeon m_dungeonRef;
+    private Array<Door> m_doors;
+    private Array<EnemySpawnPoint> m_enemySpawnPoints;
+    private Dungeon m_dungeonRef;
+    private WaterDrop m_waterDrop;
+
 
     public DungeonRoom(DungeonRoomPlan plan, Dungeon d) {
         super(d.getPlayerRef());
@@ -29,8 +33,13 @@ public class DungeonRoom extends World {
                 if (plan.grid[i][j] instanceof DoorItem) {
                     m_doors.set(((DoorItem) plan.grid[i][j]).getDir(), new Door(((DoorItem) plan.grid[i][j]).getDir(), j * Wall.WIDTH, (plan.grid.length - i) * Wall.HEIGHT));
                 }
+                if (plan.grid[i][j] instanceof EnemySpawnPointItem) {
+
+                }
             }
         }
+
+        m_waterDrop = null;
 
         // TODO this is placeholder for the testing
         m_playerRef.getRect().x = plan.grid.length / 2 * Wall.WIDTH;
@@ -51,10 +60,24 @@ public class DungeonRoom extends World {
             m_doors.get(i).render(delta);
         }
         m_shapeRendererRef.end();
+
+        if (m_waterDrop != null)
+            m_waterDrop.render(delta);
     }
 
     private void update(float delta) {
         m_playerRef.update(delta);
+
+
+
+        if (m_waterDrop != null) {
+            m_waterDrop.update(delta);
+            if (m_waterDrop.done())
+                m_waterDrop = null;
+        }
+        else if (MathUtils.random(100) > 90) {
+            m_waterDrop = new WaterDrop((int)m_playerRef.getRect().x + MathUtils.random(-1000, 1000), (int)m_playerRef.getRect().y + MathUtils.random(-1000, 1000));
+        }
 
         for (int i = 0; i < 4; i++) {
             if (m_doors.get(i) == null)

@@ -17,9 +17,8 @@ public class Player extends Character {
     // TODO inventory, equipped items, abilities, other properties
 
     public Player(int h, int ms, int l, String imageFP) {
-        super(h, ms, l);
-        m_rect.x = Gdx.graphics.getWidth() / 2;
-        m_rect.y = Gdx.graphics.getHeight() / 2;
+        super(Gdx.graphics.getWidth() / 2,Gdx.graphics.getHeight() / 2, 32, 32, h, ms, l);
+
         m_gold = 0;
         m_xp = 0;
     }
@@ -36,10 +35,14 @@ public class Player extends Character {
         if (Gdx.input.isKeyPressed(Input.Keys.D))
             m_rect.x += 300 * Gdx.graphics.getDeltaTime();
 
+        if (Gdx.input.isKeyPressed((Input.Keys.ESCAPE)))
+            ((Agalon) Gdx.app.getApplicationListener()).returnToOverworld();
+
     }
 
     @Override
     public void render(float delta) {
+        // TODO use sprite
         ShapeRenderer sr = ((Agalon) Gdx.app.getApplicationListener()).getShapeRenderer();
         OrthographicCamera camera = ((Agalon) Gdx.app.getApplicationListener()).getCamera();
 

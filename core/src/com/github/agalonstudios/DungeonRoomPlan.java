@@ -1,5 +1,7 @@
 package com.github.agalonstudios;
 
+import com.badlogic.gdx.math.MathUtils;
+
 import java.lang.*;
 import java.util.*;
 
@@ -223,6 +225,9 @@ public class DungeonRoomPlan {
                 if (!hasChestNeighbor(i, j) && neighbors >= TREASURELIM && grid[i][j] instanceof FloorItem) {
                     grid[i][j] = new ChestItem(difficulty, theme);
                 }
+
+                if (grid[i][j] instanceof FloorItem && MathUtils.random(100) > 90)
+                    grid[i][j] = new EnemySpawnPointItem(MathUtils.random(1, difficulty), 128);
                 // TODO Come up with how to place enemy spawn points
                 // For example, if there's a chest then maybe place one or two spawn points
                 // If there's a door, place some spawn points nearish to door

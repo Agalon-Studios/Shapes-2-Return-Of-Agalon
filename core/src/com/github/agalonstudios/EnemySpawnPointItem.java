@@ -1,19 +1,19 @@
-public class EnemySpawnPointItem extends DungeonRoomPlanItem {
-	// Distance from player when enemies spawn/attack
-	private int m_AggroRadius;
-	// The amount of enemies spawned
-	private int m_EnemyCount;
-	// Something to do with what type of enemy it is	
-	// TODO put something here
-	
-	public EnemySpawnPointItem(int difficulty, Theme theme) {
-		// TODO generate an AggroRadius
-		// TODO generate an EnemyCount
-		// TODO pick an enemy type etc
-		;
-	}
+package com.github.agalonstudios;
 
-	public char toChar() {
-		return 'E';
-	}
+/**
+ * Created by spr on 3/14/17.
+ */
+public class EnemySpawnPointItem extends DungeonRoomPlanItem {
+    private int m_enemyCount;
+    private int m_spawnRadius;
+
+    public EnemySpawnPointItem(int count, int radius) {
+        m_enemyCount = count;
+        m_spawnRadius = radius;
+    }
+
+    @Override
+    public char toChar() {
+        return 'E';
+    }
 }
