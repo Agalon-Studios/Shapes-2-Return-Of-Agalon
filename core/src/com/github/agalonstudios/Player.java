@@ -35,8 +35,11 @@ public class Player extends Character {
         if (Gdx.input.isKeyPressed(Input.Keys.D))
             m_rect.x += 300 * Gdx.graphics.getDeltaTime();
 
-        if (Gdx.input.isKeyPressed((Input.Keys.ESCAPE)))
+        if (Gdx.input.isKeyPressed((Input.Keys.ESCAPE))) {
             ((Agalon) Gdx.app.getApplicationListener()).returnToOverworld();
+            m_rect.x = Gdx.graphics.getWidth() / 2;
+            m_rect.y = Gdx.graphics.getHeight() / 2;
+        }
 
     }
 

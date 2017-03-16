@@ -14,12 +14,17 @@ public class World implements Screen {
     protected Array<Wall> m_walls;
     protected OrthographicCamera m_cameraRef;
     protected ShapeRenderer m_shapeRendererRef;
+    protected Array<Character> m_nonPlayerCharacters;
 
     public World(Player pRef) {
         m_playerRef = pRef;
         m_cameraRef = ((Agalon) Gdx.app.getApplicationListener()).getCamera();
         m_shapeRendererRef = ((Agalon) Gdx.app.getApplicationListener()).getShapeRenderer();
         m_walls = new Array<Wall>();
+    }
+
+    public void spawnNPC(Character character) {
+        m_nonPlayerCharacters.add(character);
     }
 
     @Override

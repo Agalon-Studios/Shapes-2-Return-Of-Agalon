@@ -1,13 +1,15 @@
+package com.github.agalonstudios;
+
 public class WallItem extends DungeonRoomPlanItem {
-	private static WallItem m_instance = new WallItem();
+    private static WallItem m_instance = new WallItem();
 
-	private WallItem() {}
+    private WallItem() {}
 
-	public char toChar() {
-		return 'X';
-	}
+    public char toChar() {
+        return 'X';
+    }
 
-	public static WallItem getInstance() {
-		return m_instance;
-	}
+    public static WallItem getInstance() {
+        return m_instance;
+    }
 }

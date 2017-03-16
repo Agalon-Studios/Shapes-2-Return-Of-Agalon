@@ -1,11 +1,13 @@
+package com.github.agalonstudios;
+
 public class ChestItem extends DungeonRoomPlanItem {
-	private int m_value;
+    private int m_value;
 
-	public ChestItem(int value, Theme theme) {
-		m_value = value;
-	}
+    public ChestItem(int value, Theme theme) {
+        m_value = value;
+    }
 
-	public char toChar() {
-		return 'C';
-	}
+    public char toChar() {
+        return 'C';
+    }
 }

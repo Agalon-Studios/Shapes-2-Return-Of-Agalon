@@ -1,3 +1,5 @@
+package com.github.agalonstudios;
+
 public abstract class DungeonRoomPlanItem {
-	public abstract char toChar();
+    public abstract char toChar();
 }

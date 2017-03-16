@@ -226,8 +226,16 @@ public class DungeonRoomPlan {
                     grid[i][j] = new ChestItem(difficulty, theme);
                 }
 
-                if (grid[i][j] instanceof FloorItem && MathUtils.random(100) > 90)
-                    grid[i][j] = new EnemySpawnPointItem(MathUtils.random(1, difficulty), 128);
+                if (grid[i][j] instanceof FloorItem && MathUtils.random(300) < 3)
+                    grid[i][j] = new EnemySpawnPointItem(MathUtils.random(1, difficulty), 1000, MathUtils.random(0, 1) == 1 ? EnemyType.ENEMY_1 : EnemyType.ENEMY_2);
+
+                else if (grid[i][j] instanceof FloorItem && hasChestNeighbor(i, j) && MathUtils.random(100) > 50)
+                    grid[i][j] = new EnemySpawnPointItem(MathUtils.random(3, difficulty), 500, MathUtils.random(0, 1) == 1 ? EnemyType.ENEMY_1 : EnemyType.ENEMY_2);
+
+                else if (grid[i][j] instanceof FloorItem && neighbors == 0 && MathUtils.random(300) < 6) {
+                    grid[i][j] = new EnemySpawnPointItem(MathUtils.random(1, 3), 1000, MathUtils.random(0, 1) == 1 ? EnemyType.ENEMY_1 : EnemyType.ENEMY_2);
+                }
+
                 // TODO Come up with how to place enemy spawn points
                 // For example, if there's a chest then maybe place one or two spawn points
                 // If there's a door, place some spawn points nearish to door

@@ -13,7 +13,7 @@ public abstract class Entity {
         m_rect = new Rectangle(0, 0, 0, 0);
     }
 
-    public Entity(int x, int y, int w, int h) {
+    public Entity(float x, float y, int w, int h) {
         m_rect = new Rectangle(x, y, w, h);
 
     }

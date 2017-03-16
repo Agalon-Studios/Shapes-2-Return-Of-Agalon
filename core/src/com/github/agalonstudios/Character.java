@@ -28,11 +28,12 @@ public abstract class Character extends Entity {
         m_acceleration = new Vector2();
     }
 
-    public Character(int x, int y, int w, int h, int health, int ms, int l) {
+    public Character(float x, float y, int w, int h, int health, int ms, int l) {
         super(x, y, w, h);
         m_health = health;
         m_maxHealth = h;
         m_maxSpeed = ms;
+        m_currentMaxSpeed = m_maxSpeed;
         m_level = l;
         m_effectOverTimes = new Array<EffectOverTime>();
         m_velocity = new Vector2();
@@ -48,5 +49,14 @@ public abstract class Character extends Entity {
             m_velocity.y = m_currentMaxSpeed;
         if (0 - m_velocity.y < 0 - m_currentMaxSpeed)
             m_velocity.y = 0 - m_currentMaxSpeed;
+    }
+
+    public void moveBy(int x, int y) {
+        m_rect.x += x;
+        m_rect.y += y;
+    }
+
+    public void update(float delta, World world) {
+        ;
     }
 }

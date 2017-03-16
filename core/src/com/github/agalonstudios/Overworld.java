@@ -12,6 +12,7 @@ public class Overworld extends World {
     private Array<DungeonEntrance> m_dungeonEntrances;
     private Array<OverworldFlower> m_overworldFlowers;
 
+
     // private Shop m_shop;
     // private Chest m_stashChest;
 
@@ -19,12 +20,15 @@ public class Overworld extends World {
         super(pRef);
 
         m_dungeonEntrances = new Array<DungeonEntrance>();
-        m_dungeonEntrances.add(new DungeonEntrance(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() + 100, 6, Theme.CAVE));
+        int numDungeons = MathUtils.random(3, 7);
+
+        for (int i = 0; i < numDungeons; i++)
+            m_dungeonEntrances.add(new DungeonEntrance(Gdx.graphics.getWidth() / 2 + i * MathUtils.random(400, 1000), Gdx.graphics.getHeight() + MathUtils.random(100, 500), MathUtils.random(3, 8), Theme.CAVE));
 
         m_overworldFlowers = new Array<OverworldFlower>();
-        int numFluffs = MathUtils.random(200, 500);
+        int numFluffs = MathUtils.random(1000, 5000);
         for (int i = 0; i < numFluffs; i++) {
-            m_overworldFlowers.add(new OverworldFlower(MathUtils.random(-2000, 2000), MathUtils.random(-2000, 2000), 8, 8));
+            m_overworldFlowers.add(new OverworldFlower(MathUtils.random(-5000, 5000), MathUtils.random(-5000, 5000), 8, 8));
         }
 
     }
@@ -48,12 +52,20 @@ public class Overworld extends World {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
         m_shapeRendererRef.begin(ShapeRenderer.ShapeType.Filled);
+
         for (OverworldFlower gf : m_overworldFlowers)
-            gf.render(delta);
+            if (gf.getRect().x + gf.getRect().width >= m_cameraRef.position.x &&
+                    gf.getRect().x < m_cameraRef.position.x + Gdx.graphics.getWidth() &&
+                    gf.getRect().y + gf.getRect().height >= m_cameraRef.position.y &&
+                    gf.getRect().y < m_cameraRef.position.y + Gdx.graphics.getHeight())
+                gf.render(delta);
+
         m_shapeRendererRef.end();
         m_shapeRendererRef.begin(ShapeRenderer.ShapeType.Filled);
+
         for (DungeonEntrance d : m_dungeonEntrances)
             d.render(delta);
+
         m_shapeRendererRef.end();
 
         super.render(delta);

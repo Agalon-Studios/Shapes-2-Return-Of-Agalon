@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.Array;
 public class DungeonRoom extends World {
     private Array<Door> m_doors;
     private Array<EnemySpawnPoint> m_enemySpawnPoints;
+    private Array<Chest> m_chests;
     private Dungeon m_dungeonRef;
     private WaterDrop m_waterDrop;
 
@@ -20,6 +21,10 @@ public class DungeonRoom extends World {
     public DungeonRoom(DungeonRoomPlan plan, Dungeon d) {
         super(d.getPlayerRef());
         m_doors = new Array<Door>();
+        m_enemySpawnPoints = new Array<EnemySpawnPoint>();
+        m_chests = new Array<Chest>();
+        m_nonPlayerCharacters = new Array<Character>();
+
         m_dungeonRef = d;
 
         for (int i = 0; i < 4; i++)
@@ -30,11 +35,14 @@ public class DungeonRoom extends World {
                 if (plan.grid[i][j] instanceof WallItem) {
                     m_walls.add(new Wall(j * Wall.WIDTH, (plan.grid.length - i) * Wall.HEIGHT));
                 }
-                if (plan.grid[i][j] instanceof DoorItem) {
+                else if (plan.grid[i][j] instanceof ChestItem) {
+                    m_chests.add(new Chest(((ChestItem) plan.grid[i][j]), j * Wall.WIDTH, (plan.grid.length - i) * Wall.HEIGHT));
+                }
+                else if (plan.grid[i][j] instanceof DoorItem) {
                     m_doors.set(((DoorItem) plan.grid[i][j]).getDir(), new Door(((DoorItem) plan.grid[i][j]).getDir(), j * Wall.WIDTH, (plan.grid.length - i) * Wall.HEIGHT));
                 }
-                if (plan.grid[i][j] instanceof EnemySpawnPointItem) {
-
+                else if (plan.grid[i][j] instanceof EnemySpawnPointItem) {
+                    m_enemySpawnPoints.add(new EnemySpawnPoint((EnemySpawnPointItem) plan.grid[i][j], j * Wall.WIDTH, (plan.grid.length - i) * Wall.HEIGHT));
                 }
             }
         }
@@ -59,6 +67,15 @@ public class DungeonRoom extends World {
                 continue;
             m_doors.get(i).render(delta);
         }
+        for (Chest c : m_chests)
+            c.render(delta);
+
+        for (Character e : m_nonPlayerCharacters) {
+            e.render(delta);
+        }
+
+
+
         m_shapeRendererRef.end();
 
         if (m_waterDrop != null)
@@ -68,7 +85,14 @@ public class DungeonRoom extends World {
     private void update(float delta) {
         m_playerRef.update(delta);
 
+        for (EnemySpawnPoint esp : m_enemySpawnPoints) {
+            if (m_playerRef.getRect().overlaps(esp.getRect()))
+                esp.spawnEnemies(this);
+        }
 
+        for (Character e : m_nonPlayerCharacters) {
+            e.update(delta, this);
+        }
 
         if (m_waterDrop != null) {
             m_waterDrop.update(delta);
@@ -96,9 +120,9 @@ public class DungeonRoom extends World {
         m_playerRef.getRect().y = m_doors.get(dir).getRect().y;
 
         // TODO make displacement equal for all doors (i.e. entering from the east displacement
-        // TODO is player.width less than entering from the west displacement, because the X coordinate
-        // TODO of the player is the top-left of the player. Same for north and south, but with the height,
-        // TODO and the Y coordinate.
+        //  is player.width less than entering from the west displacement, because the X coordinate
+        //  of the player is the top-left of the player. Same for north and south, but with the height,
+        //  and the Y coordinate.
         m_playerRef.getRect().x += Direction.dxdyScreen[Direction.opposite(dir)][0] * Wall.WIDTH + Wall.WIDTH / 2;
         m_playerRef.getRect().y += Direction.dxdyScreen[Direction.opposite(dir)][1] * Wall.HEIGHT + Wall.HEIGHT / 2;
 
