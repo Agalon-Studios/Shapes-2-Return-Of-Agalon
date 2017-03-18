@@ -24,6 +24,11 @@ public class Door extends Entity {
 
     }
 
+    @Override
+    public void runCollision(Entity other) {
+
+    }
+
     public void render(float delta) {
         ShapeRenderer sr = ((Agalon) Gdx.app.getApplicationListener()).getShapeRenderer();
         OrthographicCamera camera = ((Agalon) Gdx.app.getApplicationListener()).getCamera();
@@ -34,13 +39,17 @@ public class Door extends Entity {
         switch (m_direction) {
             case Direction.NORTH:
             case Direction.SOUTH:
-                sr.rect(m_rect.x - camera.position.x + m_rect.width / 2 - 10, m_rect.y - camera.position.y + m_rect.height / 2, 5, 5);
-                sr.rect(m_rect.x - camera.position.x + m_rect.width / 2 + 10, m_rect.y - camera.position.y + m_rect.height / 2, 5, 5);
+                sr.rect(m_rect.x - camera.position.x + m_rect.width / 2 - 10, m_rect.y - camera.position.y + m_rect.height / 2,
+                        5, 5);
+                sr.rect(m_rect.x - camera.position.x + m_rect.width / 2 + 10, m_rect.y - camera.position.y + m_rect.height / 2,
+                        5, 5);
                 break;
             case Direction.EAST:
             case Direction.WEST:
-                sr.rect(m_rect.x - camera.position.x + m_rect.width / 2, m_rect.y - camera.position.y + m_rect.height / 2 - 10, 5, 5);
-                sr.rect(m_rect.x - camera.position.x + m_rect.width / 2, m_rect.y - camera.position.y + m_rect.height / 2 + 10, 5, 5);
+                sr.rect(m_rect.x - camera.position.x + m_rect.width / 2, m_rect.y - camera.position.y + m_rect.height / 2 - 10,
+                        5, 5);
+                sr.rect(m_rect.x - camera.position.x + m_rect.width / 2, m_rect.y - camera.position.y + m_rect.height / 2 + 10,
+                        5, 5);
 
         }
     }

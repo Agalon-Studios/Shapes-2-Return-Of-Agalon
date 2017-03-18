@@ -26,6 +26,11 @@ public class WaterDrop extends Entity {
     }
 
     @Override
+    public void runCollision(Entity other) {
+        ;
+    }
+
+    @Override
     public void update(float delta) {
         m_timer -= Gdx.graphics.getDeltaTime();
 

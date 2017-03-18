@@ -1,6 +1,7 @@
 package com.github.agalonstudios;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
@@ -13,11 +14,17 @@ public class Wall extends Entity {
 
     public Wall(int x, int y) {
         super(x, y, Wall.WIDTH, Wall.HEIGHT);
+        m_fixed = true;
     }
 
     @Override
     public void update(float delta) {
         ;
+    }
+
+    @Override
+    public void runCollision(Entity other) {
+
     }
 
     @Override

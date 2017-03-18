@@ -18,13 +18,27 @@ public class Player extends Character {
 
     public Player(int h, int ms, int l, String imageFP) {
         super(Gdx.graphics.getWidth() / 2,Gdx.graphics.getHeight() / 2, 32, 32, h, ms, l);
-
+        m_fixed = false;
         m_gold = 0;
         m_xp = 0;
     }
 
     @Override
+    public void runCollision(Entity other) {
+        // TODO make it so this isnt necessary
+        if (other == this)
+            return;
+
+        if (other.getRect().overlaps(m_rect)) {
+            revertPosition();
+        }
+    }
+
+    @Override
     public void update(float delta) {
+        m_revert.x = m_rect.x;
+        m_revert.y = m_rect.y;
+
         // TODO use velocity, use HUD components
         if (Gdx.input.isKeyPressed(Input.Keys.W))
             m_rect.y += 300 * Gdx.graphics.getDeltaTime();

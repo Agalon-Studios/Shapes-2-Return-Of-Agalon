@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
-
+import java.util.Queue;
 /**
  * DungeonRoom
  * Author: Sean Rapp
@@ -16,7 +16,7 @@ public class DungeonRoom extends World {
     private Array<Chest> m_chests;
     private Dungeon m_dungeonRef;
     private WaterDrop m_waterDrop;
-
+    private Theme m_theme;
 
     public DungeonRoom(DungeonRoomPlan plan, Dungeon d) {
         super(d.getPlayerRef());
@@ -24,7 +24,7 @@ public class DungeonRoom extends World {
         m_enemySpawnPoints = new Array<EnemySpawnPoint>();
         m_chests = new Array<Chest>();
         m_nonPlayerCharacters = new Array<Character>();
-
+        m_theme = plan.getTheme();
         m_dungeonRef = d;
 
         for (int i = 0; i < 4; i++)
@@ -42,21 +42,29 @@ public class DungeonRoom extends World {
                     m_doors.set(((DoorItem) plan.grid[i][j]).getDir(), new Door(((DoorItem) plan.grid[i][j]).getDir(), j * Wall.WIDTH, (plan.grid.length - i) * Wall.HEIGHT));
                 }
                 else if (plan.grid[i][j] instanceof EnemySpawnPointItem) {
-                    m_enemySpawnPoints.add(new EnemySpawnPoint((EnemySpawnPointItem) plan.grid[i][j], j * Wall.WIDTH, (plan.grid.length - i) * Wall.HEIGHT));
+                    EnemySpawnPointItem item = (EnemySpawnPointItem) plan.grid[i][j];
+                    m_enemySpawnPoints.add(new EnemySpawnPoint(item, j * Wall.WIDTH - item.getRadius(), (plan.grid.length - i) * Wall.HEIGHT - item.getRadius()));
                 }
             }
         }
 
         m_waterDrop = null;
 
+        placePlayerInCenter(plan);
+    }
+
+    private void placePlayerInCenter(DungeonRoomPlan planRef) {
         // TODO this is placeholder for the testing
-        m_playerRef.getRect().x = plan.grid.length / 2 * Wall.WIDTH;
-        m_playerRef.getRect().y = plan.grid[0].length / 2 * Wall.HEIGHT;
+        m_playerRef.getRect().x = planRef.grid.length / 2 * Wall.WIDTH;
+        m_playerRef.getRect().y = planRef.grid[0].length / 2 * Wall.HEIGHT;
+
+        // flood fill from center of room until a floor cell, place
     }
 
     @Override
     public void render(float delta) {
         update(delta);
+
         Gdx.gl.glClearColor(182/255.f, 125/255.f, 84/255.f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         super.render(delta);
@@ -74,16 +82,17 @@ public class DungeonRoom extends World {
             e.render(delta);
         }
 
-
-
         m_shapeRendererRef.end();
 
         if (m_waterDrop != null)
             m_waterDrop.render(delta);
+
+        // TODO remove
+        // just printing fps
+        System.out.println(1.f / delta);
     }
 
-    private void update(float delta) {
-        m_playerRef.update(delta);
+    protected void update(float delta) {
 
         for (EnemySpawnPoint esp : m_enemySpawnPoints) {
             if (m_playerRef.getRect().overlaps(esp.getRect()))
@@ -93,6 +102,8 @@ public class DungeonRoom extends World {
         for (Character e : m_nonPlayerCharacters) {
             e.update(delta, this);
         }
+        m_playerRef.update(delta);
+
 
         if (m_waterDrop != null) {
             m_waterDrop.update(delta);
@@ -113,13 +124,16 @@ public class DungeonRoom extends World {
                 break;
             }
         }
+
+        runCollisions(m_nonPlayerCharacters, m_walls, m_playerRefArray, m_chests);
     }
 
     public void movePlayerToDoorAt(int dir) {
         m_playerRef.getRect().x = m_doors.get(dir).getRect().x;
         m_playerRef.getRect().y = m_doors.get(dir).getRect().y;
 
-        // TODO make displacement equal for all doors (i.e. entering from the east displacement
+        // TODO make displacement equal for all doors
+        //  (i.e. entering from the east displacement
         //  is player.width less than entering from the west displacement, because the X coordinate
         //  of the player is the top-left of the player. Same for north and south, but with the height,
         //  and the Y coordinate.

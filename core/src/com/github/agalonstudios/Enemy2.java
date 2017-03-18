@@ -16,6 +16,7 @@ public class Enemy2 extends Character {
 
     public Enemy2(float x, float y, int l, EnemySpawnPoint sp) {
         super(x, y, 64, 128, 200, 200, l);
+        m_fixed = false;
         m_spawnPointRef = sp;
         dir = MathUtils.random(0, 3);
         moveTime = MathUtils.random(.5f, 1.5f);
@@ -23,11 +24,28 @@ public class Enemy2 extends Character {
     }
 
     @Override
+    public void runCollision(Entity other) {
+        // TODO this is a temporary collision handle
+        // that just makes it so the
+        // entity """doesn't move""" if there's a collision
+        // For example, if you're running NW and hit a vertical wall,
+        // you will stop completely instead of sliding vertically along
+        // the wall, while holding W and A. If you just hit W though
+        // you start moving vertically along the wall.
+        if (other.getRect().overlaps(m_rect)) {
+            revertPosition();
+        }
+    }
+
+    @Override
     public void update(float delta) {
         ;
     }
 
+
     public void update(float delta, World world) {
+        m_revert.x = m_rect.x;
+        m_revert.y = m_rect.y;
         if (m_health <= 0) {
             m_spawnPointRef.decrementLivingCount();
         }
@@ -41,12 +59,14 @@ public class Enemy2 extends Character {
             switch (dir) {
                 case Direction.NORTH:
                     dir = Direction.EAST;
+                    moveTime *= 2;
                     break;
                 case Direction.SOUTH:
                     dir = Direction.WEST;
                     break;
                 case Direction.EAST:
                     dir = Direction.SOUTH;
+                    moveTime /= 2;
                     break;
                 case Direction.WEST:
                     dir = Direction.NORTH;

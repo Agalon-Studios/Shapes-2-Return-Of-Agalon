@@ -21,6 +21,11 @@ public class Chest extends Entity {
     }
 
     @Override
+    public void runCollision(Entity other) {
+
+    }
+
+    @Override
     public void render(float delta) {
         ShapeRenderer sr = ((Agalon) Gdx.app.getApplicationListener()).getShapeRenderer();
         OrthographicCamera camera = ((Agalon) Gdx.app.getApplicationListener()).getCamera();

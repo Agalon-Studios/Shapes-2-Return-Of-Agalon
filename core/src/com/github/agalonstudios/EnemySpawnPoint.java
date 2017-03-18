@@ -38,18 +38,28 @@ public class EnemySpawnPoint extends Entity {
         sr.rect(m_rect.x + 3 - camera.position.x, m_rect.y + 3 - camera.position.y, m_rect.width - 6, m_rect.height - 6);
     }
 
+    @Override
+    public void runCollision(Entity other) {
+        ;
+    }
+
     public void spawnEnemies(World world) {
         if (m_spawned)
             return;
 
+        // TODO remove
+        m_enemiesToSpawn = 1;
+
         switch (m_enemyType) {
             case ENEMY_1:
                 for (int i = 0; i < m_enemiesToSpawn; i++)
-                    world.spawnNPC(new Enemy1(m_rect.x + MathUtils.random(-20, 20), m_rect.y + MathUtils.random(-20, 20), 1, this));
+                    world.spawnNPC(new Enemy1(m_rect.x + m_rect.width / 2 + MathUtils.random(-20, 20),
+                            m_rect.y + m_rect.height / 2 + MathUtils.random(-20, 20), 1, this));
                 break;
             case ENEMY_2:
                 for (int i = 0; i < m_enemiesToSpawn; i++)
-                    world.spawnNPC(new Enemy2(m_rect.x + MathUtils.random(-20, 20), m_rect.y + MathUtils.random(-20, 20), 1, this));
+                    world.spawnNPC(new Enemy2(m_rect.x + m_rect.width / 2 + MathUtils.random(-20, 20),
+                            m_rect.y + m_rect.height / 2 + MathUtils.random(-20, 20), 1, this));
                 break;
         }
         m_spawned = true;

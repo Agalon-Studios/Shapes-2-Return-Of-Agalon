@@ -5,12 +5,16 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 
+import java.util.ArrayList;
+
 /**
  * Created by spr on 3/13/17.
  */
 public class Overworld extends World {
     private Array<DungeonEntrance> m_dungeonEntrances;
     private Array<OverworldFlower> m_overworldFlowers;
+    private Array<OverworldTree> m_trees;
+    private Array<Traveler> m_travelers;
 
 
     // private Shop m_shop;
@@ -20,10 +24,13 @@ public class Overworld extends World {
         super(pRef);
 
         m_dungeonEntrances = new Array<DungeonEntrance>();
-        int numDungeons = MathUtils.random(3, 7);
+        int numDungeons = MathUtils.random(10, 20);
+        int placeX = MathUtils.random(-1000, -500);
 
-        for (int i = 0; i < numDungeons; i++)
-            m_dungeonEntrances.add(new DungeonEntrance(Gdx.graphics.getWidth() / 2 + i * MathUtils.random(400, 1000), Gdx.graphics.getHeight() + MathUtils.random(100, 500), MathUtils.random(3, 8), Theme.CAVE));
+        for (int i = 0; i < numDungeons; i++) {
+            m_dungeonEntrances.add(new DungeonEntrance(placeX, MathUtils.random(-1000, 1000), MathUtils.random(3, 5), Theme.CAVE));
+            placeX += MathUtils.random(500, 1000);
+        }
 
         m_overworldFlowers = new Array<OverworldFlower>();
         int numFluffs = MathUtils.random(1000, 5000);
@@ -31,11 +38,27 @@ public class Overworld extends World {
             m_overworldFlowers.add(new OverworldFlower(MathUtils.random(-5000, 5000), MathUtils.random(-5000, 5000), 8, 8));
         }
 
+        m_trees = new Array<OverworldTree>();
+        int numTrees = MathUtils.random(150, 300);
+        int placeYMax = 5000;
+        for (int i = 0; i < numTrees; i++) {
+            m_trees.add(new OverworldTree(MathUtils.random(-5000, 5000), MathUtils.random(placeYMax - 128, placeYMax)));
+            placeYMax = (int) m_trees.get(i).getRect().y;
+        }
+
+        m_travelers = new Array<Traveler>();
+        int numTravelers = MathUtils.random(1, 50);
+        for (int i = 0; i < numTravelers; i++) {
+            m_travelers.add(new Traveler(MathUtils.random(-5000, 5000), MathUtils.random(-5000, 5000)));
+        }
+
     }
 
-    private void update(float delta) {
+    protected void update(float delta) {
+        m_playerRef.update(delta);
+
         for (DungeonEntrance de : m_dungeonEntrances) {
-            if (m_playerRef.getRect().overlaps(de.getRect())) {
+            if (m_playerRef.getRect().overlaps(de.getEntranceRect()) && m_playerRef.getRect().y < de.getEntranceRect().y) {
                 Dungeon d = new Dungeon(de.getLevel(), de.getTheme(), m_playerRef);
                 ((Agalon) Gdx.app.getApplicationListener()).setScreen(d.currentRoom());
             }
@@ -43,6 +66,11 @@ public class Overworld extends World {
 
         for (OverworldFlower gf : m_overworldFlowers)
             gf.update(delta);
+
+        for (Traveler t : m_travelers)
+            t.update(delta);
+
+        runCollisions(m_playerRefArray, m_dungeonEntrances, m_trees, m_travelers);
     }
 
     @Override
@@ -63,12 +91,21 @@ public class Overworld extends World {
         m_shapeRendererRef.end();
         m_shapeRendererRef.begin(ShapeRenderer.ShapeType.Filled);
 
+        m_shapeRendererRef.end();
+        super.render(delta);
+        m_shapeRendererRef.begin(ShapeRenderer.ShapeType.Filled);
+
+        for (Traveler t : m_travelers)
+            t.render(delta);
+
+        for (OverworldTree t : m_trees)
+            t.render(delta);
+
         for (DungeonEntrance d : m_dungeonEntrances)
             d.render(delta);
 
         m_shapeRendererRef.end();
 
-        super.render(delta);
 
 
         // m_shop.render();

@@ -13,6 +13,7 @@ import java.util.*;
 public class DungeonRoomPlan {
     public DungeonRoomPlanItem[][] grid;
     private int[][] m_doors;
+    private Theme m_theme;
 
     private static final int GENERATIONS = 6;
     private static final int BIRTHMIN    = 4;
@@ -27,6 +28,7 @@ public class DungeonRoomPlan {
 
     public DungeonRoomPlan(int dir, int difficulty, Theme theme, boolean open) {
         allocateGrid(difficulty, theme);
+        m_theme = theme;
         m_start = new int[4][2];
         m_start[0][0] = 0;
         m_start[0][1] = grid[0].length / 2;
@@ -227,13 +229,13 @@ public class DungeonRoomPlan {
                 }
 
                 if (grid[i][j] instanceof FloorItem && MathUtils.random(300) < 3)
-                    grid[i][j] = new EnemySpawnPointItem(MathUtils.random(1, difficulty), 1000, MathUtils.random(0, 1) == 1 ? EnemyType.ENEMY_1 : EnemyType.ENEMY_2);
+                    grid[i][j] = new EnemySpawnPointItem(MathUtils.random(1, difficulty), 1000, pickEnemyType(difficulty, theme));
 
                 else if (grid[i][j] instanceof FloorItem && hasChestNeighbor(i, j) && MathUtils.random(100) > 50)
-                    grid[i][j] = new EnemySpawnPointItem(MathUtils.random(3, difficulty), 500, MathUtils.random(0, 1) == 1 ? EnemyType.ENEMY_1 : EnemyType.ENEMY_2);
+                    grid[i][j] = new EnemySpawnPointItem(MathUtils.random(3, difficulty), 500, pickEnemyType(difficulty, theme));
 
                 else if (grid[i][j] instanceof FloorItem && neighbors == 0 && MathUtils.random(300) < 6) {
-                    grid[i][j] = new EnemySpawnPointItem(MathUtils.random(1, 3), 1000, MathUtils.random(0, 1) == 1 ? EnemyType.ENEMY_1 : EnemyType.ENEMY_2);
+                    grid[i][j] = new EnemySpawnPointItem(MathUtils.random(1, 3), 1000, pickEnemyType(difficulty, theme));
                 }
 
                 // TODO Come up with how to place enemy spawn points
@@ -243,6 +245,11 @@ public class DungeonRoomPlan {
                 // etc
             }
         }
+    }
+
+    // TODO make proper
+    private EnemyType pickEnemyType(int difficulty, Theme theme) {
+        return MathUtils.random(1) == 1 ? EnemyType.ENEMY_1 : EnemyType.ENEMY_2;
     }
 
     public boolean hasDoorInThe(int dir) {
@@ -300,5 +307,9 @@ public class DungeonRoomPlan {
 
         grid[m_doors[dir][0]][m_doors[dir][1]] = WallItem.getInstance();
         m_doors[dir][0] = -1;
+    }
+
+    public Theme getTheme() {
+        return m_theme;
     }
 }
