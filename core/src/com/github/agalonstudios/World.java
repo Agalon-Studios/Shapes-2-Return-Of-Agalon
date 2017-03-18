@@ -94,7 +94,7 @@ public abstract class World implements Screen {
         }
     }
 
-    protected static void runColliionsQuadTree(Array<? extends Entity> ... entityLists) {
+    protected static void runCollisionsQuadTree(Array<? extends Entity> ... entityLists) {
         QuadTree collisionTree = new QuadTree(0, new Rectangle(0 - MAX_WORLD_WIDTH / 2 , 0 - MAX_WORLD_HEIGHT / 2,
                 MAX_WORLD_WIDTH / 2, MAX_WORLD_HEIGHT / 2));
 
