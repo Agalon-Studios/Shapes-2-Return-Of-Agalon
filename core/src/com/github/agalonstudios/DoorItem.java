@@ -1,14 +1,17 @@
 package com.github.agalonstudios;
 
 public class DoorItem extends DungeonRoomPlanItem {
-    private int side; // north south east west
+    private int m_side; // north south east west
 
     public DoorItem(int dir) {
-        side = dir;
+        m_side = dir;
+
     }
 
+
+
     public int getDir() {
-        return side;
+        return m_side;
     }
 
     public char toChar() {

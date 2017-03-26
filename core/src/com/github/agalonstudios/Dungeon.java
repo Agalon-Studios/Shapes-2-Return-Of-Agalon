@@ -5,7 +5,6 @@ import java.util.*;
 import java.lang.*;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector2;
 
 /* Dungeon
  * Author: Sean Rapp
@@ -31,6 +30,7 @@ public class Dungeon {
     }
 
     private void moveRoom(int x, int y) {
+        System.out.println("Moving rooms r" + x + "c" + y);
         m_currentRoomCoordinates[0] = m_currentRoomCoordinates[0] + x;
 
         if (m_currentRoomCoordinates[0] < 0 ||

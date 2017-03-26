@@ -10,22 +10,26 @@ import com.badlogic.gdx.math.MathUtils;
  */
 public class Enemy1 extends Character {
     private EnemySpawnPoint m_spawnPointRef;
-    private int dir;
     private float moveTimer;
     private float moveTime;
 
     public Enemy1(float x, float y, int l, EnemySpawnPoint sp) {
-        super(x, y, 64, 64, 400, 150, l);
+        super(x, y, 64, 64, 400, 150, 2);
         m_fixed = false;
         m_spawnPointRef = sp;
-        dir = MathUtils.random(0, 3);
+        m_directionFacing = MathUtils.random(0, 3);
         moveTime = MathUtils.random(.5f, 1.5f);
         moveTimer = moveTime;
+        m_engaged = true;
     }
 
     @Override
     public void runCollision(Entity other) {
-        if (other.getRect().overlaps(m_rect)) {
+        // TODO this is a placeholder, castobjects don't destroy on character impact
+        if (other instanceof CastObject) {
+            m_engaged = true;
+        }
+        else if (other.getRect().overlaps(m_rect)) {
             revertPosition();
         }
     }
@@ -41,35 +45,32 @@ public class Enemy1 extends Character {
 
         moveTimer -= Gdx.graphics.getDeltaTime();
 
-        m_rect.x += Direction.dxdyScreen[dir][0] * m_currentMaxSpeed * Gdx.graphics.getDeltaTime();
-        m_rect.y += Direction.dxdyScreen[dir][1] * m_currentMaxSpeed * Gdx.graphics.getDeltaTime();
+        m_rect.x += Direction.dxdyScreen[m_directionFacing][0] * m_currentMaxSpeed * Gdx.graphics.getDeltaTime();
+        m_rect.y += Direction.dxdyScreen[m_directionFacing][1] * m_currentMaxSpeed * Gdx.graphics.getDeltaTime();
 
         if (moveTimer < 0) {
-            switch (dir) {
+            switch (m_directionFacing) {
                 case Direction.NORTH:
-                    dir = Direction.EAST;
+                    m_directionFacing = Direction.EAST;
                     break;
                 case Direction.SOUTH:
-                    dir = Direction.WEST;
+                    m_directionFacing = Direction.WEST;
                     break;
                 case Direction.EAST:
-                    dir = Direction.SOUTH;
+                    m_directionFacing = Direction.SOUTH;
                     break;
                 case Direction.WEST:
-                    dir = Direction.NORTH;
+                    m_directionFacing = Direction.NORTH;
                     break;
             }
             moveTimer = moveTime;
         }
-
-
     }
 
     @Override
     public void update(float delta) {
         ;
     }
-
 
     @Override
     public void render(float delta) {
@@ -80,5 +81,10 @@ public class Enemy1 extends Character {
         sr.rect(m_rect.x - camera.position.x, m_rect.y - camera.position.y, m_rect.width, m_rect.height);
         sr.setColor(220 / 255.f, 78 / 255.f, 59 / 255.f, 1);
         sr.rect(m_rect.x + 3 - camera.position.x, m_rect.y + 3 - camera.position.y, m_rect.width - 6, m_rect.height - 6);
+
+        //if (m_engaged) {
+            sr.setColor(255 / 255.f, 0, 0, 1);
+            sr.rect(m_rect.x - camera.position.x, m_rect.y + 10 + m_rect.height - camera.position.y, (m_health / m_maxHealth) * m_rect.width, 5);
+        //}
     }
 }
