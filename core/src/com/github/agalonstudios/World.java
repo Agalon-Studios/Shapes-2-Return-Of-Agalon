@@ -91,7 +91,9 @@ public abstract class World implements Screen {
             for (int o = 0; o < allObjects.size; o++) {
                 if (e == o)
                     continue;
-                allObjects.get(e).runCollision(allObjects.get(o));
+
+                if (allObjects.get(e).getRect().overlaps(allObjects.get(o).getRect()))
+                    allObjects.get(e).runCollision(allObjects.get(o));
             }
         }
     }

@@ -7,7 +7,12 @@ public class Ability {
     private Stats m_effect;
     private int m_castObjectAmount;
     private int m_cooldown;
+    private Abilities m_ability;
 
+
+    public enum Abilities {
+        STRIKE, SHOT
+    }
 
     public enum Type {
         SELF, // self heal, self buff
@@ -20,10 +25,13 @@ public class Ability {
 
     private Type m_type;
 
+    public Ability(Abilities a) {
+        m_ability = a;
+    }
+
     public Ability(Stats e) {
         // make SELF
     }
-
 
     public Ability(Stats e, Type t) {
         m_effect = e;
@@ -32,6 +40,18 @@ public class Ability {
 
     public void cast(Character casterRef, World worldRef) {
         // TODO generalize
-        worldRef.addCastObject(new StrikeCastObject(casterRef));
+
+        switch (m_ability) {
+            case STRIKE:
+                worldRef.addCastObject(new StrikeCastObject(casterRef));
+                break;
+            case SHOT:
+                worldRef.addCastObject(new ShotCastObject(casterRef));
+                break;
+        }
+    }
+
+    public float getCoolDown() {
+        return m_cooldown;
     }
 }

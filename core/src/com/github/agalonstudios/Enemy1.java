@@ -82,9 +82,9 @@ public class Enemy1 extends Character {
         sr.setColor(220 / 255.f, 78 / 255.f, 59 / 255.f, 1);
         sr.rect(m_rect.x + 3 - camera.position.x, m_rect.y + 3 - camera.position.y, m_rect.width - 6, m_rect.height - 6);
 
-        //if (m_engaged) {
+        if (m_engaged) {
             sr.setColor(255 / 255.f, 0, 0, 1);
-            sr.rect(m_rect.x - camera.position.x, m_rect.y + 10 + m_rect.height - camera.position.y, (m_health / m_maxHealth) * m_rect.width, 5);
-        //}
+            sr.rect(m_rect.x - camera.position.x, m_rect.y + 10 + m_rect.height - camera.position.y, (m_health / (float) m_maxHealth) * m_rect.width, 5);
+        }
     }
 }

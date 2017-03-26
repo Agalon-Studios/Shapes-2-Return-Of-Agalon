@@ -40,8 +40,8 @@ public class HUD {
 
     public void update(float delta, Player player) {
         m_stage.act(delta);
-        hudOutputs.playerPositionUpdate.x = m_movementJoystick.getKnobPercentX() * player.maxSpeed.x;
-        hudOutputs.playerPositionUpdate.y = m_movementJoystick.getKnobPercentY() * player.maxSpeed.y;
+        hudOutputs.playerPositionUpdate.x = m_movementJoystick.getKnobPercentX() * player.m_maxSpeed;
+        hudOutputs.playerPositionUpdate.y = m_movementJoystick.getKnobPercentY() * player.m_maxSpeed;
     }
 
     public void render() {
