@@ -1,6 +1,5 @@
 package com.github.agalonstudios;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
@@ -13,9 +12,11 @@ public abstract class Character extends Entity {
     protected int m_maxSpeed;
     protected int m_currentMaxSpeed;
     protected int m_level;
+    protected boolean m_engaged;
     protected Vector2 m_velocity;
     protected Vector2 m_acceleration;
-    Array<EffectOverTime> m_effectOverTimes;
+    protected int m_directionFacing;
+    protected Array<EffectOverTime> m_effectOverTimes;
 
     public Character() {
         m_health = 0;
@@ -26,18 +27,22 @@ public abstract class Character extends Entity {
         m_effectOverTimes = new Array<EffectOverTime>();
         m_velocity = new Vector2();
         m_acceleration = new Vector2();
+        m_fixed = false;
     }
 
     public Character(float x, float y, int w, int h, int health, int ms, int l) {
         super(x, y, w, h);
         m_health = health;
-        m_maxHealth = h;
+        m_maxHealth = health;
         m_maxSpeed = ms;
         m_currentMaxSpeed = m_maxSpeed;
         m_level = l;
         m_effectOverTimes = new Array<EffectOverTime>();
         m_velocity = new Vector2();
         m_acceleration = new Vector2();
+        m_fixed = false;
+        m_directionFacing = Direction.EAST;
+        m_engaged = false;
     }
 
     protected void bindVelocity() {
@@ -54,6 +59,19 @@ public abstract class Character extends Entity {
     public void moveBy(int x, int y) {
         m_rect.x += x;
         m_rect.y += y;
+    }
+
+    public boolean alive() {
+        return m_health > 0;
+    }
+
+    public void apply(Effect e) {
+        m_health -= e.m_meleeDamage + e.m_rangeDamage + e.m_mageDamage;
+        // TODO do all of these
+    }
+
+    public int getDirectionFacing() {
+        return m_directionFacing;
     }
 
     public void update(float delta, World world) {

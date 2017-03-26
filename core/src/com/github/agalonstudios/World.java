@@ -20,6 +20,7 @@ public abstract class World implements Screen {
     protected ShapeRenderer m_shapeRendererRef;
     protected Array<Character> m_nonPlayerCharacters;
     protected Array<Player> m_playerRefArray;
+    protected Array<CastObject> m_castObjects;
 
     protected QuadTree m_collisionTree;
 
@@ -38,6 +39,7 @@ public abstract class World implements Screen {
         m_cameraRef = ((Agalon) Gdx.app.getApplicationListener()).getCamera();
         m_shapeRendererRef = ((Agalon) Gdx.app.getApplicationListener()).getShapeRenderer();
         m_walls = new Array<Wall>();
+        m_castObjects = new Array<CastObject>();
 
     }
 
@@ -94,7 +96,7 @@ public abstract class World implements Screen {
         }
     }
 
-    protected static void runCollisionsQuadTree(Array<? extends Entity> ... entityLists) {
+    protected static void runColliionsQuadTree(Array<? extends Entity> ... entityLists) {
         QuadTree collisionTree = new QuadTree(0, new Rectangle(0 - MAX_WORLD_WIDTH / 2 , 0 - MAX_WORLD_HEIGHT / 2,
                 MAX_WORLD_WIDTH / 2, MAX_WORLD_HEIGHT / 2));
 
@@ -120,6 +122,14 @@ public abstract class World implements Screen {
                 e.runCollision(object);
             }
         }
+    }
+
+    public void addCastObject(CastObject co) {
+        m_castObjects.add(co);
+    }
+
+    public void addCastObjects(Array<CastObject> cos) {
+        m_castObjects.addAll(cos);
     }
 
     @Override

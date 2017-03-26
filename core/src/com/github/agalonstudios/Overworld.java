@@ -55,7 +55,7 @@ public class Overworld extends World {
     }
 
     protected void update(float delta) {
-        m_playerRef.update(delta);
+        m_playerRef.update(delta, this);
 
         for (DungeonEntrance de : m_dungeonEntrances) {
             if (m_playerRef.getRect().overlaps(de.getEntranceRect()) && m_playerRef.getRect().y < de.getEntranceRect().y) {
@@ -70,7 +70,14 @@ public class Overworld extends World {
         for (Traveler t : m_travelers)
             t.update(delta);
 
-        runCollisions(m_playerRefArray, m_dungeonEntrances, m_trees, m_travelers);
+        for (int i = 0; i < m_castObjects.size; i++) {
+            m_castObjects.get(i).update(delta, this);
+            if (m_castObjects.get(i).done()) {
+                m_castObjects.removeIndex(i);
+            }
+        }
+
+        runCollisions(m_playerRefArray, m_dungeonEntrances, m_trees, m_travelers, m_castObjects);
     }
 
     @Override
@@ -103,6 +110,10 @@ public class Overworld extends World {
 
         for (DungeonEntrance d : m_dungeonEntrances)
             d.render(delta);
+
+        for (CastObject co : m_castObjects) {
+            co.render(delta);
+        }
 
         m_shapeRendererRef.end();
 

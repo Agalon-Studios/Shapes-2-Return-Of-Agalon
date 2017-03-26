@@ -82,6 +82,10 @@ public class DungeonRoom extends World {
             e.render(delta);
         }
 
+        for (CastObject co : m_castObjects) {
+            co.render(delta);
+        }
+
         m_shapeRendererRef.end();
 
         if (m_waterDrop != null)
@@ -89,21 +93,23 @@ public class DungeonRoom extends World {
 
         // TODO remove
         // just printing fps
-        System.out.println(1.f / delta);
+        // System.out.println(1.f / delta);
     }
 
     protected void update(float delta) {
-
         for (EnemySpawnPoint esp : m_enemySpawnPoints) {
             if (m_playerRef.getRect().overlaps(esp.getRect()))
                 esp.spawnEnemies(this);
         }
 
-        for (Character e : m_nonPlayerCharacters) {
-            e.update(delta, this);
+        for (int i = 0; i < m_nonPlayerCharacters.size; i++) {
+            m_nonPlayerCharacters.get(i).update(delta, this);
+            if (!m_nonPlayerCharacters.get(i).alive()) {
+                m_nonPlayerCharacters.removeIndex(i);
+            }
         }
-        m_playerRef.update(delta);
 
+        m_playerRef.update(delta, this);
 
         if (m_waterDrop != null) {
             m_waterDrop.update(delta);
@@ -112,6 +118,13 @@ public class DungeonRoom extends World {
         }
         else if (MathUtils.random(100) > 90) {
             m_waterDrop = new WaterDrop((int)m_playerRef.getRect().x + MathUtils.random(-1000, 1000), (int)m_playerRef.getRect().y + MathUtils.random(-1000, 1000));
+        }
+
+        for (int i = 0; i < m_castObjects.size; i++) {
+            m_castObjects.get(i).update(delta, this);
+            if (m_castObjects.get(i).done()) {
+                m_castObjects.removeIndex(i);
+            }
         }
 
         for (int i = 0; i < 4; i++) {
@@ -125,7 +138,7 @@ public class DungeonRoom extends World {
             }
         }
 
-        runCollisions(m_nonPlayerCharacters, m_walls, m_playerRefArray, m_chests);
+        runCollisions(m_nonPlayerCharacters, m_walls, m_playerRefArray, m_chests, m_castObjects);
     }
 
     public void movePlayerToDoorAt(int dir) {
@@ -139,6 +152,9 @@ public class DungeonRoom extends World {
         //  and the Y coordinate.
         m_playerRef.getRect().x += Direction.dxdyScreen[Direction.opposite(dir)][0] * Wall.WIDTH + Wall.WIDTH / 2;
         m_playerRef.getRect().y += Direction.dxdyScreen[Direction.opposite(dir)][1] * Wall.HEIGHT + Wall.HEIGHT / 2;
+
+        // TODO remove this when real collision added
+        m_playerRef.clearRevert();
 
     }
 }
