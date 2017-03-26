@@ -22,10 +22,7 @@ public class EnemySpawnPoint extends Entity {
         m_spawned = false;
     }
 
-    @Override
-    public void update(float delta) {
 
-    }
 
     @Override
     public void render(float delta) {

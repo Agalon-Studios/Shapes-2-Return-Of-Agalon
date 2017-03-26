@@ -46,7 +46,7 @@ public class Ability {
                 worldRef.addCastObject(new StrikeCastObject(casterRef));
                 break;
             case SHOT:
-                worldRef.addCastObject(new ShotCastObject(casterRef));
+               // worldRef.addCastObject(new ShotCastObject(casterRef));
                 break;
         }
     }

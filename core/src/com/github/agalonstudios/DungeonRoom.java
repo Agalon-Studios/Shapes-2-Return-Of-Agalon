@@ -110,7 +110,7 @@ public class DungeonRoom extends World {
             }
         }
 
-        m_playerRef.update(delta, this);
+        m_playerRef.update(delta, this, new HUDOutputs()); //TODO use HUD hudoutputs
 
         if (m_waterDrop != null) {
             m_waterDrop.update(delta);

@@ -15,7 +15,7 @@ public class Agalon extends Game {
         m_shapeRenderer = new ShapeRenderer();
         m_camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        m_overworld = new Overworld(new Player(100, 200, 13, "player-image-path"));
+        m_overworld = new Overworld(new Player(100, 200, "player-image-path"));
 
         this.setScreen(m_overworld);
 	}

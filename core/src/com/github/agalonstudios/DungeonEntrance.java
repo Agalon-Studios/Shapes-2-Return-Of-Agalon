@@ -26,10 +26,6 @@ public class DungeonEntrance extends Entity {
         return m_entranceRect;
     }
 
-    @Override
-    public void update(float delta) {
-
-    }
 
     @Override
     public void runCollision(Entity other) {

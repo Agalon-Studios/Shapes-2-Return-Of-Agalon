@@ -14,7 +14,7 @@ public class Enemy1 extends Character {
     private float moveTime;
 
     public Enemy1(float x, float y, int l, EnemySpawnPoint sp) {
-        super(x, y, 64, 64, 400, 150, 2);
+        super(x, y, 64, 64, 400, 150, 10, 2);
         m_fixed = false;
         m_spawnPointRef = sp;
         m_directionFacing = MathUtils.random(0, 3);
@@ -67,10 +67,6 @@ public class Enemy1 extends Character {
         }
     }
 
-    @Override
-    public void update(float delta) {
-        ;
-    }
 
     @Override
     public void render(float delta) {

@@ -74,7 +74,6 @@ public abstract class Entity {
     public abstract void runCollision(Entity other);
 
 
-    public abstract void update(float delta);
     public abstract void render(float delta);
 
 }

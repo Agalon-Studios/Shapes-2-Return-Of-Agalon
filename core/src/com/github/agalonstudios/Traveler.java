@@ -18,7 +18,7 @@ public class Traveler extends Character {
     }
 
     public Traveler(int x, int y) {
-        super(x, y, 32, 32, 100, 50, 1);
+        super(x, y, 32, 32, 100, 50, 10, 1);
         dir = MathUtils.random(7);
 
         stateTimer = MathUtils.random(1.f, 3.f);
@@ -30,7 +30,6 @@ public class Traveler extends Character {
             revertPosition();
     }
 
-    @Override
     public void update(float delta) {
         m_revert.x = m_rect.x;
         m_revert.y = m_rect.y;

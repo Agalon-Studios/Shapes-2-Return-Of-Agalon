@@ -18,11 +18,6 @@ public class OverworldTree extends Entity {
     }
 
     @Override
-    public void update(float delta) {
-        ;
-    }
-
-    @Override
     public void render(float delta) {
         ShapeRenderer sr = ((Agalon) Gdx.app.getApplicationListener()).getShapeRenderer();
         OrthographicCamera camera = ((Agalon) Gdx.app.getApplicationListener()).getCamera();

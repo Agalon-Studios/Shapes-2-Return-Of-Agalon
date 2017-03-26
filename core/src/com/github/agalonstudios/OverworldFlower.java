@@ -35,7 +35,6 @@ public class OverworldFlower extends Entity {
         ;
     }
 
-    @Override
     public void update(float delta) {
         m_waveTimer -= delta;
 

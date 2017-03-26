@@ -21,10 +21,7 @@ public class CastObject extends Entity {
         ;
     }
 
-    @Override
-    public void update(float delta) {
 
-    }
 
     @Override
     public void render(float delta) {

@@ -22,11 +22,6 @@ public class Door extends Entity {
     }
 
     @Override
-    public void update(float delta) {
-
-    }
-
-    @Override
     public void runCollision(Entity other) {
 
     }

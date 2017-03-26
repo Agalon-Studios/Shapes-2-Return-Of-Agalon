@@ -55,7 +55,7 @@ public class Overworld extends World {
     }
 
     protected void update(float delta) {
-        m_playerRef.update(delta, this);
+        m_playerRef.update(delta, this, new HUDOutputs());
 
         for (DungeonEntrance de : m_dungeonEntrances) {
             if (m_playerRef.getRect().overlaps(de.getEntranceRect()) && m_playerRef.getRect().y < de.getEntranceRect().y) {

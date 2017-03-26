@@ -20,24 +20,26 @@ public class Player extends Character {
     private Ability m_ability;
     private float m_cooldown;
     private float m_cooldownTimer;
-
+    private float m_stats;
     private Array<Ability> m_equippedAbilities;
-    private Array<Float> m_cooldownTimers;
+
 
     // TODO inventory, equipped items, abilities, other properties
 
-    public Player(int h, int ms, int l, String imageFP) {
-        super(Gdx.graphics.getWidth() / 2,Gdx.graphics.getHeight() / 2, 32, 32, h, ms, l);
+    public Player(int h, int l, String imageFP) {
+        super(Gdx.graphics.getWidth() / 2,Gdx.graphics.getHeight() / 2, 32, 32, h, 200, 20, l);
         m_fixed = false;
         m_gold = 0;
         m_xp = 0;
         m_equippedAbilities = new Array<Ability>();
-        m_cooldownTimers = new Array<Float>();
+
 
         m_equippedAbilities.add(new Ability(Ability.Abilities.STRIKE));
         m_equippedAbilities.add(new Ability(Ability.Abilities.SHOT));
         m_cooldownTimers.add(0.f);
         m_cooldownTimers.add(0.f);
+
+        // TODO add constructor for stats
     }
 
     @Override
@@ -51,8 +53,25 @@ public class Player extends Character {
         }
     }
 
-    @Override
-    public void update(float delta) {
+
+
+    public void update(float delta, World world, HUDOutputs hudOutputs) {
+        super.update(delta, world);
+
+        if (m_cooldownTimers.get(0) <= 0) {
+            if (Gdx.input.isKeyPressed(Input.Keys.NUM_1)) {
+                m_equippedAbilities.get(0).cast(this, world);
+                m_cooldownTimers.set(0, m_equippedAbilities.get(0).getCoolDown());
+            }
+        }
+
+        if (m_cooldownTimers.get(1) <= 0) {
+            if (Gdx.input.isKeyPressed(Input.Keys.NUM_2)) {
+                m_equippedAbilities.get(1).cast(this, world);
+                m_cooldownTimers.set(1, m_equippedAbilities.get(0).getCoolDown());
+            }
+        }
+
         m_revert.x = m_rect.x;
         m_revert.y = m_rect.y;
 
@@ -82,29 +101,7 @@ public class Player extends Character {
 
     }
 
-    @Override
-    public void update(float delta, World world) {
-        update(delta);
 
-        if (m_cooldownTimers.get(0) <= 0) {
-            if (Gdx.input.isKeyPressed(Input.Keys.NUM_1)) {
-                m_equippedAbilities.get(0).cast(this, world);
-                m_cooldownTimers.set(0, m_equippedAbilities.get(0).getCoolDown());
-            }
-        }
-
-        if (m_cooldownTimers.get(1) <= 0) {
-            if (Gdx.input.isKeyPressed(Input.Keys.NUM_2)) {
-                m_equippedAbilities.get(1).cast(this, world);
-                m_cooldownTimers.set(1, m_equippedAbilities.get(0).getCoolDown());
-            }
-        }
-
-        for (int i = 0; i < m_cooldownTimers.size; i++) {
-            m_cooldownTimers.set(i, m_cooldownTimers.get(i) - delta);
-        }
-
-    }
 
     @Override
     public void render(float delta) {

@@ -15,10 +15,7 @@ public class Chest extends Entity {
         // load inventory
     }
 
-    @Override
-    public void update(float delta) {
 
-    }
 
     @Override
     public void runCollision(Entity other) {
