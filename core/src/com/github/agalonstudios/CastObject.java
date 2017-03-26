@@ -5,7 +5,7 @@ package com.github.agalonstudios;
  */
 public class CastObject extends Entity {
     protected Character m_casterRef;
-    protected Effect m_effect;
+    protected Stats m_effect;
 
     public CastObject(Character casterRef, int x, int y, int w, int h) {
         super(x, y, w, h);

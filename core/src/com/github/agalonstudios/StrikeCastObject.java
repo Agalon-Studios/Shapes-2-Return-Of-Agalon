@@ -15,7 +15,7 @@ public class StrikeCastObject extends CastObject {
     public StrikeCastObject(Character casterRef) {
         super(casterRef, 0, 0, 16, 16);
 
-        m_effect = new Effect(2, 0, 0, 0, 0, 0, 0, null);
+        m_effect = new Stats(2, 0, 0, 0, 0, 0, 0, null);
 
         m_dx = 0;
         m_dy = 0;
@@ -61,6 +61,7 @@ public class StrikeCastObject extends CastObject {
 
     @Override
     public void update(float delta, World world) {
+        /* TODO */
         switch (m_moveDirection) {
             case Direction.EAST:
                 m_dx += 100 * Gdx.graphics.getDeltaTime();

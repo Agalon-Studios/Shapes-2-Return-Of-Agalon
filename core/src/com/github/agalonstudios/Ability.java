@@ -1,14 +1,10 @@
 package com.github.agalonstudios;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
-
 /**
  * Created by spr on 3/20/17.
  */
 public class Ability {
-    private Effect m_effect;
+    private Stats m_effect;
     private int m_castObjectAmount;
     private int m_cooldown;
 
@@ -24,12 +20,12 @@ public class Ability {
 
     private Type m_type;
 
-    public Ability(Effect e) {
+    public Ability(Stats e) {
         // make SELF
     }
 
 
-    public Ability(Effect e, Type t) {
+    public Ability(Stats e, Type t) {
         m_effect = e;
         m_type = t;
     }

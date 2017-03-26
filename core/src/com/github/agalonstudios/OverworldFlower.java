@@ -37,7 +37,7 @@ public class OverworldFlower extends Entity {
 
     @Override
     public void update(float delta) {
-        m_waveTimer -= Gdx.graphics.getDeltaTime();
+        m_waveTimer -= delta;
 
         if (m_waveTimer < 0) {
             if (m_fluffPosition) {

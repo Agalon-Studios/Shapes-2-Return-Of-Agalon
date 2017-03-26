@@ -3,7 +3,7 @@ package com.github.agalonstudios;
 /**
  * Created by spr on 3/12/17.
  */
-public class Effect {
+public class Stats {
     public final int m_meleeDamage;
     public final int m_rangeDamage;
     public final int m_mageDamage;
@@ -13,7 +13,7 @@ public class Effect {
     public final float m_knockback;
     public final EffectOverTime m_effectOverTime;
 
-    public Effect(int md, int rd, int gd, float sc, float dx, float mc, float kb, EffectOverTime eot) {
+    public Stats(int md, int rd, int gd, float sc, float dx, float mc, float kb, EffectOverTime eot) {
         m_meleeDamage = md;
         m_rangeDamage = rd;
         m_mageDamage = gd;

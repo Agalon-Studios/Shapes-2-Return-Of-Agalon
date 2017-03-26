@@ -32,19 +32,19 @@ public class WaterDrop extends Entity {
 
     @Override
     public void update(float delta) {
-        m_timer -= Gdx.graphics.getDeltaTime();
+        m_timer -= delta;
 
         if (!m_splashing) {
-            m_yvelocity -= 300 * Gdx.graphics.getDeltaTime();
-            m_rect.y += m_yvelocity * Gdx.graphics.getDeltaTime();
+            m_yvelocity -= 300 * delta;
+            m_rect.y += m_yvelocity * delta;
         }
 
         if (m_timer <= 0)
             m_splashing = true;
 
         if (m_splashing) {
-            m_splashRadius += 200 * Gdx.graphics.getDeltaTime();
-            m_splashOpacity -= 4.f * Gdx.graphics.getDeltaTime();
+            m_splashRadius += 200 * delta;
+            m_splashOpacity -= 4.f * delta;
         }
     }
 

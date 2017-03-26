@@ -1,5 +1,6 @@
 package com.github.agalonstudios;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
@@ -9,28 +10,18 @@ import com.badlogic.gdx.utils.Array;
 public abstract class Character extends Entity {
     protected int m_health;
     protected int m_maxHealth;
-    protected int m_maxSpeed;
-    protected int m_currentMaxSpeed;
+    protected float m_maxSpeed;
+    protected float m_currentMaxSpeed;
     protected int m_level;
     protected boolean m_engaged;
     protected Vector2 m_velocity;
     protected Vector2 m_acceleration;
     protected int m_directionFacing;
     protected Array<EffectOverTime> m_effectOverTimes;
+    protected Stats m_Stats;
 
-    public Character() {
-        m_health = 0;
-        m_maxHealth = 0;
-        m_maxSpeed = 0;
-        m_currentMaxSpeed = 0;
-        m_level = 0;
-        m_effectOverTimes = new Array<EffectOverTime>();
-        m_velocity = new Vector2();
-        m_acceleration = new Vector2();
-        m_fixed = false;
-    }
 
-    public Character(float x, float y, int w, int h, int health, int ms, int l) {
+    public Character(float x, float y, int w, int h, int health, float ms, int l) {
         super(x, y, w, h);
         m_health = health;
         m_maxHealth = health;
@@ -43,6 +34,7 @@ public abstract class Character extends Entity {
         m_fixed = false;
         m_directionFacing = Direction.EAST;
         m_engaged = false;
+        // TODO m_Stats = new m_Stats
     }
 
     protected void bindVelocity() {
@@ -56,16 +48,13 @@ public abstract class Character extends Entity {
             m_velocity.y = 0 - m_currentMaxSpeed;
     }
 
-    public void moveBy(int x, int y) {
-        m_rect.x += x;
-        m_rect.y += y;
-    }
+
 
     public boolean alive() {
         return m_health > 0;
     }
 
-    public void apply(Effect e) {
+    public void apply(Stats e) {
         m_health -= e.m_meleeDamage + e.m_rangeDamage + e.m_mageDamage;
         // TODO do all of these
     }
@@ -75,6 +64,17 @@ public abstract class Character extends Entity {
     }
 
     public void update(float delta, World world) {
-        ;
+        Gdx.graphics.getDeltaTime();
+
+
+
+
+        bindVelocity();
+
+        m_rect.x += m_velocity.x * delta * 60;
+        m_rect.y += m_velocity.y * delta * 60;
+
+
     }
+
 }

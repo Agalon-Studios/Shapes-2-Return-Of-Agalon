@@ -82,6 +82,7 @@ public class Overworld extends World {
 
     @Override
     public void render(float delta) {
+        delta *= 60;
         update(delta);
         Gdx.gl.glClearColor(104/255.f, 219/255.f, 112/255.f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);

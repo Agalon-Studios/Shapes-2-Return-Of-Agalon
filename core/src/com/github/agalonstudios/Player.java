@@ -30,7 +30,7 @@ public class Player extends Character {
         m_cooldown = 0.5f;
         m_cooldownTimer = m_cooldown;
         m_ability = new Ability(null); // TODO
-       // m_ability = new Ability(new Effect(0, 0, 50, 0, 0, 0, 0, null), Ability.Type.PROJECTILE, Color.BLUE);
+       // m_ability = new Ability(new Stats(0, 0, 50, 0, 0, 0, 0, null), Ability.Type.PROJECTILE, Color.BLUE);
     }
 
     @Override
@@ -51,19 +51,19 @@ public class Player extends Character {
 
         // TODO use velocity, use HUD components
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            m_rect.y += 300 * Gdx.graphics.getDeltaTime();
+            m_rect.y += 300 * delta;
             m_directionFacing = Direction.NORTH;
         }
         else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            m_rect.y -= 300 * Gdx.graphics.getDeltaTime();
+            m_rect.y -= 300 * delta;
             m_directionFacing = Direction.SOUTH;
         }
         else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            m_rect.x -= 300 * Gdx.graphics.getDeltaTime();
+            m_rect.x -= 300 * delta;
             m_directionFacing = Direction.WEST;
         }
         else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            m_rect.x += 300 * Gdx.graphics.getDeltaTime();
+            m_rect.x += 300 * delta;
             m_directionFacing = Direction.EAST;
         }
 
@@ -86,7 +86,7 @@ public class Player extends Character {
             }
         }
 
-        m_cooldownTimer -= Gdx.graphics.getDeltaTime();
+        m_cooldownTimer -= delta;
 
     }
 
