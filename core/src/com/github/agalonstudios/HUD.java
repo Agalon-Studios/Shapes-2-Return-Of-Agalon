@@ -13,11 +13,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Touchpad.TouchpadStyle;
  */
 
 public class HUD {
-    public HUDOutputs hudOutputs;
-    private Touchpad m_movementJoystick;
-    private Stage m_stage;
+    public static HUDOutputs hudOutputs;
+    private static Touchpad m_movementJoystick;
+    private static Stage m_stage;
 
-    public HUD() {
+    private HUD() { }
+    static {
         hudOutputs = new HUDOutputs();
 
         m_stage = new Stage();
@@ -38,17 +39,19 @@ public class HUD {
         m_stage.addActor(m_movementJoystick);
     }
 
-    public void update(float delta, Player player) {
+
+
+    public static void update(float delta, Player player) {
         m_stage.act(delta);
         hudOutputs.accelerationUpdate.x = m_movementJoystick.getKnobPercentX() * player.m_maxAcceleration;
         hudOutputs.accelerationUpdate.y = m_movementJoystick.getKnobPercentY() * player.m_maxAcceleration;
     }
 
-    public void render() {
+    public static void render() {
         m_stage.draw();
     }
 
-    public void dispose() {
+    public static void dispose() {
         m_stage.dispose();
     }
 }

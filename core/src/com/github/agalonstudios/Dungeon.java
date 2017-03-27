@@ -6,6 +6,8 @@ import java.lang.*;
 
 import com.badlogic.gdx.Gdx;
 
+import static com.badlogic.gdx.Input.Keys.G;
+
 /* Dungeon
  * Author: Sean Rapp
  */
@@ -16,11 +18,13 @@ public class Dungeon {
     private DungeonRoomPlan[][] m_roomPlanGrid;
     private Player              m_playerRef;
 
+
     public Dungeon(int difficulty, Theme theme, Player pRef) {
         m_currentRoomCoordinates = new int[2];
         generateRoomPlans(difficulty, theme);
         m_playerRef = pRef;
         loadCurrentRoom();
+
     }
 
     // Change from one room to another
@@ -174,4 +178,6 @@ public class Dungeon {
     }
 
     public Player getPlayerRef() { return m_playerRef; }
+
+
 }

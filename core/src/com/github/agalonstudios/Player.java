@@ -29,7 +29,7 @@ public class Player extends Character {
     // TODO inventory, equipped items, abilities, other properties
 
     public Player(int h, int l, String imageFP) {
-        super(Gdx.graphics.getWidth() / 2,Gdx.graphics.getHeight() / 2, 32, 32, h, 800, 400, l);
+        super(Gdx.graphics.getWidth() / 2,Gdx.graphics.getHeight() / 2, 32, 32, h, 150, 800, l);
         m_fixed = false;
         m_gold = 0;
         m_xp = 0;
@@ -50,21 +50,17 @@ public class Player extends Character {
         if (other == this)
             return;
 
-        if (other.getRect().overlaps(m_rect)) {
-            revertPosition();
-        }
+        //TODO
     }
 
 
-
-    public void update(float delta, World world, HUDOutputs hudOutputs) {
+    @Override
+    public void update(float delta, World world) {
         super.update(delta, world);
 
-        m_acceleration.x = hudOutputs.accelerationUpdate.x;
-        m_acceleration.y = hudOutputs.accelerationUpdate.y;
 
-        m_revert.x = m_rect.x;
-        m_revert.y = m_rect.y;
+        m_acceleration.x = HUD.hudOutputs.accelerationUpdate.x;
+        m_acceleration.y = HUD.hudOutputs.accelerationUpdate.y;
 
         // TODO use velocity, use HUD components
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {

@@ -29,15 +29,12 @@ public class Enemy1 extends Character {
         if (other instanceof CastObject) {
             m_engaged = true;
         }
-        else if (other.getRect().overlaps(m_rect)) {
-            revertPosition();
-        }
+
+        //TODO add collision test
     }
 
     @Override
     public void update(float delta, World world) {
-        m_revert.x = m_rect.x;
-        m_revert.y = m_rect.y;
 
         if (m_health <= 0) {
             m_spawnPointRef.decrementLivingCount();

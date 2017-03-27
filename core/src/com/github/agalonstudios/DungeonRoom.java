@@ -68,7 +68,6 @@ public class DungeonRoom extends World {
 
         Gdx.gl.glClearColor(182/255.f, 125/255.f, 84/255.f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-        super.render(delta);
 
         m_shapeRendererRef.begin(ShapeRenderer.ShapeType.Filled);
         for (int i = 0; i < m_doors.size; i++) {
@@ -92,12 +91,15 @@ public class DungeonRoom extends World {
         if (m_waterDrop != null)
             m_waterDrop.render(delta);
 
+        super.render(delta);
+
         // TODO remove
         // just printing fps
         // System.out.println(1.f / delta);
     }
 
     protected void update(float delta) {
+        super.update(delta);
         for (EnemySpawnPoint esp : m_enemySpawnPoints) {
             if (m_playerRef.getRect().overlaps(esp.getRect()))
                 esp.spawnEnemies(this);
@@ -109,8 +111,6 @@ public class DungeonRoom extends World {
                 m_nonPlayerCharacters.removeIndex(i);
             }
         }
-
-        m_playerRef.update(delta, this, m_HUD.hudOutputs); //TODO use HUD hudoutputs
 
         if (m_waterDrop != null) {
             m_waterDrop.update(delta);
@@ -154,8 +154,6 @@ public class DungeonRoom extends World {
         m_playerRef.getRect().x += Direction.dxdyScreen[Direction.opposite(dir)][0] * Wall.WIDTH + Wall.WIDTH / 2;
         m_playerRef.getRect().y += Direction.dxdyScreen[Direction.opposite(dir)][1] * Wall.HEIGHT + Wall.HEIGHT / 2;
 
-        // TODO remove this when real collision added
-        m_playerRef.clearRevert();
 
     }
 }
