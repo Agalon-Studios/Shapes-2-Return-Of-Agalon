@@ -7,11 +7,13 @@ import com.badlogic.gdx.math.Vector2;
  */
 
 public class HUDOutputs {
-    public Vector2 playerPositionUpdate;
+    public Vector2 accelerationUpdate;
 
 
     public HUDOutputs() {
-        playerPositionUpdate = new Vector2(0, 0);
+        accelerationUpdate = new Vector2(0, 0);
     }
+
+
 
 }

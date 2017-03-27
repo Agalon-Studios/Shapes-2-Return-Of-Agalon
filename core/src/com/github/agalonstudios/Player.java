@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 
+import static sun.audio.AudioPlayer.player;
+
 /**
  * Created by spr on 3/12/17.
  */
@@ -27,7 +29,7 @@ public class Player extends Character {
     // TODO inventory, equipped items, abilities, other properties
 
     public Player(int h, int l, String imageFP) {
-        super(Gdx.graphics.getWidth() / 2,Gdx.graphics.getHeight() / 2, 32, 32, h, 200, 20, l);
+        super(Gdx.graphics.getWidth() / 2,Gdx.graphics.getHeight() / 2, 32, 32, h, 800, 400, l);
         m_fixed = false;
         m_gold = 0;
         m_xp = 0;
@@ -58,19 +60,8 @@ public class Player extends Character {
     public void update(float delta, World world, HUDOutputs hudOutputs) {
         super.update(delta, world);
 
-        if (m_cooldownTimers.get(0) <= 0) {
-            if (Gdx.input.isKeyPressed(Input.Keys.NUM_1)) {
-                m_equippedAbilities.get(0).cast(this, world);
-                m_cooldownTimers.set(0, m_equippedAbilities.get(0).getCoolDown());
-            }
-        }
-
-        if (m_cooldownTimers.get(1) <= 0) {
-            if (Gdx.input.isKeyPressed(Input.Keys.NUM_2)) {
-                m_equippedAbilities.get(1).cast(this, world);
-                m_cooldownTimers.set(1, m_equippedAbilities.get(0).getCoolDown());
-            }
-        }
+        m_acceleration.x = hudOutputs.accelerationUpdate.x;
+        m_acceleration.y = hudOutputs.accelerationUpdate.y;
 
         m_revert.x = m_rect.x;
         m_revert.y = m_rect.y;
@@ -99,6 +90,19 @@ public class Player extends Character {
             m_rect.y = Gdx.graphics.getHeight() / 2;
         }
 
+        if (m_cooldownTimers.get(0) <= 0) {
+            if (Gdx.input.isKeyPressed(Input.Keys.NUM_1)) {
+                m_equippedAbilities.get(0).cast(this, world);
+                m_cooldownTimers.set(0, m_equippedAbilities.get(0).getCoolDown());
+            }
+        }
+
+        if (m_cooldownTimers.get(1) <= 0) {
+            if (Gdx.input.isKeyPressed(Input.Keys.NUM_2)) {
+                m_equippedAbilities.get(1).cast(this, world);
+                m_cooldownTimers.set(1, m_equippedAbilities.get(0).getCoolDown());
+            }
+        }
     }
 
 

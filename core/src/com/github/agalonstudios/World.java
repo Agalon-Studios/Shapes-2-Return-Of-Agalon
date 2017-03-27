@@ -21,7 +21,7 @@ public abstract class World implements Screen {
     protected Array<Character> m_nonPlayerCharacters;
     protected Array<Player> m_playerRefArray;
     protected Array<CastObject> m_castObjects;
-
+    protected HUD m_HUD;
     protected QuadTree m_collisionTree;
 
     private static Array<Entity> refList = new Array<Entity>();
@@ -40,7 +40,7 @@ public abstract class World implements Screen {
         m_shapeRendererRef = ((Agalon) Gdx.app.getApplicationListener()).getShapeRenderer();
         m_walls = new Array<Wall>();
         m_castObjects = new Array<CastObject>();
-
+        m_HUD = new HUD();
     }
 
     public void spawnNPC(Character character) {
@@ -52,11 +52,15 @@ public abstract class World implements Screen {
 
     }
 
-    protected abstract void update(float delta);
+    protected void update(float delta) {
+        m_playerRef.update(delta, this, m_HUD.hudOutputs);
+        m_HUD.update(delta, m_playerRef);
+    }
 
     @Override
     public void render(float delta) {
         update(delta);
+
         m_cameraRef.position.set(m_playerRef.getRect().x - Gdx.graphics.getWidth() / 2, m_playerRef.getRect().y - Gdx.graphics.getHeight() / 2, 0);
 
         m_shapeRendererRef.begin(ShapeRenderer.ShapeType.Filled);
@@ -69,11 +73,11 @@ public abstract class World implements Screen {
                 wall.render(delta);
         }
 
+        m_HUD.render();
         m_playerRef.render(delta);
         m_shapeRendererRef.end();
     }
 
-    @SafeVarargs
     protected static void runCollisions(Array<? extends Entity> ... entityLists) {
         runCollisionsNSquared(entityLists);
     }

@@ -42,11 +42,14 @@ public abstract class Character extends Entity {
     }
 
     protected void bindVelocity() {
+        m_velocity.x *= .95;
+        m_velocity.y *= .95;
         float currentVelocity = (float) Math.sqrt(m_velocity.x * m_velocity.x + m_velocity.y * m_velocity.y);
-        if (currentVelocity == 0) return;
-        m_velocity.x *= (m_currentMaxSpeed / currentVelocity);
-        m_velocity.y *= (m_currentMaxSpeed / currentVelocity);
-        System.out.println(m_velocity.x + " " + m_velocity.y);
+        if (currentVelocity >  m_currentMaxSpeed) {
+            m_velocity.x *= (m_currentMaxSpeed / currentVelocity);
+            m_velocity.y *= (m_currentMaxSpeed / currentVelocity);
+            System.out.println(m_velocity.x + " " + m_velocity.y);
+        }
     }
 
 
