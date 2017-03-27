@@ -61,6 +61,7 @@ public class Overworld extends World {
             if (m_playerRef.getRect().overlaps(de.getEntranceRect()) && m_playerRef.getRect().y < de.getEntranceRect().y) {
                 Dungeon d = new Dungeon(de.getLevel(), de.getTheme(), m_playerRef);
                 ((Agalon) Gdx.app.getApplicationListener()).setScreen(d.currentRoom());
+
             }
         }
 
@@ -100,7 +101,7 @@ public class Overworld extends World {
         m_shapeRendererRef.begin(ShapeRenderer.ShapeType.Filled);
 
         m_shapeRendererRef.end();
-        super.render(delta);
+
         m_shapeRendererRef.begin(ShapeRenderer.ShapeType.Filled);
 
         for (Traveler t : m_travelers)
@@ -118,7 +119,7 @@ public class Overworld extends World {
 
         m_shapeRendererRef.end();
 
-
+        super.render(delta);
 
         // m_shop.render();
         // m_stashChest.render();

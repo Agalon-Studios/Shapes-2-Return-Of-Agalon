@@ -35,16 +35,13 @@ public class Enemy2 extends Character {
         // you will stop completely instead of sliding vertically along
         // the wall, while holding W and A. If you just hit W though
         // you start moving vertically along the wall.
-        if (other.getRect().overlaps(m_rect)) {
-            revertPosition();
-        }
+
     }
 
 
     @Override
     public void update(float delta, World world) {
-        m_revert.x = m_rect.x;
-        m_revert.y = m_rect.y;
+
         if (m_health <= 0) {
             m_spawnPointRef.decrementLivingCount();
         }

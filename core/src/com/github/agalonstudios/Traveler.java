@@ -26,13 +26,11 @@ public class Traveler extends Character {
 
     @Override
     public void runCollision(Entity other) {
-        if (m_rect.overlaps(other.getRect()))
-            revertPosition();
+       //TODO
     }
 
     public void update(float delta) {
-        m_revert.x = m_rect.x;
-        m_revert.y = m_rect.y;
+
 
         stateTimer -= Gdx.graphics.getDeltaTime();
 
