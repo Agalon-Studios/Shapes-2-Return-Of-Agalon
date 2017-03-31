@@ -64,9 +64,7 @@ class MainMenu implements Screen {
 
         m_playButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
-                //System.out.println("Clicked! Is checked: " + button.isChecked());
-                m_playButton.setText("Starting new game");
-                a.setScreen(new Overworld(new Player(100, 200, "player-image-path")));
+                a.returnToOverworld();
             }
         });
 
@@ -78,7 +76,6 @@ class MainMenu implements Screen {
 
         m_optionsButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
-                //System.out.println("Clicked! Is checked: " + button.isChecked());
                 a.setScreen(new MainMenuOptions(a));
             }
         });

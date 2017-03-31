@@ -1,39 +1,32 @@
 package com.github.agalonstudios;
 
-import com.badlogic.gdx.Screen;
-
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 /**
- * Created by BDog on 3/27/2017.
+ * Created by BDog on 3/31/2017.
  */
 
-public class MainMenuOptions implements Screen {
-
+public class InGameOptionsTab implements Screen{
     private Stage m_stage;
     private Skin skin;
     private TextButton m_soundButton;
     private TextButton m_backButton;
 
-    public MainMenuOptions(final Agalon a){
+    public InGameOptionsTab(final Agalon a){
         m_stage = new Stage();
         Gdx.input.setInputProcessor(m_stage);
 
@@ -79,9 +72,9 @@ public class MainMenuOptions implements Screen {
         m_backButton.setPosition(350,200);
         m_stage.addActor(m_backButton);
 
-        m_backButton.addListener(new ChangeListener() {
-            public void changed (ChangeEvent event, Actor actor) {
-                a.setScreen(new MainMenu(a));
+        m_backButton.addListener(new ClickListener() {
+            public void clicked (InputEvent event, float x, float y){
+                a.returnToOverworld();
             }
         });
     }
