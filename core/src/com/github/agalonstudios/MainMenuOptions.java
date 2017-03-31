@@ -27,17 +27,13 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  */
 
 public class MainMenuOptions implements Screen {
-    private SpriteBatch m_batch;
+
     private Stage m_stage;
-    private OrthographicCamera m_camera;
     private Skin skin;
     private TextButton m_soundButton;
     private TextButton m_backButton;
 
     public MainMenuOptions(final Agalon a){
-        m_batch = new SpriteBatch();
-        m_camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
         m_stage = new Stage();
         Gdx.input.setInputProcessor(m_stage);
 
