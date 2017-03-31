@@ -4,31 +4,27 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-
-
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
-
 /**
- * Created by BDog on 3/27/2017.
+ * Created by Jacob on 3/31/2017.
  */
 
-class MainMenu implements Screen {
+public class CharacterCreationMenu implements Screen {
 
     private Stage m_stage;
+    private TextButton m_doneButton;
+    private Slider m_colorSlider;
 
-    private TextButton m_playButton;
-
-    public MainMenu(final Agalon a){
+    public CharacterCreationMenu(final Agalon a){
 
         m_stage = new Stage();
         Gdx.input.setInputProcessor(m_stage);
@@ -55,35 +51,30 @@ class MainMenu implements Screen {
 
         skin.add("default", textButtonStyle);
 
-        // adding the play button
-        m_playButton  = new TextButton("PLAY",textButtonStyle);
-        m_playButton.setPosition(200, 200);
-        m_stage.addActor(m_playButton);
+        // creating the slider style
+        Slider.SliderStyle slideStyle = new Slider.SliderStyle();
+        slideStyle.background = skin.newDrawable("white", Color.CHARTREUSE);
+        slideStyle.knob = skin.newDrawable("white", Color.DARK_GRAY);
+        slideStyle.knobDown = skin.newDrawable("white", Color.DARK_GRAY);
+        slideStyle.knobOver = skin.newDrawable("white", Color.LIGHT_GRAY);
 
+        // adding the done button
+        m_doneButton  = new TextButton("DONE",textButtonStyle);
+        m_doneButton.setPosition(200, 200);
+        m_stage.addActor(m_doneButton);
 
-
-        m_playButton.addListener(new ChangeListener() {
+        m_doneButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
                 //System.out.println("Clicked! Is checked: " + button.isChecked());
-                m_playButton.setText("Starting new game");
+                m_doneButton.setText("Wow, so shapely");
                 a.setScreen(new Overworld(new Player(100, 200, "player-image-path")));
             }
         });
 
-        // adding the options button
-
-        TextButton m_optionsButton = new TextButton("Options", textButtonStyle);
-        m_optionsButton.setPosition(350, 200);
-        m_stage.addActor(m_optionsButton);
-
-        m_optionsButton.addListener(new ChangeListener() {
-            public void changed (ChangeEvent event, Actor actor) {
-                //System.out.println("Clicked! Is checked: " + button.isChecked());
-                a.setScreen(new MainMenuOptions(a));
-            }
-        });
-
-
+        // adding the color slider
+        m_colorSlider = new Slider(0, 100, 5, false, slideStyle);
+        m_colorSlider.setPosition(200,100);
+        m_stage.addActor(m_colorSlider);
 
     }
     @Override
@@ -98,6 +89,8 @@ class MainMenu implements Screen {
         m_stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         m_stage.draw();
         m_stage.setDebugAll(true);
+
+
     }
 
     @Override
