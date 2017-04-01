@@ -64,7 +64,7 @@ class MainMenu implements Screen {
 
         m_playButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
-                a.returnToOverworld();
+                a.setScreen(new CharacterCreationMenu(a));
             }
         });
 

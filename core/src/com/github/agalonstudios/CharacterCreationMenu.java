@@ -30,13 +30,21 @@ public class CharacterCreationMenu implements Screen {
         Gdx.input.setInputProcessor(m_stage);
 
         Skin skin = new Skin();
+        Skin slideSkin = new Skin();
 
         // creating the button style
         Pixmap pixmap = new Pixmap(100, 100, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.GREEN);
         pixmap.fill();
 
+        // Creating Slider style (setting x to 500 and y to 50 makes the
+        // slider look nicer, but i'm not able to drag it, the button skin works fine)
+        Pixmap pixmapSlider = new Pixmap(500, 50, Pixmap.Format.RGBA8888);
+        pixmapSlider.setColor(Color.GREEN);
+        pixmapSlider.fill();
+
         skin.add("white", new Texture(pixmap));
+        slideSkin.add("white", new Texture(pixmapSlider));
 
         BitmapFont bfont = new BitmapFont();
         skin.add("default", bfont);
@@ -51,16 +59,17 @@ public class CharacterCreationMenu implements Screen {
 
         skin.add("default", textButtonStyle);
 
-        // creating the slider style
         Slider.SliderStyle slideStyle = new Slider.SliderStyle();
-        slideStyle.background = skin.newDrawable("white", Color.CHARTREUSE);
-        slideStyle.knob = skin.newDrawable("white", Color.DARK_GRAY);
-        slideStyle.knobDown = skin.newDrawable("white", Color.DARK_GRAY);
-        slideStyle.knobOver = skin.newDrawable("white", Color.LIGHT_GRAY);
+        slideStyle.background = slideSkin.newDrawable("white", Color.WHITE);
+        slideStyle.background.setMinWidth(100);
+        slideStyle.knob = slideSkin.newDrawable("white", Color.DARK_GRAY);
+        slideStyle.knobDown = slideSkin.newDrawable("white", Color.PINK);
+        slideStyle.knobOver = slideSkin.newDrawable("white", Color.LIGHT_GRAY);
 
+        slideSkin.add("default", slideStyle);
         // adding the done button
         m_doneButton  = new TextButton("DONE",textButtonStyle);
-        m_doneButton.setPosition(200, 200);
+        m_doneButton.setPosition(250, 250);
         m_stage.addActor(m_doneButton);
 
         m_doneButton.addListener(new ChangeListener() {
@@ -72,8 +81,8 @@ public class CharacterCreationMenu implements Screen {
         });
 
         // adding the color slider
-        m_colorSlider = new Slider(0, 100, 5, false, slideStyle);
-        m_colorSlider.setPosition(200,100);
+        m_colorSlider = new Slider(0, 100, 10, false, slideStyle);
+        m_colorSlider.setPosition(100,50);
         m_stage.addActor(m_colorSlider);
 
     }
@@ -89,6 +98,9 @@ public class CharacterCreationMenu implements Screen {
         m_stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         m_stage.draw();
         m_stage.setDebugAll(true);
+
+        float colorVal;
+        colorVal = m_colorSlider.getPercent();
 
 
     }
