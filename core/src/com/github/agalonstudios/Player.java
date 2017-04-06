@@ -26,7 +26,7 @@ public class Player extends Character {
 
     // TODO inventory, equipped items, abilities, other properties
 
-    public Player(int h, int l, String imageFP) {
+    public Player(int h, int l, Color c) {
         super(
                 32,
                 new Vector2(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2),
@@ -42,7 +42,7 @@ public class Player extends Character {
         m_xp = 0;
         m_equippedAbilities = new Array<Ability>();
 
-        m_color = Color.FIREBRICK;
+        m_color = c;
 
         m_equippedAbilities.add(new Ability(Ability.Abilities.STRIKE));
         m_equippedAbilities.add(new Ability(Ability.Abilities.SHOT));

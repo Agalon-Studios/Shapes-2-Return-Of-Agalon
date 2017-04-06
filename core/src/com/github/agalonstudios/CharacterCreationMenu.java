@@ -69,7 +69,8 @@ public class CharacterCreationMenu implements Screen {
             public void changed (ChangeEvent event, Actor actor) {
                 //System.out.println("Clicked! Is checked: " + button.isChecked());
                 m_doneButton.setText("Wow, so shapely");
-                a.setScreen(new Overworld(new Player(100, 200, "player-image-path")));
+                a.createOverworld(new Player(100, 1, m_playerColorRGB));
+                a.returnToOverworld();
             }
         });
 

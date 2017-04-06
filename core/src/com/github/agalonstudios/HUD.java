@@ -45,7 +45,7 @@ public class HUD {
                 )
         );
 
-        m_movementJoystick.setBounds(0, 0, 100, 100);
+        m_movementJoystick.setBounds(0, 0, ScreenScale.scale(400), ScreenScale.scale(400));
         m_stage.addActor(m_movementJoystick);
 
         // pause button
@@ -66,7 +66,7 @@ public class HUD {
         });
 
 
-        m_pauseButton.setBounds(0, Gdx.graphics.getHeight()-50, 50, 50);
+        m_pauseButton.setBounds(0, ScreenScale.scaleHeight(-200) + Gdx.graphics.getHeight(), ScreenScale.scale(200), ScreenScale.scale(200));
         m_stage.addActor(m_pauseButton);
     }
 

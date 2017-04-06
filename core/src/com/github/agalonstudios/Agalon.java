@@ -13,23 +13,49 @@ public class Agalon extends Game {
     private Music m_overworldMusic;
     private Music m_dungeonMusic;
     private boolean m_whichMusic;
+    private Player m_player;
+    private World m_currentWorld;
 
 	@Override
-	public void create () {
-        m_shapeRenderer = new ExtendedShapeRenderer();
+    public void create () {
+        loadPlayer();
 
         setMainMusic(true);
 
+        ScreenScale.init(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        m_shapeRenderer = new ExtendedShapeRenderer();
+
         m_camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        m_overworld = new Overworld(new Player(100, 200, "player-image-path"));
-
         this.setScreen(new MainMenu(this));
-	}
+        //this.setScreen(m_overworld);
+    }
+
+    private void loadPlayer() {
+        // if savedata load from save data
+    }
+
+    public void changeToWorld(World w) {
+        m_currentWorld = w;
+        this.setScreen(w);
+        Gdx.input.setInputProcessor(HUD.getStage());
+    }
+
+    public void backToWorld() {
+        this.setScreen(m_currentWorld);
+        Gdx.input.setInputProcessor(HUD.getStage());
+    }
 
     public void returnToOverworld() {
         this.setScreen(m_overworld);
         Gdx.input.setInputProcessor(HUD.getStage());
+    }
+
+    public void createOverworld(Player player) {
+        m_player = player;
+        m_overworld = new Overworld(player);
+        m_currentWorld = m_overworld;
     }
 
     public ExtendedShapeRenderer getShapeRenderer() {

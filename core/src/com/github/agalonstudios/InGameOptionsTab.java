@@ -81,7 +81,7 @@ public class InGameOptionsTab implements Screen{
 
         m_backButton.addListener(new ClickListener() {
             public void clicked (InputEvent event, float x, float y){
-                a.returnToOverworld();
+                a.backToWorld();
             }
         });
     }

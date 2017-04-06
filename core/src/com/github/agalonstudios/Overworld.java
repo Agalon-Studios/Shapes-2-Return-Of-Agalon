@@ -68,7 +68,7 @@ public class Overworld extends World {
                 else
                     ((Agalon) Gdx.app.getApplicationListener()).setDungeonMusic(false);
 
-                ((Agalon) Gdx.app.getApplicationListener()).setScreen(d.currentRoom());
+                ((Agalon) Gdx.app.getApplicationListener()).changeToWorld(d.currentRoom());
 
             }
         }
