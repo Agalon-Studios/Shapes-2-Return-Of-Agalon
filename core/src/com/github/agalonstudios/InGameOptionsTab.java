@@ -1,39 +1,36 @@
 package com.github.agalonstudios;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-
-
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 /**
- * Created by BDog on 3/27/2017.
+ * Created by BDog on 3/31/2017.
  */
 
-class MainMenu implements Screen {
-
+public class InGameOptionsTab implements Screen{
     private Stage m_stage;
+    private Skin skin;
+    private TextButton m_soundButton;
+    private TextButton m_backButton;
 
-    private TextButton m_playButton;
-
-    public MainMenu(final Agalon a){
-
+    public InGameOptionsTab(final Agalon a){
         m_stage = new Stage();
         Gdx.input.setInputProcessor(m_stage);
 
-        Skin skin = new Skin();
+        skin = new Skin();
 
         // creating the button style
         Pixmap pixmap = new Pixmap(100, 100, Pixmap.Format.RGBA8888);
@@ -55,33 +52,31 @@ class MainMenu implements Screen {
 
         skin.add("default", textButtonStyle);
 
-        // adding the play button
-        m_playButton  = new TextButton("PLAY",textButtonStyle);
-        m_playButton.setPosition(200, 200);
-        m_stage.addActor(m_playButton);
+        // add sound toggle button
+        m_soundButton = new TextButton("Sound OFF", textButtonStyle);
+        m_soundButton.setPosition(200, 200);
+        m_stage.addActor(m_soundButton);
 
-
-
-        m_playButton.addListener(new ChangeListener() {
+        m_soundButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
-                a.setScreen(new CharacterCreationMenu(a));
-            }
-        });
-
-        // adding the options button
-
-        TextButton m_optionsButton = new TextButton("Options", textButtonStyle);
-        m_optionsButton.setPosition(350, 200);
-        m_stage.addActor(m_optionsButton);
-
-        m_optionsButton.addListener(new ChangeListener() {
-            public void changed (ChangeEvent event, Actor actor) {
-                a.setScreen(new MainMenuOptions(a));
+                if(m_soundButton.getText().toString().equals("Sound OFF"))
+                    m_soundButton.setText("Sound ON");
+                else
+                    m_soundButton.setText("Sound OFF");
             }
         });
 
 
+        // add back button
+        m_backButton = new TextButton("Back", textButtonStyle);
+        m_backButton.setPosition(350,200);
+        m_stage.addActor(m_backButton);
 
+        m_backButton.addListener(new ClickListener() {
+            public void clicked (InputEvent event, float x, float y){
+                a.returnToOverworld();
+            }
+        });
     }
     @Override
     public void show() {
