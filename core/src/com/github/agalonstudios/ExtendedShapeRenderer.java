@@ -2,8 +2,12 @@ package com.github.agalonstudios;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.EarClippingTriangulator;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.badlogic.gdx.utils.ShortArray;
 
 /**
  * Created by Satya Patel on 2/18/2017.
@@ -12,8 +16,7 @@ import com.badlogic.gdx.math.Rectangle;
 public class ExtendedShapeRenderer extends ShapeRenderer {
     private static final int borderSize = 5;
     private static final int borderColorDepth = 2;
-    private static final Color grayCooldownColor = new Color(0, 0, 0, .4f);
-
+    private Vector2 m_centroid = new Vector2();
 
     public void borderedRect(Rectangle boundingBox, Color color) {
         borderedRect(boundingBox.x, boundingBox.y, boundingBox.width, boundingBox.height, color);
@@ -93,6 +96,62 @@ public class ExtendedShapeRenderer extends ShapeRenderer {
             currentTheta += delta;
         }
 
+    }
+
+    @Override
+    public void polygon(float[] vertices) {
+        getCentroid(vertices, m_centroid);
+
+        Color temp = new Color (this.getColor().r, this.getColor().g, this.getColor().b, this.getColor().a);
+        this.setColor(getBorderColor(temp));
+
+        for (int i = 0; i < vertices.length; i += 2) {
+            this.triangle(m_centroid.x, m_centroid.y, vertices[i], vertices[i+1],
+                          vertices[(i + 2) % vertices.length], vertices[(i + 3) % vertices.length]);
+        }
+
+        this.setColor(temp);
+
+
+        float yChange = vertices[1] - m_centroid.y;
+        float xChange = vertices[0] - m_centroid.x;
+        float theta1;
+        float theta2 = MathUtils.atan2(Math.abs(yChange), Math.abs(xChange));
+
+        if (xChange > 0 && yChange < 0) theta2 += 3 * Math.PI / 2;
+        if (xChange < 0 && yChange < 0) theta2 += Math.PI;
+        if (xChange < 0 && yChange > 0) theta2 += Math.PI / 2;
+
+
+        for (int i = 2; i <= vertices.length; i += 2) {
+            theta1 = theta2;
+            yChange = vertices[(i + 3) % vertices.length] - m_centroid.y;
+            xChange = vertices[(i + 2) % vertices.length] - m_centroid.x;
+            theta2 = MathUtils.atan2(Math.abs(yChange), Math.abs(xChange));
+
+            if (xChange > 0 && yChange < 0) theta2 += 3 * Math.PI / 2;
+            if (xChange < 0 && yChange < 0) theta2 += Math.PI;
+            if (xChange < 0 && yChange > 0) theta2 += Math.PI / 2;
+
+            this.triangle(
+                    m_centroid.x, m_centroid.y,
+                    vertices[i % vertices.length] - borderSize * MathUtils.cos(theta1),
+                    vertices[(i + 1) % vertices.length] - borderSize * MathUtils.sin(theta1),
+                    vertices[(i + 2) % vertices.length] - borderSize * MathUtils.cos(theta2),
+                    vertices[(i + 3) % vertices.length] - borderSize * MathUtils.sin(theta2)
+            );
+        }
+    }
+
+    private void getCentroid(float[] vertices, Vector2 centroid) {
+        float numSides = vertices.length / 2;
+        centroid.x = vertices[0] / numSides;
+        centroid.y = vertices[1] / numSides;
+
+        for (int i = 2; i < vertices.length; i += 2) {
+            centroid.x += vertices[i] / numSides;
+            centroid.y += vertices[i + 1] / numSides;
+        }
     }
 
     private static Color getBorderColor(Color color) {

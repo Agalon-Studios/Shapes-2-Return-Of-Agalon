@@ -23,10 +23,6 @@ public class CastObject extends Entity {
 
 
 
-    @Override
-    public void render(float delta) {
-
-    }
 
     public boolean done() {
         return false;

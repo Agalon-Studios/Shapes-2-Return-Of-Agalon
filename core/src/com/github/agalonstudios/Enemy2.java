@@ -1,9 +1,9 @@
 package com.github.agalonstudios;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * Created by spr on 3/13/17.
@@ -14,12 +14,13 @@ public class Enemy2 extends Character {
     private float moveTime;
 
     public Enemy2(float x, float y, int l, EnemySpawnPoint sp) {
-        super(x, y, 64, 128, 200, 200, 10, l);
+        super(32, new Vector2(x, y), Shape.SQUARE, 200, 200, 10, 1);
         m_fixed = false;
         m_spawnPointRef = sp;
         m_directionFacing = MathUtils.random(0, 3);
         moveTime = MathUtils.random(.5f, 1.5f);
         moveTimer = moveTime;
+        m_color = new Color(80 / 255.f, 78 / 255.f, 137 / 255.f, 1);
     }
 
     @Override
@@ -48,8 +49,11 @@ public class Enemy2 extends Character {
 
         moveTimer -= Gdx.graphics.getDeltaTime();
 
-        m_rect.x += Direction.dxdyScreen[m_directionFacing][0] * m_currentMaxSpeed * Gdx.graphics.getDeltaTime();
-        m_rect.y += Direction.dxdyScreen[m_directionFacing][1] * m_currentMaxSpeed * Gdx.graphics.getDeltaTime();
+        m_shape.translate(
+                Direction.dxdyScreen[m_directionFacing][0] * m_currentMaxSpeed * delta,
+                Direction.dxdyScreen[m_directionFacing][1] * m_currentMaxSpeed * delta
+        );
+
 
         if (moveTimer < 0) {
             switch (m_directionFacing) {
@@ -74,18 +78,16 @@ public class Enemy2 extends Character {
 
 
     @Override
-    public void render(float delta) {
-        ShapeRenderer sr = ((Agalon) Gdx.app.getApplicationListener()).getShapeRenderer();
-        OrthographicCamera camera = ((Agalon) Gdx.app.getApplicationListener()).getCamera();
+    public void render() {
+        super.render();
+        //TODO er.borderedPoly()
+        //sr.setColor(102 / 255.f, 99 / 255.f, 198 / 255.f, 1);
+        //sr.rect(m_rect.x + 3 - camera.position.x, m_rect.y + 3 - camera.position.y, m_rect.width - 6, m_rect.height - 6);
 
-        sr.setColor(80 / 255.f, 78 / 255.f, 137 / 255.f, 1);
-        sr.rect(m_rect.x - camera.position.x, m_rect.y - camera.position.y, m_rect.width, m_rect.height);
-        sr.setColor(102 / 255.f, 99 / 255.f, 198 / 255.f, 1);
-        sr.rect(m_rect.x + 3 - camera.position.x, m_rect.y + 3 - camera.position.y, m_rect.width - 6, m_rect.height - 6);
-
-        if (m_engaged) {
-            sr.setColor(255 / 255.f, 0, 0, 1);
-            sr.rect(m_rect.x - camera.position.x, m_rect.y + 10 + m_rect.height - camera.position.y, (m_health / (float) m_maxHealth) * m_rect.width, 5);
-        }
+        //TODO char.displayHP()
+//        if (m_engaged) {
+//            sr.setColor(255 / 255.f, 0, 0, 1);
+//            sr.rect(m_rect.x - camera.position.x, m_rect.y + 10 + m_rect.height - camera.position.y, (m_health / (float) m_maxHealth) * m_rect.width, 5);
+//        }
     }
 }

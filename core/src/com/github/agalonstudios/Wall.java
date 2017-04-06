@@ -14,6 +14,7 @@ public class Wall extends Entity {
 
     public Wall(int x, int y) {
         super(x, y, Wall.WIDTH, Wall.HEIGHT);
+        m_color = new Color(137/255.f, 90/255.f, 56/255.f, 1);
         m_fixed = true;
     }
 
@@ -23,11 +24,5 @@ public class Wall extends Entity {
 
     }
 
-    @Override
-    public void render(float delta) {
-        ShapeRenderer sr = ((Agalon) Gdx.app.getApplicationListener()).getShapeRenderer();
-        OrthographicCamera camera = ((Agalon) Gdx.app.getApplicationListener()).getCamera();
 
-        sr.rect(m_rect.x - camera.position.x, m_rect.y - camera.position.y, m_rect.width, m_rect.height);
-    }
 }
