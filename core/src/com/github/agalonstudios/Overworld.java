@@ -43,7 +43,7 @@ public class Overworld extends World {
         int placeYMax = 5000;
         for (int i = 0; i < numTrees; i++) {
             m_trees.add(new OverworldTree(MathUtils.random(-5000, 5000), MathUtils.random(placeYMax - 128, placeYMax)));
-            placeYMax = (int) m_trees.get(i).getRect().y;
+            placeYMax = (int) m_trees.get(i).getY();
         }
 
         m_travelers = new Array<Traveler>();
@@ -58,7 +58,7 @@ public class Overworld extends World {
     protected void update(float delta) {
         super.update(delta);
         for (DungeonEntrance de : m_dungeonEntrances) {
-            if (m_playerRef.getRect().overlaps(de.getEntranceRect()) && m_playerRef.getRect().y < de.getEntranceRect().y) {
+            if (m_playerRef.overlaps(de) && m_playerRef.getY() < de.getY()) {
                 Dungeon d = new Dungeon(de.getLevel(), de.getTheme(), m_playerRef);
                 ((Agalon) Gdx.app.getApplicationListener()).setScreen(d.currentRoom());
 
@@ -87,34 +87,32 @@ public class Overworld extends World {
         update(delta);
         Gdx.gl.glClearColor(104/255.f, 219/255.f, 112/255.f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-
+        m_cameraRef.position.set(m_playerRef.getX() - Gdx.graphics.getWidth() / 2, m_playerRef.getY() - Gdx.graphics.getHeight() / 2, 0);
         m_shapeRendererRef.begin(ShapeRenderer.ShapeType.Filled);
 
         for (OverworldFlower gf : m_overworldFlowers)
-            if (gf.getRect().x + gf.getRect().width >= m_cameraRef.position.x &&
-                    gf.getRect().x < m_cameraRef.position.x + Gdx.graphics.getWidth() &&
-                    gf.getRect().y + gf.getRect().height >= m_cameraRef.position.y &&
-                    gf.getRect().y < m_cameraRef.position.y + Gdx.graphics.getHeight())
-                gf.render(delta);
-
-        m_shapeRendererRef.end();
-        m_shapeRendererRef.begin(ShapeRenderer.ShapeType.Filled);
+            if (gf.getX() + gf.getWidth() >= m_cameraRef.position.x &&
+                    gf.getX() < m_cameraRef.position.x + Gdx.graphics.getWidth() &&
+                    gf.getY() + gf.getHeight() >= m_cameraRef.position.y &&
+                    gf.getY() < m_cameraRef.position.y + Gdx.graphics.getHeight())
+                gf.render();
 
         m_shapeRendererRef.end();
 
+
         m_shapeRendererRef.begin(ShapeRenderer.ShapeType.Filled);
 
-        for (Traveler t : m_travelers)
-            t.render(delta);
+     //   for (Traveler t : m_travelers)
+       //     t.render();
 
         for (OverworldTree t : m_trees)
-            t.render(delta);
+            t.render();
 
         for (DungeonEntrance d : m_dungeonEntrances)
-            d.render(delta);
+            d.render();
 
         for (CastObject co : m_castObjects) {
-            co.render(delta);
+            co.render();
         }
 
         m_shapeRendererRef.end();

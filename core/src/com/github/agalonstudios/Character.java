@@ -23,8 +23,9 @@ public abstract class Character extends Entity {
     protected Stats m_Stats;
 
 
-    public Character(float x, float y, int w, int h, int health, float ms, float ma, int l) {
-        super(x, y, w, h);
+
+    public Character(float radius, Vector2 center, Shape shape, int health, float ms, float ma, int l) {
+        super(radius, center, shape);
         m_health = health;
         m_maxHealth = health;
         m_maxSpeed = ms;
@@ -38,7 +39,6 @@ public abstract class Character extends Entity {
         m_directionFacing = Direction.EAST;
         m_engaged = false;
         m_cooldownTimers = new Array<Float>();
-        // TODO m_Stats = new m_Stats
     }
 
     protected void bindVelocity() {
@@ -48,7 +48,6 @@ public abstract class Character extends Entity {
         if (currentVelocity >  m_currentMaxSpeed) {
             m_velocity.x *= (m_currentMaxSpeed / currentVelocity);
             m_velocity.y *= (m_currentMaxSpeed / currentVelocity);
-            System.out.println(m_velocity.x + " " + m_velocity.y);
         }
     }
 
@@ -75,12 +74,7 @@ public abstract class Character extends Entity {
 
         bindVelocity();
 
-
-
-        m_rect.x += m_velocity.x * delta;
-        m_rect.y += m_velocity.y * delta;
-
-
+        translate(m_velocity.x * delta, m_velocity.y * delta);
     }
 
     private void updateCooldowns(float delta) {

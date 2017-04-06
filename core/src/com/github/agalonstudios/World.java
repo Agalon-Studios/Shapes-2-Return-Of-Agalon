@@ -21,7 +21,7 @@ public abstract class World implements Screen {
     protected Array<Character> m_nonPlayerCharacters;
     protected Array<Player> m_playerRefArray;
     protected Array<CastObject> m_castObjects;
-    protected QuadTree m_collisionTree;
+    //protected QuadTree m_collisionTree;
 
     private static Array<Entity> refList = new Array<Entity>();
     private static List<Entity> returnObjects = new ArrayList<Entity>();
@@ -59,19 +59,18 @@ public abstract class World implements Screen {
     public void render(float delta) {
         update(delta);
 
-        m_cameraRef.position.set(m_playerRef.getRect().x - Gdx.graphics.getWidth() / 2, m_playerRef.getRect().y - Gdx.graphics.getHeight() / 2, 0);
 
         m_shapeRendererRef.begin(ShapeRenderer.ShapeType.Filled);
         m_shapeRendererRef.setColor(137/255.f, 90/255.f, 56/255.f, 1);
         for (Wall wall : m_walls) {
-            if (wall.getRect().x + wall.getRect().width >= m_cameraRef.position.x &&
-                    wall.getRect().x < m_cameraRef.position.x + Gdx.graphics.getWidth() &&
-                    wall.getRect().y + wall.getRect().height >= m_cameraRef.position.y &&
-                    wall.getRect().y < m_cameraRef.position.y + Gdx.graphics.getHeight())
-                wall.render(delta);
+            if (wall.getX() + wall.getWidth() >= m_cameraRef.position.x &&
+                    wall.getX() < m_cameraRef.position.x + Gdx.graphics.getWidth() &&
+                    wall.getY() + wall.getHeight() >= m_cameraRef.position.y &&
+                    wall.getY() < m_cameraRef.position.y + Gdx.graphics.getHeight())
+                wall.render();
         }
 
-        m_playerRef.render(delta);
+        m_playerRef.render();
 
         m_shapeRendererRef.end();
         HUD.render();
@@ -95,39 +94,39 @@ public abstract class World implements Screen {
                 if (e == o)
                     continue;
 
-                if (allObjects.get(e).getRect().overlaps(allObjects.get(o).getRect()))
+                if (allObjects.get(e).overlaps(allObjects.get(o)))
                     allObjects.get(e).runCollision(allObjects.get(o));
             }
         }
     }
 
-    protected static void runColliionsQuadTree(Array<? extends Entity> ... entityLists) {
-        QuadTree collisionTree = new QuadTree(0, new Rectangle(0 - MAX_WORLD_WIDTH / 2 , 0 - MAX_WORLD_HEIGHT / 2,
-                MAX_WORLD_WIDTH / 2, MAX_WORLD_HEIGHT / 2));
-
-        refList.clear();
-        collisionTree.clear();
-        returnObjects.clear();
-
-        for (Array<? extends Entity> entityList : entityLists) {
-            for (Entity e : entityList) {
-                collisionTree.insert(e);
-                refList.add(e);
-            }
-        }
-
-        for (Entity e : refList) {
-            if (e.isFixed())
-                continue;
-
-            returnObjects.clear();
-            collisionTree.retrieve(returnObjects, e);
-
-            for (Entity object : returnObjects) {
-                e.runCollision(object);
-            }
-        }
-    }
+//    protected static void runColliionsQuadTree(Array<? extends Entity> ... entityLists) {
+//        QuadTree collisionTree = new QuadTree(0, new Rectangle(0 - MAX_WORLD_WIDTH / 2 , 0 - MAX_WORLD_HEIGHT / 2,
+//                MAX_WORLD_WIDTH / 2, MAX_WORLD_HEIGHT / 2));
+//
+//        refList.clear();
+//        collisionTree.clear();
+//        returnObjects.clear();
+//
+//        for (Array<? extends Entity> entityList : entityLists) {
+//            for (Entity e : entityList) {
+//                collisionTree.insert(e);
+//                refList.add(e);
+//            }
+//        }
+//
+//        for (Entity e : refList) {
+//            if (e.isFixed())
+//                continue;
+//
+//            returnObjects.clear();
+//            collisionTree.retrieve(returnObjects, e);
+//
+//            for (Entity object : returnObjects) {
+//                e.runCollision(object);
+//            }
+//        }
+//    }
 
     public void addCastObject(CastObject co) {
         m_castObjects.add(co);

@@ -6,13 +6,13 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class Agalon extends Game {
-	private ShapeRenderer m_shapeRenderer;
+	private ExtendedShapeRenderer m_shapeRenderer;
     private OrthographicCamera m_camera;
     private Overworld m_overworld;
 
 	@Override
 	public void create () {
-        m_shapeRenderer = new ShapeRenderer();
+        m_shapeRenderer = new ExtendedShapeRenderer();
         m_camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         m_overworld = new Overworld(new Player(100, 200, "player-image-path"));
@@ -24,7 +24,7 @@ public class Agalon extends Game {
         this.setScreen(m_overworld);
     }
 
-    public ShapeRenderer getShapeRenderer() {
+    public ExtendedShapeRenderer getShapeRenderer() {
         return m_shapeRenderer;
     }
 

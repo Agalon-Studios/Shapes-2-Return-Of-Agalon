@@ -1,9 +1,11 @@
 package com.github.agalonstudios;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * Created by spr on 3/18/17.
@@ -18,9 +20,9 @@ public class Traveler extends Character {
     }
 
     public Traveler(int x, int y) {
-        super(x, y, 32, 32, 100, 50, 10, 1);
+        super(32, new Vector2(32, 32), Shape.SQUARE, 100, 50, 10, 1);
         dir = MathUtils.random(7);
-
+        m_color = new Color(199 / 255.f, 143 / 255.f, 97 / 255.f, 1);
         stateTimer = MathUtils.random(1.f, 3.f);
     }
 
@@ -35,8 +37,10 @@ public class Traveler extends Character {
         stateTimer -= Gdx.graphics.getDeltaTime();
 
         if (state == State.WALK) {
-            m_rect.x += Direction.dxdyScreen[dir][0] * m_currentMaxSpeed * Gdx.graphics.getDeltaTime();
-            m_rect.y += Direction.dxdyScreen[dir][1] * m_currentMaxSpeed * Gdx.graphics.getDeltaTime();
+            translate(
+                    Direction.dxdyScreen[dir][0] * m_currentMaxSpeed * Gdx.graphics.getDeltaTime(),
+                    Direction.dxdyScreen[dir][1] * m_currentMaxSpeed * Gdx.graphics.getDeltaTime()
+            );
         }
 
         if (stateTimer <= 0) {
@@ -45,17 +49,5 @@ public class Traveler extends Character {
                 dir = MathUtils.random(7);
             stateTimer = MathUtils.random(1.f, 3.f);
         }
-    }
-
-    @Override
-    public void render(float delta) {
-        ShapeRenderer sr = ((Agalon) Gdx.app.getApplicationListener()).getShapeRenderer();
-        OrthographicCamera camera = ((Agalon) Gdx.app.getApplicationListener()).getCamera();
-
-        sr.setColor(199 / 255.f, 143 / 255.f, 97 / 255.f, 1);
-        sr.rect(m_rect.x - camera.position.x, m_rect.y - camera.position.y, m_rect.width, m_rect.height);
-        sr.setColor(230 / 255.f, 169 / 255.f, 120 / 255.f, 1);
-        sr.rect(m_rect.x + 3 - camera.position.x, m_rect.y + 3 - camera.position.y, m_rect.width - 6, m_rect.height - 6);
-
     }
 }

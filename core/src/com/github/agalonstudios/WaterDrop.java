@@ -1,14 +1,17 @@
 package com.github.agalonstudios;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * Created by spr on 3/13/17.
  */
+@Deprecated
 public class WaterDrop extends Entity {
     private float m_timer;
     private boolean m_splashing;
@@ -17,12 +20,13 @@ public class WaterDrop extends Entity {
     private float m_yvelocity;
 
     public WaterDrop(int x, int y) {
-        super(x, y, 8, 8);
+        super(4, new Vector2(x, y), Shape.SQUARE);
         m_timer = 1.f;
         m_splashing = false;
         m_splashOpacity = 1.f;
         m_splashRadius = 1;
         m_yvelocity = 0;
+        m_color = new Color(125/255.f, 212/255.f, 238/255.f, m_splashOpacity);
     }
 
     @Override
@@ -36,7 +40,7 @@ public class WaterDrop extends Entity {
 
         if (!m_splashing) {
             m_yvelocity -= 300 * delta;
-            m_rect.y += m_yvelocity * delta;
+            m_shape.translate(0, m_yvelocity * delta);
         }
 
         if (m_timer <= 0)
@@ -49,23 +53,21 @@ public class WaterDrop extends Entity {
     }
 
     @Override
-    public void render(float delta) {
+    public void render() {
         ShapeRenderer sr = ((Agalon) Gdx.app.getApplicationListener()).getShapeRenderer();
-        OrthographicCamera camera = ((Agalon) Gdx.app.getApplicationListener()).getCamera();
 
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
-        sr.setColor(125/255.f, 212/255.f, 238/255.f, m_splashOpacity);
+        sr.setColor(m_color);
+        float[] vertices = getcameraAdjustedVertices();
         if (!m_splashing) {
-            sr.begin(ShapeRenderer.ShapeType.Filled);
-            sr.rect(m_rect.x - camera.position.x, m_rect.y - camera.position.y, m_rect.width, m_rect.height);
-            sr.end();
+            sr.set(ShapeRenderer.ShapeType.Filled);
+            sr.polygon(getcameraAdjustedVertices());
         }
         else {
-            sr.begin(ShapeRenderer.ShapeType.Line);
-            sr.circle(m_rect.x - camera.position.x, m_rect.y - camera.position.y, m_splashRadius);
-            sr.end();
+            sr.set(ShapeRenderer.ShapeType.Line);
+            sr.circle(vertices[0], vertices[1], m_splashRadius);
         }
 
         Gdx.gl.glDisable(GL20.GL_BLEND);

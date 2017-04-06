@@ -50,7 +50,7 @@ public class OverworldFlower extends Entity {
     }
 
     @Override
-    public void render(float delta) {
+    public void render() {
         ShapeRenderer sr = ((Agalon) Gdx.app.getApplicationListener()).getShapeRenderer();
         OrthographicCamera camera = ((Agalon) Gdx.app.getApplicationListener()).getCamera();
 

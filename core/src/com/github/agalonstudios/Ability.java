@@ -43,7 +43,7 @@ public class Ability {
 
         switch (m_ability) {
             case STRIKE:
-                worldRef.addCastObject(new StrikeCastObject(casterRef));
+                //worldRef.addCastObject(new StrikeCastObject(casterRef));
                 break;
             case SHOT:
                // worldRef.addCastObject(new ShotCastObject(casterRef));
