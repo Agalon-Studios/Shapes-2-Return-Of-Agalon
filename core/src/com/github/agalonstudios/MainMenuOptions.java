@@ -60,16 +60,24 @@ public class MainMenuOptions implements Screen {
         skin.add("default", textButtonStyle);
 
         // add sound toggle button
-        m_soundButton = new TextButton("Sound OFF", textButtonStyle);
+        if(a.getMusic().isPlaying())
+            m_soundButton = new TextButton("Sound OFF", textButtonStyle);
+        else
+            m_soundButton = new TextButton("Sound ON", textButtonStyle);
+
         m_soundButton.setPosition(200, 200);
         m_stage.addActor(m_soundButton);
 
         m_soundButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
-                if(m_soundButton.getText().toString().equals("Sound OFF"))
-                    m_soundButton.setText("Sound ON");
-                else
+                if(a.getMusic().isPlaying()) {
                     m_soundButton.setText("Sound OFF");
+                    a.turnOffMusic();
+                }
+                else {
+                    m_soundButton.setText("Sound ON");
+                    a.turnOnMusic();
+                }
             }
         });
 

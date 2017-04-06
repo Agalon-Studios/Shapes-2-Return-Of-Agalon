@@ -60,6 +60,14 @@ public class Overworld extends World {
         for (DungeonEntrance de : m_dungeonEntrances) {
             if (m_playerRef.getRect().overlaps(de.getEntranceRect()) && m_playerRef.getRect().y < de.getEntranceRect().y) {
                 Dungeon d = new Dungeon(de.getLevel(), de.getTheme(), m_playerRef);
+
+                if(((Agalon) Gdx.app.getApplicationListener()).getMusic().isPlaying()){
+                    ((Agalon) Gdx.app.getApplicationListener()).turnOffMusic();
+                    ((Agalon) Gdx.app.getApplicationListener()).setDungeonMusic(true);
+                }
+                else
+                    ((Agalon) Gdx.app.getApplicationListener()).setDungeonMusic(false);
+
                 ((Agalon) Gdx.app.getApplicationListener()).setScreen(d.currentRoom());
 
             }
