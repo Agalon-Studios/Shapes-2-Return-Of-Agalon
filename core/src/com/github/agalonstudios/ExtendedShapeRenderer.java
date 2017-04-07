@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.EarClippingTriangulator;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.GdxRuntimeException;
@@ -100,6 +101,12 @@ public class ExtendedShapeRenderer extends ShapeRenderer {
 
     @Override
     public void polygon(float[] vertices) {
+        // TODO move allocations outside of this method
+        Polygon seanoriginalpoly = new Polygon(vertices);
+        Polygon seanpoly = new Polygon(vertices);
+        float[] seanvertices;
+        Vector2 seancentroid = new Vector2();
+
         getCentroid(vertices, m_centroid);
 
         Color temp = new Color (this.getColor().r, this.getColor().g, this.getColor().b, this.getColor().a);
@@ -112,34 +119,17 @@ public class ExtendedShapeRenderer extends ShapeRenderer {
 
         this.setColor(temp);
 
+        seanpoly.setScale(0.85f, 0.85f);
+        seanvertices = seanpoly.getTransformedVertices();
+        getCentroid(seanvertices, seancentroid);
+        seanpoly.translate(m_centroid.x - seancentroid.x, m_centroid.y - seancentroid.y);
+        seanvertices = seanpoly.getTransformedVertices();
 
-        float yChange = vertices[1] - m_centroid.y;
-        float xChange = vertices[0] - m_centroid.x;
-        float theta1;
-        float theta2 = MathUtils.atan2(Math.abs(yChange), Math.abs(xChange));
+        getCentroid(seanvertices, seancentroid);
 
-        if (xChange > 0 && yChange < 0) theta2 += 3 * Math.PI / 2;
-        if (xChange < 0 && yChange < 0) theta2 += Math.PI;
-        if (xChange < 0 && yChange > 0) theta2 += Math.PI / 2;
-
-
-        for (int i = 2; i <= vertices.length; i += 2) {
-            theta1 = theta2;
-            yChange = vertices[(i + 3) % vertices.length] - m_centroid.y;
-            xChange = vertices[(i + 2) % vertices.length] - m_centroid.x;
-            theta2 = MathUtils.atan2(Math.abs(yChange), Math.abs(xChange));
-
-            if (xChange > 0 && yChange < 0) theta2 += 3 * Math.PI / 2;
-            if (xChange < 0 && yChange < 0) theta2 += Math.PI;
-            if (xChange < 0 && yChange > 0) theta2 += Math.PI / 2;
-
-            this.triangle(
-                    m_centroid.x, m_centroid.y,
-                    vertices[i % vertices.length] - borderSize * MathUtils.cos(theta1),
-                    vertices[(i + 1) % vertices.length] - borderSize * MathUtils.sin(theta1),
-                    vertices[(i + 2) % vertices.length] - borderSize * MathUtils.cos(theta2),
-                    vertices[(i + 3) % vertices.length] - borderSize * MathUtils.sin(theta2)
-            );
+        for (int i = 0; i < seanvertices.length; i += 2) {
+            this.triangle(seancentroid.x, seancentroid.y, seanvertices[i], seanvertices[i+1],
+                    seanvertices[(i + 2) % seanvertices.length], seanvertices[(i + 3) % seanvertices.length]);
         }
     }
 
