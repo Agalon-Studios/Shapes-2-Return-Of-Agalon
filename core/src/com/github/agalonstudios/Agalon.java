@@ -49,6 +49,9 @@ public class Agalon extends Game {
 
     public void returnToOverworld() {
         this.setScreen(m_overworld);
+        m_currentWorld = m_overworld;
+        this.turnOffMusic();
+        this.setMainMusic(true);
         Gdx.input.setInputProcessor(HUD.getStage());
     }
 
@@ -112,4 +115,12 @@ public class Agalon extends Game {
         else
             m_dungeonMusic.play();
     }
+
+    public boolean getOverworldType(){
+        if(m_currentWorld instanceof Overworld)
+            return true;
+        else
+            return false;
+    }
+
 }

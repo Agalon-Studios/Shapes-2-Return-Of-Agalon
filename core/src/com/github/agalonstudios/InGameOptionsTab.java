@@ -26,7 +26,7 @@ public class InGameOptionsTab implements Screen{
     private Skin skin;
     private TextButton m_soundButton;
     private TextButton m_backButton;
-    private TextButton m_deleteButton;
+    private TextButton m_exitDung;
 
     public InGameOptionsTab(final Agalon a){
         m_stage = new Stage();
@@ -89,6 +89,18 @@ public class InGameOptionsTab implements Screen{
         m_backButton.addListener(new ClickListener() {
             public void clicked (InputEvent event, float x, float y){
                 a.backToWorld();
+            }
+        });
+
+        //add exit dungeon button
+        m_exitDung = new TextButton("Exit Dungeon", textButtonStyle);
+        m_exitDung.setPosition(screenWidth*2/5, screenHeight/2 - screenWidth/10);
+        if(!a.getOverworldType())
+            m_stage.addActor(m_exitDung);
+
+        m_exitDung.addListener(new ClickListener() {
+            public void clicked (InputEvent event, float x, float y){
+                a.returnToOverworld();
             }
         });
 
