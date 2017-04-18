@@ -3,11 +3,6 @@ package com.github.agalonstudios;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Circle;
-import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -19,6 +14,8 @@ public abstract class Entity {
     protected int m_ID;
     protected boolean m_fixed;
     protected Polygon m_shape;
+    protected Rectangle m_oldAnus;
+    protected Rectangle m_rect;
     private float[] m_cameraAdjustedVertices;
     protected Color m_color;
 
@@ -27,7 +24,10 @@ public abstract class Entity {
         m_cameraAdjustedVertices = new float[vertices.length];
         m_shape = new Polygon(vertices);
 
+
         m_shape.translate(x, y);
+        m_rect = new Rectangle(x, y, width, height);
+        m_oldAnus = new Rectangle(m_rect);
 
         m_ID = EntityManager.getNextValidEntityID();
         EntityManager.registerEntity(this);
@@ -65,8 +65,6 @@ public abstract class Entity {
             vertices[i * 2 + 1] = (float) (radius + radius * Math.sin(2 * Math.PI * i / numSides));
         }
 
-
-
         m_shape = new Polygon(vertices);
 
         m_shape.setOrigin(radius, radius);
@@ -78,15 +76,25 @@ public abstract class Entity {
 
         m_ID = EntityManager.getNextValidEntityID();
         EntityManager.registerEntity(this);
+
+        m_rect = new Rectangle(position.x, position.y, (float) (radius * 1.8), (float) (radius * 1.8));
+        m_oldAnus = new Rectangle(m_rect);
+
     }
 
 
     public void setPosition(float x, float y) {
+        m_oldAnus.setPosition(m_rect.getX(), m_rect.getY());
         m_shape.setPosition(x, y);
+        m_rect.setPosition(x, y);
     }
 
     public void translate(float x, float y) {
+        m_oldAnus.setX(m_rect.getX());
+        m_oldAnus.setY(m_rect.getY());
         m_shape.translate(x, y);
+        m_rect.setX(m_rect.getX() + x);
+        m_rect.setY(m_rect.getY() + y);
     }
 
     public float getX() {
@@ -123,7 +131,6 @@ public abstract class Entity {
     public void render() {
         ExtendedShapeRenderer er = ((Agalon) Gdx.app.getApplicationListener()).getShapeRenderer();
         er.setColor(m_color);
-        //m_shape.rotate(1);
         er.polygon(getcameraAdjustedVertices());
     }
 
@@ -140,11 +147,15 @@ public abstract class Entity {
     }
 
     public boolean overlaps(Entity e) {
-        return Intersector.overlapConvexPolygons(this.getShape(), e.getShape());
+        //return Intersector.overlapConvexPolygons(this.getShape(), e.getShape());
+        return m_rect.overlaps(e.getRect());
     }
 
     public Polygon getShape() {
         return this.m_shape;
     }
 
+    public Rectangle getRect() {
+        return m_rect;
+    }
 }

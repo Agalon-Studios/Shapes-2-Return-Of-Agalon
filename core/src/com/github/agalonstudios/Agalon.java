@@ -123,4 +123,11 @@ public class Agalon extends Game {
             return false;
     }
 
+    public void setPlayer(Player p) {
+        this.m_player = p;
+    }
+
+    public Player getPlayer() {
+        return m_player;
+    }
 }

@@ -18,7 +18,6 @@ public class Wall extends Entity {
         m_fixed = true;
     }
 
-
     @Override
     public void runCollision(Entity other) {
 

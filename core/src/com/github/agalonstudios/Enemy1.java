@@ -26,15 +26,7 @@ public class Enemy1 extends Character {
         m_color = new Color(145 / 255.f, 81 / 255.f, 70 / 255.f, 1);
     }
 
-    @Override
-    public void runCollision(Entity other) {
-        // TODO this is a placeholder, castobjects don't destroy on character impact
-        if (other instanceof CastObject) {
-            m_engaged = true;
-        }
 
-        //TODO add collision test
-    }
 
     @Override
     public void update(float delta, World world) {

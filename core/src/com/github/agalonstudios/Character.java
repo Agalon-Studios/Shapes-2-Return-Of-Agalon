@@ -21,8 +21,7 @@ public abstract class Character extends Entity {
     protected Array<EffectOverTime> m_effectOverTimes;
     protected Array<Float> m_cooldownTimers;
     protected Stats m_Stats;
-
-
+    protected Array<Ability> m_equippedAbilities;
 
     public Character(float radius, Vector2 center, Shape shape, int health, float ms, float ma, int l) {
         super(radius, center, shape);
@@ -39,6 +38,7 @@ public abstract class Character extends Entity {
         m_directionFacing = Direction.EAST;
         m_engaged = false;
         m_cooldownTimers = new Array<Float>();
+        m_equippedAbilities = new Array<Ability>();
     }
 
     protected void bindVelocity() {
@@ -83,6 +83,15 @@ public abstract class Character extends Entity {
             m_cooldownTimers.set(i, m_cooldownTimers.get(i) > 0 ? m_cooldownTimers.get(i) - delta : 0);
 
 
+    }
+
+    public void cast(int abilityNum) {
+        m_equippedAbilities.get(abilityNum).cast(this, (World) ((Agalon) Gdx.app.getApplicationListener()).getScreen());
+    }
+
+    @Override
+    public void runCollision(Entity other) {
+        this.setPosition(m_oldAnus.getX(), m_oldAnus.getY());
     }
 
 }
