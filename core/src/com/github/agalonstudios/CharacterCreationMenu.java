@@ -107,7 +107,6 @@ public class CharacterCreationMenu implements Screen {
         //m_colorSlider.setSnapToValues(snapvals,.04f);
         m_stage.addActor(m_colorSlider);
 
-        // add preview for character color
     }
     @Override
     public void show() {

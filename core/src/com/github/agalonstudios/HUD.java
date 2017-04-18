@@ -26,6 +26,7 @@ public class HUD {
     private static Touchpad m_movementJoystick;
     private static Stage m_stage;
     private static Button m_pauseButton;
+    private static Button m_bookButton;
 
     private HUD() { }
     static {
@@ -68,6 +69,27 @@ public class HUD {
 
         m_pauseButton.setBounds(0, ScreenScale.scaleHeight(-200) + Gdx.graphics.getHeight(), ScreenScale.scale(200), ScreenScale.scale(200));
         m_stage.addActor(m_pauseButton);
+
+        //Ability book button
+        Skin bookSkin = new Skin();
+        bookSkin.add("bookButton", new Texture("bookButton.png"));
+
+        Button.ButtonStyle bookStyle = new Button.ButtonStyle();
+        bookStyle.checked = bookSkin.getDrawable("bookButton");
+        bookStyle.up = bookSkin.getDrawable("bookButton");
+        bookStyle.down = bookSkin.getDrawable("bookButton");
+
+        m_bookButton = new Button(bookStyle);
+
+        m_bookButton.addListener(new ClickListener() {
+            public void clicked (InputEvent event, float x, float y){
+                ((Agalon) Gdx.app.getApplicationListener()).setScreen(new AbilityBook(((Agalon) Gdx.app.getApplicationListener())));
+            }
+        });
+
+
+        m_bookButton.setBounds(0, ScreenScale.scaleHeight(-400) + Gdx.graphics.getHeight(), ScreenScale.scale(200), ScreenScale.scale(200));
+        m_stage.addActor(m_bookButton);
     }
 
 
