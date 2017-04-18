@@ -125,12 +125,11 @@ public class CharacterCreationMenu implements Screen {
         m_playerColorHSV.r =  m_colorSlider.getPercent();
         System.out.println(m_playerColorHSV.r + ", " +  m_colorSlider.getPercent());
 
-        ShapeRenderer sr = ((Agalon) Gdx.app.getApplicationListener()).getShapeRenderer();
+        ExtendedShapeRenderer sr = ((Agalon) Gdx.app.getApplicationListener()).getShapeRenderer();
 
         sr.begin(ShapeRenderer.ShapeType.Filled);
         calculateRGB();
-        sr.setColor(m_playerColorRGB.r, m_playerColorRGB.g, m_playerColorRGB.b, 1);
-        sr.rect(Gdx.graphics.getWidth() / 2 - 64, Gdx.graphics.getHeight() / 2 - 64, 64, 64);
+        sr.borderedRect(Gdx.graphics.getWidth() / 2 - 64, Gdx.graphics.getHeight() / 2 - 64, 64, 64, m_playerColorRGB);
         sr.end();
     }
 

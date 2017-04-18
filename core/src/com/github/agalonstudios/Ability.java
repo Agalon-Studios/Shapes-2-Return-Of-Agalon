@@ -48,6 +48,7 @@ public class Ability {
             case SHOT:
                // worldRef.addCastObject(new ShotCastObject(casterRef));
                 break;
+
         }
     }
 
