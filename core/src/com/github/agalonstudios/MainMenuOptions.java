@@ -115,6 +115,11 @@ public class MainMenuOptions implements Screen {
         m_howToButton = new TextButton("How to Play", textButtonStyle);
         m_howToButton.setPosition(screenWidth/4, screenHeight/2-screenWidth/10);
         m_stage.addActor(m_howToButton);
+        m_howToButton.addListener(new ChangeListener() {
+            public void changed (ChangeEvent event, Actor actor) {
+                a.setScreen(new HowToPlay(a));
+            }
+        });
     }
     @Override
     public void show() {
