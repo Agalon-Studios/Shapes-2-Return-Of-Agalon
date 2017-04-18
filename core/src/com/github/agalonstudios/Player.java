@@ -21,7 +21,6 @@ public class Player extends Character {
     private float m_cooldown;
     private float m_cooldownTimer;
     private float m_stats;
-    private Array<Ability> m_equippedAbilities;
 
 
     // TODO inventory, equipped items, abilities, other properties
@@ -40,8 +39,6 @@ public class Player extends Character {
         m_fixed = false;
         m_gold = 0;
         m_xp = 0;
-        m_equippedAbilities = new Array<Ability>();
-
         m_color = c;
 
         m_equippedAbilities.add(new Ability(Ability.Abilities.STRIKE));
@@ -51,15 +48,6 @@ public class Player extends Character {
 
 
         // TODO add constructor for stats
-    }
-
-    @Override
-    public void runCollision(Entity other) {
-        // TODO make it so this isnt necessary
-        if (other == this)
-            return;
-
-        //TODO
     }
 
 
@@ -91,7 +79,7 @@ public class Player extends Character {
 
         if (Gdx.input.isKeyPressed((Input.Keys.ESCAPE))) {
             ((Agalon) Gdx.app.getApplicationListener()).returnToOverworld();
-            m_shape.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
+            this.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
 
         }
 
