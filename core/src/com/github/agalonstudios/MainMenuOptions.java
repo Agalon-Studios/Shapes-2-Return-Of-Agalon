@@ -13,12 +13,14 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -32,15 +34,20 @@ public class MainMenuOptions implements Screen {
     private Skin skin;
     private TextButton m_soundButton;
     private TextButton m_backButton;
+    private TextButton m_deleteButton;
+    private TextButton m_howToButton;
 
     public MainMenuOptions(final Agalon a){
         m_stage = new Stage();
         Gdx.input.setInputProcessor(m_stage);
 
+        int screenWidth = Gdx.graphics.getWidth();
+        int screenHeight = Gdx.graphics.getHeight();
+
         skin = new Skin();
 
         // creating the button style
-        Pixmap pixmap = new Pixmap(100, 100, Pixmap.Format.RGBA8888);
+        Pixmap pixmap = new Pixmap(screenWidth/4, screenWidth/4, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.GREEN);
         pixmap.fill();
 
@@ -65,7 +72,7 @@ public class MainMenuOptions implements Screen {
         else
             m_soundButton = new TextButton("Sound ON", textButtonStyle);
 
-        m_soundButton.setPosition(200, 200);
+        m_soundButton.setPosition(0, screenHeight/2-screenWidth/10);
         m_stage.addActor(m_soundButton);
 
         m_soundButton.addListener(new ChangeListener() {
@@ -84,7 +91,7 @@ public class MainMenuOptions implements Screen {
 
         // add back button
         m_backButton = new TextButton("Back", textButtonStyle);
-        m_backButton.setPosition(350,200);
+        m_backButton.setPosition(screenWidth*3/4, screenHeight/2-screenWidth/10);
         m_stage.addActor(m_backButton);
 
         m_backButton.addListener(new ChangeListener() {
@@ -92,6 +99,22 @@ public class MainMenuOptions implements Screen {
                 a.setScreen(new MainMenu(a));
             }
         });
+
+        // add delete save data button
+        m_deleteButton = new TextButton("Delete Save Data", textButtonStyle);
+        m_deleteButton.setPosition(screenWidth/2, screenHeight/2-screenWidth/10);
+        m_stage.addActor(m_deleteButton);
+
+        m_deleteButton.addListener(new ClickListener() {
+            public void clicked (InputEvent event, float x, float y){
+
+            }
+        });
+
+        // add how to play button
+        m_howToButton = new TextButton("How to Play", textButtonStyle);
+        m_howToButton.setPosition(screenWidth/4, screenHeight/2-screenWidth/10);
+        m_stage.addActor(m_howToButton);
     }
     @Override
     public void show() {

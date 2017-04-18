@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -16,6 +17,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 
 /**
@@ -25,18 +28,24 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 class MainMenu implements Screen {
 
     private Stage m_stage;
-
+    private Viewport m_viewport;
     private TextButton m_playButton;
 
     public MainMenu(final Agalon a){
 
+        int screenWidth = Gdx.graphics.getWidth();
+        int screenHeight = Gdx.graphics.getHeight();
+
         m_stage = new Stage();
+        //m_viewport = new ExtendViewport(100, 100, a.getCamera());
+        //m_viewport.apply();
+        //a.getCamera().position.set(a.getCamera().viewportWidth/2,a.getCamera().viewportHeight/2,0);
         Gdx.input.setInputProcessor(m_stage);
 
         Skin skin = new Skin();
 
         // creating the button style
-        Pixmap pixmap = new Pixmap(100, 100, Pixmap.Format.RGBA8888);
+        Pixmap pixmap = new Pixmap(screenWidth/5, screenWidth/5, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.GREEN);
         pixmap.fill();
 
@@ -57,7 +66,8 @@ class MainMenu implements Screen {
 
         // adding the play button
         m_playButton  = new TextButton("PLAY",textButtonStyle);
-        m_playButton.setPosition(200, 200);
+        m_playButton.setPosition(screenWidth/5, screenHeight/2-screenWidth/10);
+
         m_stage.addActor(m_playButton);
 
 
@@ -71,7 +81,7 @@ class MainMenu implements Screen {
         // adding the options button
 
         TextButton m_optionsButton = new TextButton("Options", textButtonStyle);
-        m_optionsButton.setPosition(350, 200);
+        m_optionsButton.setPosition(screenWidth*3/5, screenHeight/2-screenWidth/10);
         m_stage.addActor(m_optionsButton);
 
         m_optionsButton.addListener(new ChangeListener() {
@@ -99,7 +109,7 @@ class MainMenu implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        //m_viewport.update(width,height);
     }
 
     @Override

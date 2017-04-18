@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
+
 /**
  * Created by BDog on 3/31/2017.
  */
@@ -25,15 +26,19 @@ public class InGameOptionsTab implements Screen{
     private Skin skin;
     private TextButton m_soundButton;
     private TextButton m_backButton;
+    private TextButton m_deleteButton;
 
     public InGameOptionsTab(final Agalon a){
         m_stage = new Stage();
         Gdx.input.setInputProcessor(m_stage);
 
+        int screenWidth = Gdx.graphics.getWidth();
+        int screenHeight = Gdx.graphics.getHeight();
+
         skin = new Skin();
 
         // creating the button style
-        Pixmap pixmap = new Pixmap(100, 100, Pixmap.Format.RGBA8888);
+        Pixmap pixmap = new Pixmap(screenWidth/5, screenWidth/5, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.GREEN);
         pixmap.fill();
 
@@ -56,7 +61,9 @@ public class InGameOptionsTab implements Screen{
         if(a.getMusic().isPlaying())
             m_soundButton = new TextButton("Sound OFF", textButtonStyle);
         else
-            m_soundButton = new TextButton("Sound ON", textButtonStyle);        m_soundButton.setPosition(200, 200);
+            m_soundButton = new TextButton("Sound ON", textButtonStyle);
+
+        m_soundButton.setPosition(screenWidth/5, screenHeight/2-screenWidth/10);
 
         m_stage.addActor(m_soundButton);
 
@@ -76,7 +83,7 @@ public class InGameOptionsTab implements Screen{
 
         // add back button
         m_backButton = new TextButton("Back", textButtonStyle);
-        m_backButton.setPosition(350,200);
+        m_backButton.setPosition(screenWidth*3/5, screenHeight/2-screenWidth/10);
         m_stage.addActor(m_backButton);
 
         m_backButton.addListener(new ClickListener() {
@@ -84,6 +91,8 @@ public class InGameOptionsTab implements Screen{
                 a.backToWorld();
             }
         });
+
+
     }
     @Override
     public void show() {

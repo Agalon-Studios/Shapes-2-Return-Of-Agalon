@@ -123,7 +123,7 @@ public abstract class Entity {
     public void render() {
         ExtendedShapeRenderer er = ((Agalon) Gdx.app.getApplicationListener()).getShapeRenderer();
         er.setColor(m_color);
-        m_shape.rotate(1);
+        //m_shape.rotate(1);
         er.polygon(getcameraAdjustedVertices());
     }
 
