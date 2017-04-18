@@ -19,9 +19,7 @@ public class ExtendedShapeRenderer extends ShapeRenderer {
     private static final int borderColorDepth = 2;
     private Vector2 m_centroid = new Vector2();
 
-    public void borderedRect(Rectangle boundingBox, Color color) {
-        borderedRect(boundingBox.x, boundingBox.y, boundingBox.width, boundingBox.height, color);
-    }
+
 
     public void borderedRect(float x, float y, float width, float height, Color color) {
         float interiorWidth = width - borderSize * 2;
