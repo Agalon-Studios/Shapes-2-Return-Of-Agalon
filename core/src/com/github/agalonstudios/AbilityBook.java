@@ -326,6 +326,7 @@ class AbilityBook implements Screen {
 
             public void reset (Source source, Payload payload) {
                 // called when payload is no longer over the target (by drop or move)
+
             }
 
             public void drop (Source source, Payload payload, float x, float y, int pointer) {
