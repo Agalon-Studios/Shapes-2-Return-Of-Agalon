@@ -4,22 +4,24 @@ package com.github.agalonstudios;
  * Created by spr on 3/12/17.
  */
 public class Stats {
-    public final int m_meleeDamage;
-    public final int m_rangeDamage;
-    public final int m_mageDamage;
-    public final float m_speedChange;
-    public final float m_defenseChange;
-    public final float m_damageChange;
-    public final float m_knockback;
+    public final int meleeDamage;
+    public final int rangeDamage;
+    public final int mageDamage;
+    public final float speedChange;
+    public final float defenseChange;
+    public final float damageChange;
+    public final float knockback;
+    public final float duration;
 
-    public Stats(int md, int rd, int gd, float sc, float dx, float mc, float kb) {
-        m_meleeDamage = md;
-        m_rangeDamage = rd;
-        m_mageDamage = gd;
-        m_speedChange = sc;
-        m_defenseChange = dx;
-        m_damageChange = mc;
-        m_knockback = kb;
+    public Stats(int md, int rd, int gd, float sc, float dx, float mc, float kb, float dur) {
+        meleeDamage = md;
+        rangeDamage = rd;
+        mageDamage = gd;
+        speedChange = sc;
+        defenseChange = dx;
+        damageChange = mc;
+        knockback = kb;
+        duration = dur;
     }
 
 }
