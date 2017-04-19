@@ -27,6 +27,7 @@ public class InGameOptionsTab implements Screen{
     private TextButton m_soundButton;
     private TextButton m_backButton;
     private TextButton m_exitDung;
+    private TextButton m_invButton;
 
     public InGameOptionsTab(final Agalon a){
         m_stage = new Stage();
@@ -104,6 +105,17 @@ public class InGameOptionsTab implements Screen{
             }
         });
 
+
+        // add inventory screen button
+        m_invButton = new TextButton("Inventory", textButtonStyle);
+        m_invButton.setPosition(0, screenHeight/2 - screenWidth/10);
+        m_stage.addActor(m_invButton);
+
+        m_invButton.addListener(new ClickListener() {
+            public void clicked (InputEvent event, float x, float y){
+                a.setScreen(new InventoryScreen(a));
+            }
+        });
 
     }
     @Override

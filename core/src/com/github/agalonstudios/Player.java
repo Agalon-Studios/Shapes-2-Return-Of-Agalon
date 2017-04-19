@@ -26,6 +26,8 @@ public class Player extends Character {
     private float m_stats;
 
     // TODO inventory, equipped items, abilities, other properties
+    private Array<Item> m_inventory;
+    private int m_numInInventory;
 
     public Player(int h, int l, Color c) {
         super(
@@ -62,7 +64,12 @@ public class Player extends Character {
 
 
         // TODO add constructor for stats
-
+        m_inventory = new Array<Item>(16);
+        m_inventory.add(Item.generateConsumable());
+        m_inventory.add(Item.generateWeapon());
+        m_numInInventory = 2;
+        System.out.println(m_inventory.first().getName());
+        System.out.println(m_inventory.get(1).getName());
     }
 
     @Override
@@ -115,4 +122,7 @@ public class Player extends Character {
         //TODO fix this one if needed
     }
 
+    public Array<Item> getInventory(){ return m_inventory;}
+    public int getNumInventory(){ return m_numInInventory;}
+    public void setNumInventory(int num){m_numInInventory = num;}
 }
