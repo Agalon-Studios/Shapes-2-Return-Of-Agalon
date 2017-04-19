@@ -3,6 +3,10 @@ package com.github.agalonstudios;
 
 import com.badlogic.gdx.Gdx;
 
+import static com.github.agalonstudios.Ability.AbilityType.CLEAVE;
+import static com.github.agalonstudios.Ability.AbilityType.CLEAVE;
+import static com.github.agalonstudios.Ability.AbilityType.ICE_ARROW;
+
 /**
  * Created by spr on 3/20/17.
  */
@@ -81,8 +85,12 @@ public class Ability {
         }
     }
 
-    public Type getAbilityType() {
+    public Type getType() {
         return  m_type;
+    }
+
+    public AbilityType getAbilityType() {
+        return m_ability;
     }
 
     public void cast(Character casterRef) {

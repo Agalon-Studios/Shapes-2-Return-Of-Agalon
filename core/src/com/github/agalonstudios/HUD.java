@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Touchpad.TouchpadStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 
+import static com.badlogic.gdx.Input.Keys.M;
 
 
 /**
@@ -120,6 +121,9 @@ public class HUD {
 
 
     public static void update(float delta, Player player) {
+        if (m_Abilities.get(0) == null)
+            setAbilityButtons(player);
+
         m_stage.act(delta);
         /*
         Array<Actor> arr = m_stage.getActors();
@@ -159,7 +163,7 @@ public class HUD {
 
         for (int i = 0; i < p.m_equippedAbilities.size; i++) {
             m_Abilities.set(i, p.m_equippedAbilities.get(i));
-            switch(m_Abilities.get(i).getAbilityType()) {
+            switch(m_Abilities.get(i).getType()) {
                 case SELF:
                 case SELF_AREA_OF_EFFECT:
                     Button abilityButton = makeAbilityButton(i);
