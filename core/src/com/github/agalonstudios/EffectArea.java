@@ -22,13 +22,12 @@ public class EffectArea {
     private float m_timeTillActive;
     private boolean m_isActive;
 
-    public EffectArea(Stats e, int count, float duration, float x, float y, float radius, Character characterRef, AbilityType type) {
+    public EffectArea(Stats e, int count, float duration, float radius, AbilityType type) {
         m_effect = e;
         m_count = count;
         m_duration = duration;
-        m_position = new Vector2(x, y);
+        m_position = new Vector2();
         m_radius = radius;
-        m_characterRef = characterRef;
         m_type = type;
         int numSides = 16;
 
@@ -50,6 +49,10 @@ public class EffectArea {
 
     public void setPosition(float x, float y) {
         m_position.set(x, y);
+    }
+
+    public void setCharacterRef(Character c) {
+        this.m_characterRef = c;
     }
 
     public void update(float delta) {

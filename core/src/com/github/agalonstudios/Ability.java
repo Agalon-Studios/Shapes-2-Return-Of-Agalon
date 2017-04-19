@@ -9,7 +9,7 @@ import com.badlogic.gdx.Gdx;
 public class Ability {
     private Stats m_effect;
     private EffectArea m_effectArea;
-    private EffectArea initialEffect;
+    private EffectArea m_initialEffect;
     private float m_maxCastDistance;
     private float m_cooldown;
     private AbilityType m_ability;
@@ -27,6 +27,7 @@ public class Ability {
         SUMMON // might not need this, this might go in self?
     }
 
+
     private Type m_type;
 
     public Ability(AbilityType a) {
@@ -41,8 +42,10 @@ public class Ability {
             case FLAME_BURST:
                 m_type = Type.DROP_AREA_OF_EFFECT;
                 m_cooldown = 5f;
-                //m_effectArea = new EffectArea(new Stats(1, 0, 0, 0, 0, 0, 0), 5, .1f, 0, 0, 100);
-                m_effect = new Stats(10, 0, 0, 0, 0, 0, 50);
+                m_maxCastDistance = 400;
+                m_effectArea = new EffectArea(new Stats(1, 0, 0, 0, 0, 0, 0, 0), 5, 2, 300, a);
+                m_effect = null;
+                m_initialEffect = new EffectArea(new Stats(10, 0, 0, 0, 0, 0, 50, 0), 0, 0, 300, a);
                 m_maxCastDistance = 0;
                 break;
             case HEAL:
@@ -62,16 +65,28 @@ public class Ability {
         m_type = t;
     }
 
-    public void cast(Character casterRef) {
+    public void cast(Player casterRef, HUDOutputs ho) {
         // TODO generalize
 
         World worldRef = (World) ((Agalon) Gdx.app.getApplicationListener()).getScreen();
 
-        switch (m_ability) {
-            case STRIKE:
+        switch (m_type) {
+            case DROP_AREA_OF_EFFECT:
+                m_effectArea.setPosition(ho.abilityReleasePosition.x, ho.abilityReleasePosition.y);
+                m_initialEffect.setPosition(ho.abilityReleasePosition.x, ho.abilityReleasePosition.y);
+                worldRef.addEffectOverTime(m_effectArea);
+                worldRef.addEffectOverTime(m_initialEffect);
                 break;
 
         }
+    }
+
+    public Type getAbilityType() {
+        return  m_type;
+    }
+
+    public void cast(Character casterRef) {
+
     }
 
     public float getCoolDown() {

@@ -19,8 +19,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Payload;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Source;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Target;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.utils.Array;
 
 import java.util.ArrayList;
+
+import static javax.swing.UIManager.get;
 
 /**
  * Created by Jacob on 4/18/2017.
@@ -29,18 +32,16 @@ import java.util.ArrayList;
 class AbilityBook implements Screen {
 
     private TextButton m_backButton;
-    private TextButton m_abilityButton1;
-    private TextButton m_abilityButton2;
-    private TextButton m_abilityButton3;
-    private TextButton m_abilityButton4;
-    private TextButton m_abilityButton5;
-    private TextButton m_abilityButton6;
-    private TextButton m_abilityButton7;
-    private TextButton m_abilityButton8;
+    private Array<TextButton> m_abilityButtons;
+    private static final String[] abilityNames = {
+            "Strike", "Cleave", "Snipe", "Flame Burst",
+            "Ice Arrow", "a"
+    };
+
     private Stage m_stage;
     private Label m_equippedLabel;
     private Label m_bookLabel;
-    private String[] equippedAbilities;
+    private Array<Ability.AbilityType> equippedAbilities;
 
     public AbilityBook(final Agalon a){
         m_stage = new Stage();
@@ -75,8 +76,9 @@ class AbilityBook implements Screen {
 
         m_backButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
-               a.backToWorld();
-               // Player.setEquippedAbilities(equippedAbilities);
+                a.backToWorld();
+                a.getPlayer().setEquippedAbilities(equippedAbilities);
+                HUD.setAbilityButtons(a.getPlayer());
             }
         });
 
@@ -97,7 +99,7 @@ class AbilityBook implements Screen {
         float pos = 600;
         for(int i = 0;i<16;i+=2){
             startingPos[i+1] = pos;
-            if(alt == false) {
+            if(!alt) {
                 startingPos[i] = 700;
                 alt = true;
             }
@@ -126,78 +128,17 @@ class AbilityBook implements Screen {
         skin.add("default", abilityButtonStyle);
 
         // adding the ability button
-        m_abilityButton1  = new TextButton("Ability 1",abilityButtonStyle);
-        m_abilityButton1.setPosition(startingPos[0], startingPos[1]);
-        m_stage.addActor(m_abilityButton1);
+        int numAbilities = abilityNames.length;
+        m_abilityButtons = new Array<TextButton>(numAbilities);
 
-        m_abilityButton1.addListener(new ChangeListener() {
-            public void changed (ChangeEvent event, Actor actor) {
-                // bring up ability info
-            }
-        });
-        m_abilityButton2  = new TextButton("Ability 2",abilityButtonStyle);
-        m_abilityButton2.setPosition(startingPos[2], startingPos[3]);
-        m_stage.addActor(m_abilityButton2);
+        for (int i = 0; i < numAbilities; i++) {
+            TextButton abilityButton = new TextButton(abilityNames[i], abilityButtonStyle);
+            abilityButton.setPosition(startingPos[i * 2], startingPos[i * 2 + 1]);
+            m_stage.addActor(abilityButton);
+            m_abilityButtons.add(abilityButton);
+        }
 
-        m_abilityButton2.addListener(new ChangeListener() {
-            public void changed (ChangeEvent event, Actor actor) {
-                // bring up ability info
-            }
-        });
-        m_abilityButton3  = new TextButton("Ability 3",abilityButtonStyle);
-        m_abilityButton3.setPosition(startingPos[4], startingPos[5]);
-        m_stage.addActor(m_abilityButton3);
 
-        m_abilityButton3.addListener(new ChangeListener() {
-            public void changed (ChangeEvent event, Actor actor) {
-                // bring up ability info
-            }
-        });
-        m_abilityButton4  = new TextButton("Ability 4",abilityButtonStyle);
-        m_abilityButton4.setPosition(startingPos[6], startingPos[7]);
-        m_stage.addActor(m_abilityButton4);
-
-        m_abilityButton4.addListener(new ChangeListener() {
-            public void changed (ChangeEvent event, Actor actor) {
-                // bring up ability info
-            }
-        });
-        m_abilityButton5  = new TextButton("Ability 5",abilityButtonStyle);
-        m_abilityButton5.setPosition(startingPos[8], startingPos[9]);
-        m_stage.addActor(m_abilityButton5);
-
-        m_abilityButton5.addListener(new ChangeListener() {
-            public void changed (ChangeEvent event, Actor actor) {
-                // bring up ability info
-            }
-        });
-        m_abilityButton6  = new TextButton("Ability 6",abilityButtonStyle);
-        m_abilityButton6.setPosition(startingPos[10], startingPos[11]);
-        m_stage.addActor(m_abilityButton6);
-
-        m_abilityButton6.addListener(new ChangeListener() {
-            public void changed (ChangeEvent event, Actor actor) {
-                // bring up ability info
-            }
-        });
-        m_abilityButton7  = new TextButton("Ability 7",abilityButtonStyle);
-        m_abilityButton7.setPosition(startingPos[12], startingPos[13]);
-        m_stage.addActor(m_abilityButton7);
-
-        m_abilityButton7.addListener(new ChangeListener() {
-            public void changed (ChangeEvent event, Actor actor) {
-                // bring up ability info
-            }
-        });
-        m_abilityButton8  = new TextButton("Ability 8",abilityButtonStyle);
-        m_abilityButton8.setPosition(startingPos[14], startingPos[15]);
-        m_stage.addActor(m_abilityButton8);
-
-        m_abilityButton8.addListener(new ChangeListener() {
-            public void changed (ChangeEvent event, Actor actor) {
-                // bring up ability info
-            }
-        });
         // Add already equipped abilites
        // equippedAbilities = Player.getEquippedAbilities();
 
@@ -219,78 +160,22 @@ class AbilityBook implements Screen {
 
         // Make Button Drag/Drop-able
         DragAndDrop dragAndDrop = new DragAndDrop();
-        dragAndDrop.addSource(new Source(m_abilityButton1){
-            public Payload dragStart (InputEvent event, float x, float y, int pointer) {
-                Payload payload = new Payload();
-                // create copy of actor
-                TextButton copy_abilityButton1  = new TextButton("Ability 1",abilityButtonStyle);
-                payload.setDragActor(copy_abilityButton1);
-                return payload;
-            }
-        });
-        dragAndDrop.addSource(new Source(m_abilityButton2){
-            public Payload dragStart (InputEvent event, float x, float y, int pointer) {
-                Payload payload = new Payload();
-                // create copy of actor
-                TextButton copy_abilityButton2  = new TextButton("Ability 2",abilityButtonStyle);
-                payload.setDragActor(copy_abilityButton2);
-                return payload;
-            }
-        });
-        dragAndDrop.addSource(new Source(m_abilityButton3){
-            public Payload dragStart (InputEvent event, float x, float y, int pointer) {
-                Payload payload = new Payload();
-                // create copy of actor
-                TextButton copy_abilityButton3  = new TextButton("Ability 3",abilityButtonStyle);
-                payload.setDragActor(copy_abilityButton3);
-                return payload;
-            }
-        });
-        dragAndDrop.addSource(new Source(m_abilityButton4){
-            public Payload dragStart (InputEvent event, float x, float y, int pointer) {
-                Payload payload = new Payload();
-                // create copy of actor
-                TextButton copy_abilityButton4  = new TextButton("Ability 4",abilityButtonStyle);
-                payload.setDragActor(copy_abilityButton4);
-                return payload;
-            }
-        });
-        dragAndDrop.addSource(new Source(m_abilityButton5){
-            public Payload dragStart (InputEvent event, float x, float y, int pointer) {
-                Payload payload = new Payload();
-                // create copy of actor
-                TextButton copy_abilityButton5  = new TextButton("Ability 5",abilityButtonStyle);
-                payload.setDragActor(copy_abilityButton5);
-                return payload;
-            }
-        });
-        dragAndDrop.addSource(new Source(m_abilityButton6){
-            public Payload dragStart (InputEvent event, float x, float y, int pointer) {
-                Payload payload = new Payload();
-                // create copy of actor
-                TextButton copy_abilityButton6  = new TextButton("Ability 6",abilityButtonStyle);
-                payload.setDragActor(copy_abilityButton6);
-                return payload;
-            }
-        });
-        dragAndDrop.addSource(new Source(m_abilityButton7){
-            public Payload dragStart (InputEvent event, float x, float y, int pointer) {
-                Payload payload = new Payload();
-                // create copy of actor
-                TextButton copy_abilityButton7  = new TextButton("Ability 7",abilityButtonStyle);
-                payload.setDragActor(copy_abilityButton7);
-                return payload;
-            }
-        });
-        dragAndDrop.addSource(new Source(m_abilityButton8){
-            public Payload dragStart (InputEvent event, float x, float y, int pointer) {
-                Payload payload = new Payload();
-                // create copy of actor
-                TextButton copy_abilityButton8  = new TextButton("Ability 8",abilityButtonStyle);
-                payload.setDragActor(copy_abilityButton8);
-                return payload;
-            }
-        });
+
+        for (int i = 0; i < m_abilityButtons.size; i++) {
+            final int j = i;
+            dragAndDrop.addSource(new Source(m_abilityButtons.get(i)){
+                public Payload dragStart (InputEvent event, float x, float y, int pointer) {
+                    Payload payload = new Payload();
+                    // create copy of actor
+                    TextButton copy_abilityButton1  = new TextButton(abilityNames[j] ,abilityButtonStyle);
+                    payload.setDragActor(copy_abilityButton1);
+                    System.out.println(abilityNames[j] + " " + payload.getDragActor().getName());
+                    return payload;
+                }
+            });
+        }
+
+
         dragAndDrop.addTarget(new Target(targetBox1) {
             public boolean drag (Source source, Payload payload, float x, float y, int pointer) {
                 return true;
@@ -305,7 +190,12 @@ class AbilityBook implements Screen {
                 // replace TargetBox with ability button
                 payload.getDragActor().setPosition(targetBox1.getX(),targetBox1.getY());
                 m_stage.addActor(payload.getDragActor());
-              //  equippedAbilities[0] = payload.getDragActor().getName();
+                for (int i = 0; i < abilityNames.length; i++) {
+                    if (payload.getDragActor() != null &&
+                            payload.getDragActor().getName().equals(abilityNames[i]))
+                        equippedAbilities.set(0, Ability.AbilityType.values()[i]);
+                }
+
             }
         });
         dragAndDrop.addTarget(new Target(targetBox2) {
@@ -322,7 +212,12 @@ class AbilityBook implements Screen {
                 // replace TargetBox with ability button
                 payload.getDragActor().setPosition(targetBox2.getX(),targetBox2.getY());
                 m_stage.addActor(payload.getDragActor());
-              //  equippedAbilities[1] = payload.getDragActor().getName();
+
+                for (int i = 0; i < abilityNames.length; i++) {
+                    if (payload.getDragActor() != null &&
+                            payload.getDragActor().getName().equals(abilityNames[i]))
+                        equippedAbilities.set(1, Ability.AbilityType.values()[i]);
+                }
             }
         });
         dragAndDrop.addTarget(new Target(targetBox3) {
@@ -339,7 +234,11 @@ class AbilityBook implements Screen {
                 // replace TargetBox with ability button
                 payload.getDragActor().setPosition(targetBox3.getX(),targetBox3.getY());
                 m_stage.addActor(payload.getDragActor());
-               // equippedAbilities[2] = payload.getDragActor().getName();
+                for (int i = 0; i < abilityNames.length; i++) {
+                    if (payload.getDragActor() != null &&
+                            payload.getDragActor().getName().equals(abilityNames[i]))
+                        equippedAbilities.set(2, Ability.AbilityType.values()[i]);
+                }
             }
         });
         dragAndDrop.addTarget(new Target(targetBox4) {
@@ -356,7 +255,12 @@ class AbilityBook implements Screen {
                 // replace TargetBox with ability button
                 payload.getDragActor().setPosition(targetBox4.getX(),targetBox4.getY());
                 m_stage.addActor(payload.getDragActor());
-              //  equippedAbilities[3] = payload.getDragActor().getName();
+
+                for (int i = 0; i < abilityNames.length; i++) {
+                    if (payload.getDragActor() != null &&
+                            payload.getDragActor().getName().equals(abilityNames[i]))
+                        equippedAbilities.set(3, Ability.AbilityType.values()[i]);
+                }
             }
         });
     }

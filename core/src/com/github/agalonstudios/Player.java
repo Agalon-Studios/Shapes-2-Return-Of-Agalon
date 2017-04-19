@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
 
 /**
@@ -18,7 +19,6 @@ public class Player extends Character {
     protected int m_stamina;
     protected int m_maxStamina;
 
-    private String[] equippedAbilities;
     // TODO just one ability for testing, replace this with equipped abilities
     private Ability m_ability;
     private float m_cooldown;
@@ -65,12 +65,6 @@ public class Player extends Character {
 
     }
 
-    public void setEquippedAbilities(String[] equippedAbilities){
-
-    }
-    public String[] getEquippedAbilities(){
-        return equippedAbilities;
-    }
     @Override
     public void update(float delta, World world) {
         super.update(delta, world);
@@ -79,23 +73,7 @@ public class Player extends Character {
         m_acceleration.x = HUD.hudOutputs.accelerationUpdate.x;
         m_acceleration.y = HUD.hudOutputs.accelerationUpdate.y;
 
-        // TODO use velocity, use HUD components
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            m_shape.translate(0, 1 * delta);
-            m_directionFacing = Direction.NORTH;
-        }
-        else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            m_shape.translate(0, -1 * delta);
-            m_directionFacing = Direction.SOUTH;
-        }
-        else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            m_shape.translate(-1 * delta, 0);
-            m_directionFacing = Direction.WEST;
-        }
-        else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            m_shape.translate(1 * delta, 0);
-            m_directionFacing = Direction.EAST;
-        }
+
 
         if (Gdx.input.isKeyPressed((Input.Keys.ESCAPE))) {
             ((Agalon) Gdx.app.getApplicationListener()).returnToOverworld();
@@ -105,7 +83,7 @@ public class Player extends Character {
 
         if (m_cooldownTimers.get(0) <= 0) {
             if (Gdx.input.isKeyPressed(Input.Keys.NUM_1)) {
-                m_equippedAbilities.get(0).cast(this);
+                m_equippedAbilities.get(0).cast(this, HUD.hudOutputs);
                 m_cooldownTimers.set(0, m_equippedAbilities.get(0).getCoolDown());
             }
         }
@@ -119,6 +97,12 @@ public class Player extends Character {
 
     }
 
+
+    public void setEquippedAbilities(Array<Ability.AbilityType> abilities) {
+        for (int i = 0; i < abilities.size; i++) {
+            m_equippedAbilities.set(i, new Ability(abilities.get(i)));
+        }
+    }
 
 
     @Override

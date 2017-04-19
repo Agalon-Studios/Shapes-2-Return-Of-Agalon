@@ -57,7 +57,7 @@ public abstract class Character extends Entity {
     }
 
     public void apply(Stats e) {
-        m_health -= e.m_meleeDamage + e.m_rangeDamage + e.m_mageDamage;
+       // m_health -= e.m_meleeDamage + e.m_rangeDamage + e.m_mageDamage;
         // TODO do all of these
     }
 
