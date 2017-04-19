@@ -5,9 +5,11 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 
 /**
@@ -18,6 +20,7 @@ public class InventoryScreen implements Screen {
     private Rectangle m_BigRect;
     private Array<Array<Button>> m_buttonArr;
     private Stage m_stage;
+    private Button m_backButton;
 
     public InventoryScreen(final Agalon a){
         m_stage = new Stage();
@@ -28,7 +31,6 @@ public class InventoryScreen implements Screen {
 
         Array<Item> inventory = a.getPlayer().getInventory();
         int numItems = a.getPlayer().getNumInventory();
-        System.out.println(numItems);
 
         // stuff for skin
         Skin slotSkin = new Skin();
@@ -67,8 +69,6 @@ public class InventoryScreen implements Screen {
         else
             row = 4;
 
-
-        //System.out.println("row and col: " + row + " " + col);
         for(int i = 0; i < row; i++) {
             if(row ==1)
                 col = numItems;
@@ -80,8 +80,8 @@ public class InventoryScreen implements Screen {
                 col = numItems - 12;
             else
                 col = 4;
+
             for(int j = 0; j < col; j++) {
-                System.out.println(i + " " + j);
                 if(inventory.get(4*i + j).getType() == Item.m_itemType.WEAPON){
                     m_buttonArr.get(i).add(new Button(swordStyle));
                 }
@@ -98,7 +98,27 @@ public class InventoryScreen implements Screen {
             }
         }
 
+        // add back button
+        Skin backSkin = new Skin();
+        backSkin.add("backButton", new Texture("backButton.png"));
 
+        Button.ButtonStyle backStyle = new Button.ButtonStyle();
+        backStyle.checked = backSkin.getDrawable("backButton");
+        backStyle.up = backSkin.getDrawable("backButton");
+        backStyle.down = backSkin.getDrawable("backButton");
+
+        m_backButton = new Button(backStyle);
+
+        m_backButton.addListener(new ClickListener() {
+            public void clicked (InputEvent event, float x, float y){
+                a.setScreen(new InGameOptionsTab(a));
+            }
+        });
+
+
+        m_backButton.setBounds(0, ScreenScale.scaleHeight(-200) + Gdx.graphics.getHeight(),
+                ScreenScale.scale(200), ScreenScale.scale(200));
+        m_stage.addActor(m_backButton);
     }
 
     @Override
