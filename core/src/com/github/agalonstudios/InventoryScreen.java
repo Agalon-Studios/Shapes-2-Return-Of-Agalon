@@ -28,6 +28,7 @@ public class InventoryScreen implements Screen {
 
         Array<Item> inventory = a.getPlayer().getInventory();
         int numItems = a.getPlayer().getNumInventory();
+        System.out.println(numItems);
 
         // stuff for skin
         Skin slotSkin = new Skin();
@@ -53,22 +54,44 @@ public class InventoryScreen implements Screen {
         }
 
         // create the buttons
-        int row = numItems/16;
-        int col = numItems%4;
-        for(int i = 0; i < row; i++) {
-            for(int j = 0; j < col; j++) {
+        int row;
+        int col;
 
+        if(numItems/4 == 0 && numItems>0)
+           row = 1;
+        else if(numItems/4 == 0 && numItems == 0)
+            row = 0;
+        else
+            row = numItems/4;
+        System.out.println(row);
+
+        for(int i = 0; i < row; i++) {
+            if (i == row && i != 0) {
+                System.out.println("1");
+                col = (numItems - row * 4);
+            }
+            else if(i == row-1 && row-1 == 0) {
+                col = (numItems);
+                System.out.println("2");
+            }
+            else {
+                col = 4;
+                System.out.println("3");
+            }
+            System.out.println("row and col: " + row + " " + col);
+            for(int j = 0; j < col; j++) {
+                System.out.println(i + " " + j);
                 if(inventory.get(4*i + j).getType() == Item.m_itemType.WEAPON){
-                    m_buttonArr.get(i).get(j).add(new Button(swordStyle));
+                    m_buttonArr.get(i).add(new Button(swordStyle));
                 }
                 else{
-                    m_buttonArr.get(i).get(j).add(new Button(healthStyle));
+                    m_buttonArr.get(i).add(new Button(healthStyle));
                 }
 
                 Button thisButton = m_buttonArr.get(i).get(j);
                 thisButton.setHeight(screenHeight / 5);
                 thisButton.setWidth(screenWidth / 4);
-                thisButton.setPosition(screenHeight*(4-i)/5, screenWidth*j/4);
+                thisButton.setPosition((screenWidth*j/4), (screenHeight*(3-i)/5));
 
                 m_stage.addActor(thisButton);
             }

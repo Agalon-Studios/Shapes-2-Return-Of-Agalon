@@ -65,11 +65,13 @@ public class Player extends Character {
 
         // TODO add constructor for stats
         m_inventory = new Array<Item>(16);
-        m_inventory.add(Item.generateConsumable());
-        m_inventory.add(Item.generateWeapon());
-        m_numInInventory = 2;
-        System.out.println(m_inventory.first().getName());
-        System.out.println(m_inventory.get(1).getName());
+        m_numInInventory = 0;
+
+        for(int i = 0; i <1 ; i++){
+            m_inventory.add(Item.generateWeapon());
+            System.out.println(m_inventory.get(i).getName());
+            m_numInInventory++;
+        }
     }
 
     @Override
