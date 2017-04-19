@@ -16,6 +16,7 @@ public class DungeonRoom extends World {
     private Dungeon m_dungeonRef;
     private Theme m_theme;
     private Rectangle m_floor;
+    private Array<Wall> m_innerWalls;
 
     public DungeonRoom(DungeonRoomPlan plan, Dungeon d) {
         super(d.getPlayerRef());
@@ -25,6 +26,7 @@ public class DungeonRoom extends World {
         m_nonPlayerCharacters = new Array<Character>();
         m_theme = plan.getTheme();
         m_dungeonRef = d;
+        m_innerWalls = new Array<Wall>();
 
         for (int i = 0; i < 4; i++)
             m_doors.insert(i, null);
@@ -32,7 +34,10 @@ public class DungeonRoom extends World {
         for (int i = 0; i < plan.grid.length; i++) {
             for (int j = 0; j < plan.grid[0].length; j++) {
                 if (plan.grid[i][j] instanceof WallItem) {
-                    m_walls.add(new Wall(j * Wall.WIDTH, (plan.grid.length - i) * Wall.HEIGHT));
+                    if (!allNeighborsAreWalls(plan, i, j))
+                        m_walls.add(new Wall(j * Wall.WIDTH, (plan.grid.length - i) * Wall.HEIGHT));
+                    else
+                        m_innerWalls.add(new Wall(j * Wall.WIDTH, (plan.grid.length - i) * Wall.HEIGHT));
                 }
                 else if (plan.grid[i][j] instanceof ChestItem) {
                     m_chests.add(new Chest(((ChestItem) plan.grid[i][j]), j * Wall.WIDTH, (plan.grid.length - i) * Wall.HEIGHT));
@@ -49,6 +54,31 @@ public class DungeonRoom extends World {
 
         m_floor = new Rectangle(0, Wall.HEIGHT, plan.grid[0].length * Wall.WIDTH, plan.grid.length * Wall.HEIGHT);
         placePlayerInCenter(plan);
+    }
+
+    private boolean allNeighborsAreWalls(DungeonRoomPlan plan, int i, int j) {
+        int count = 0;
+
+        if (i > 0)
+            count += plan.grid[i - 1][j] instanceof WallItem ? 1 : 0;
+        else
+            count++;
+
+        if (i < plan.grid.length - 1)
+            count += plan.grid[i + 1][j] instanceof WallItem ? 1 : 0;
+        else
+            count++;
+        if (j > 0)
+            count += plan.grid[i][j - 1] instanceof WallItem ? 1 : 0;
+        else
+            count++;
+        if (j < plan.grid[0].length - 1)
+            count += plan.grid[i][j + 1] instanceof WallItem ? 1 : 0;
+        else
+            count++;
+
+        return count == 4;
+
     }
 
     private void placePlayerInCenter(DungeonRoomPlan planRef) {
@@ -101,7 +131,11 @@ public class DungeonRoom extends World {
         for (Chest c : m_chests)
             c.render();
 
+        for (Wall w : m_innerWalls)
+            w.render();
+
         m_shapeRendererRef.end();
+
 
 
         super.render(delta);

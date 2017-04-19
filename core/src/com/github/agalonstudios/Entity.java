@@ -3,6 +3,7 @@ package com.github.agalonstudios;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -147,8 +148,8 @@ public abstract class Entity {
     }
 
     public boolean overlaps(Entity e) {
-        //return Intersector.overlapConvexPolygons(this.getShape(), e.getShape());
-        return m_rect.overlaps(e.getRect());
+        return Intersector.overlapConvexPolygons(this.getShape(), e.getShape());
+        //return m_rect.overlaps(e.getRect());
     }
 
     public Polygon getShape() {

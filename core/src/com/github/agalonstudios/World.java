@@ -26,7 +26,6 @@ public abstract class World implements Screen {
     private static Array<Entity> refList = new Array<Entity>();
     private static List<Entity> returnObjects = new ArrayList<Entity>();
 
-
     // TODO come up with a standard size that works with everything we need it to.
     protected static final int MAX_WORLD_WIDTH  = 10000;
     protected static final int MAX_WORLD_HEIGHT = 10000;
@@ -81,22 +80,24 @@ public abstract class World implements Screen {
     }
 
     protected static void runCollisionsNSquared(Array<? extends Entity> ... entityLists) {
-        Array<Entity> allObjects = new Array<Entity>();
-
         for (Array<? extends Entity> entityList : entityLists) {
-            for (Entity e : entityList) {
-                allObjects.add(e);
+            if (entityList.size > 0 && entityList.get(0) instanceof Wall) {
+                continue;
             }
-        }
-
-        for (int e = 0; e < allObjects.size; e++) {
-            for (int o = 0; o < allObjects.size; o++) {
-                if (e == o)
-                    continue;
-
-                if (allObjects.get(e).overlaps(allObjects.get(o)))
-                    allObjects.get(e).runCollision(allObjects.get(o));
-            }
+            for (Array<? extends Entity> entityList2 : entityLists) {
+          //      if (!entityList.equals(entityList2)) {
+                    for (int e = 0; e < entityList.size; e++) {
+                        for (int o = 0; o < entityList2.size; o++) {
+                            if (e == o) continue;
+                            Entity e1 = entityList.get(e);
+                            Entity e2 = entityList2.get(o);
+                            if (e1.isFixed() && e2.isFixed()) continue;
+                            if (e1.overlaps(e2))
+                                e1.runCollision(e2);
+                        }
+                    }
+                }
+            //}
         }
     }
 
