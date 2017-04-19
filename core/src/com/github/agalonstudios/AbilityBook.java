@@ -19,7 +19,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Payload;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Source;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Target;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.utils.Array;
+
+import java.util.ArrayList;
 
 /**
  * Created by Jacob on 4/18/2017.
@@ -39,7 +40,7 @@ class AbilityBook implements Screen {
     private Stage m_stage;
     private Label m_equippedLabel;
     private Label m_bookLabel;
-    private boolean isEquipped;
+    private String[] equippedAbilities;
 
     public AbilityBook(final Agalon a){
         m_stage = new Stage();
@@ -75,6 +76,7 @@ class AbilityBook implements Screen {
         m_backButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
                a.backToWorld();
+               // Player.setEquippedAbilities(equippedAbilities);
             }
         });
 
@@ -90,7 +92,7 @@ class AbilityBook implements Screen {
 
         // Create buttons for each ability
         // add starting position for each ability
-        float[] startingPos = new float[16];
+        final float[] startingPos = new float[16];
         boolean alt = false;
         float pos = 600;
         for(int i = 0;i<16;i+=2){
@@ -114,7 +116,7 @@ class AbilityBook implements Screen {
 
         skin.add("default", bfont);
 
-        TextButton.TextButtonStyle abilityButtonStyle = new TextButton.TextButtonStyle();
+        final TextButton.TextButtonStyle abilityButtonStyle = new TextButton.TextButtonStyle();
         abilityButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
         abilityButtonStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
         abilityButtonStyle.checked = skin.newDrawable("white", Color.BLUE);
@@ -196,7 +198,10 @@ class AbilityBook implements Screen {
                 // bring up ability info
             }
         });
-        // add targets for equipped abiliites
+        // Add already equipped abilites
+       // equippedAbilities = Player.getEquippedAbilities();
+
+        // add targets for equipped abilities
         Skin emptySkin = new Skin();
         emptySkin.add("targetBox", new Texture("targetBox.png"));
         final Image targetBox1 = new Image(emptySkin, "targetBox");
@@ -217,56 +222,72 @@ class AbilityBook implements Screen {
         dragAndDrop.addSource(new Source(m_abilityButton1){
             public Payload dragStart (InputEvent event, float x, float y, int pointer) {
                 Payload payload = new Payload();
-                payload.setDragActor(m_abilityButton1);
+                // create copy of actor
+                TextButton copy_abilityButton1  = new TextButton("Ability 1",abilityButtonStyle);
+                payload.setDragActor(copy_abilityButton1);
                 return payload;
             }
         });
         dragAndDrop.addSource(new Source(m_abilityButton2){
             public Payload dragStart (InputEvent event, float x, float y, int pointer) {
                 Payload payload = new Payload();
-                payload.setDragActor(m_abilityButton2);
+                // create copy of actor
+                TextButton copy_abilityButton2  = new TextButton("Ability 2",abilityButtonStyle);
+                payload.setDragActor(copy_abilityButton2);
                 return payload;
             }
         });
         dragAndDrop.addSource(new Source(m_abilityButton3){
             public Payload dragStart (InputEvent event, float x, float y, int pointer) {
                 Payload payload = new Payload();
-                payload.setDragActor(m_abilityButton3);
+                // create copy of actor
+                TextButton copy_abilityButton3  = new TextButton("Ability 3",abilityButtonStyle);
+                payload.setDragActor(copy_abilityButton3);
                 return payload;
             }
         });
         dragAndDrop.addSource(new Source(m_abilityButton4){
             public Payload dragStart (InputEvent event, float x, float y, int pointer) {
                 Payload payload = new Payload();
-                payload.setDragActor(m_abilityButton4);
+                // create copy of actor
+                TextButton copy_abilityButton4  = new TextButton("Ability 4",abilityButtonStyle);
+                payload.setDragActor(copy_abilityButton4);
                 return payload;
             }
         });
         dragAndDrop.addSource(new Source(m_abilityButton5){
             public Payload dragStart (InputEvent event, float x, float y, int pointer) {
                 Payload payload = new Payload();
-                payload.setDragActor(m_abilityButton5);
+                // create copy of actor
+                TextButton copy_abilityButton5  = new TextButton("Ability 5",abilityButtonStyle);
+                payload.setDragActor(copy_abilityButton5);
                 return payload;
             }
         });
         dragAndDrop.addSource(new Source(m_abilityButton6){
             public Payload dragStart (InputEvent event, float x, float y, int pointer) {
                 Payload payload = new Payload();
-                payload.setDragActor(m_abilityButton6);
+                // create copy of actor
+                TextButton copy_abilityButton6  = new TextButton("Ability 6",abilityButtonStyle);
+                payload.setDragActor(copy_abilityButton6);
                 return payload;
             }
         });
         dragAndDrop.addSource(new Source(m_abilityButton7){
             public Payload dragStart (InputEvent event, float x, float y, int pointer) {
                 Payload payload = new Payload();
-                payload.setDragActor(m_abilityButton7);
+                // create copy of actor
+                TextButton copy_abilityButton7  = new TextButton("Ability 7",abilityButtonStyle);
+                payload.setDragActor(copy_abilityButton7);
                 return payload;
             }
         });
         dragAndDrop.addSource(new Source(m_abilityButton8){
             public Payload dragStart (InputEvent event, float x, float y, int pointer) {
                 Payload payload = new Payload();
-                payload.setDragActor(m_abilityButton8);
+                // create copy of actor
+                TextButton copy_abilityButton8  = new TextButton("Ability 8",abilityButtonStyle);
+                payload.setDragActor(copy_abilityButton8);
                 return payload;
             }
         });
@@ -282,9 +303,9 @@ class AbilityBook implements Screen {
             public void drop (Source source, Payload payload, float x, float y, int pointer) {
                 // called when payload is dropped on target
                 // replace TargetBox with ability button
-
                 payload.getDragActor().setPosition(targetBox1.getX(),targetBox1.getY());
                 m_stage.addActor(payload.getDragActor());
+              //  equippedAbilities[0] = payload.getDragActor().getName();
             }
         });
         dragAndDrop.addTarget(new Target(targetBox2) {
@@ -301,6 +322,7 @@ class AbilityBook implements Screen {
                 // replace TargetBox with ability button
                 payload.getDragActor().setPosition(targetBox2.getX(),targetBox2.getY());
                 m_stage.addActor(payload.getDragActor());
+              //  equippedAbilities[1] = payload.getDragActor().getName();
             }
         });
         dragAndDrop.addTarget(new Target(targetBox3) {
@@ -317,6 +339,7 @@ class AbilityBook implements Screen {
                 // replace TargetBox with ability button
                 payload.getDragActor().setPosition(targetBox3.getX(),targetBox3.getY());
                 m_stage.addActor(payload.getDragActor());
+               // equippedAbilities[2] = payload.getDragActor().getName();
             }
         });
         dragAndDrop.addTarget(new Target(targetBox4) {
@@ -326,7 +349,6 @@ class AbilityBook implements Screen {
 
             public void reset (Source source, Payload payload) {
                 // called when payload is no longer over the target (by drop or move)
-
             }
 
             public void drop (Source source, Payload payload, float x, float y, int pointer) {
@@ -334,15 +356,11 @@ class AbilityBook implements Screen {
                 // replace TargetBox with ability button
                 payload.getDragActor().setPosition(targetBox4.getX(),targetBox4.getY());
                 m_stage.addActor(payload.getDragActor());
+              //  equippedAbilities[3] = payload.getDragActor().getName();
             }
         });
     }
-
-    public boolean isEquipped(float x, float y){
-        // if ability position is not at a target position return false
-        // if false return ability button to starting position
-        return true;
-    }
+    // Can't remove abilities because copy of ability isn't set as a drag source
     @Override
     public void show(){
 

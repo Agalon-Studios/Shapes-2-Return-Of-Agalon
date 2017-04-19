@@ -11,9 +11,8 @@ public class Stats {
     public final float m_defenseChange;
     public final float m_damageChange;
     public final float m_knockback;
-    public final EffectOverTime m_effectOverTime;
 
-    public Stats(int md, int rd, int gd, float sc, float dx, float mc, float kb, EffectOverTime eot) {
+    public Stats(int md, int rd, int gd, float sc, float dx, float mc, float kb) {
         m_meleeDamage = md;
         m_rangeDamage = rd;
         m_mageDamage = gd;
@@ -21,6 +20,6 @@ public class Stats {
         m_defenseChange = dx;
         m_damageChange = mc;
         m_knockback = kb;
-        m_effectOverTime = eot;
     }
+
 }

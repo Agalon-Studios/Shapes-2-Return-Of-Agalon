@@ -1,17 +1,21 @@
 package com.github.agalonstudios;
 
+
+import com.badlogic.gdx.Gdx;
+
 /**
  * Created by spr on 3/20/17.
  */
 public class Ability {
     private Stats m_effect;
-    private int m_castObjectAmount;
-    private int m_cooldown;
-    private Abilities m_ability;
+    private EffectArea m_effectArea;
+    private EffectArea initialEffect;
+    private float m_maxCastDistance;
+    private float m_cooldown;
+    private AbilityType m_ability;
 
-
-    public enum Abilities {
-        STRIKE, SHOT
+    public enum AbilityType {
+        STRIKE, CLEAVE, SNIPE, FLAME_BURST, HEAL, ICE_ARROW
     }
 
     public enum Type {
@@ -25,12 +29,32 @@ public class Ability {
 
     private Type m_type;
 
-    public Ability(Abilities a) {
+    public Ability(AbilityType a) {
         m_ability = a;
-    }
-
-    public Ability(Stats e) {
-        // make SELF
+        switch (m_ability) {
+            case CLEAVE:
+                m_type = Type.SELF_AREA_OF_EFFECT;
+                break;
+            case SNIPE:
+                m_type = Type.PROJECTILE;
+                break;
+            case FLAME_BURST:
+                m_type = Type.DROP_AREA_OF_EFFECT;
+                m_cooldown = 5f;
+                //m_effectArea = new EffectArea(new Stats(1, 0, 0, 0, 0, 0, 0), 5, .1f, 0, 0, 100);
+                m_effect = new Stats(10, 0, 0, 0, 0, 0, 50);
+                m_maxCastDistance = 0;
+                break;
+            case HEAL:
+                m_type = Type.SELF;
+                break;
+            case ICE_ARROW:
+                m_type = Type.PROJECTILE_AREA_OF_EFFECT;
+                break;
+            case STRIKE:
+                m_type = Type.SELF_AREA_OF_EFFECT;
+                break;
+        }
     }
 
     public Ability(Stats e, Type t) {
@@ -38,15 +62,13 @@ public class Ability {
         m_type = t;
     }
 
-    public void cast(Character casterRef, World worldRef) {
+    public void cast(Character casterRef) {
         // TODO generalize
+
+        World worldRef = (World) ((Agalon) Gdx.app.getApplicationListener()).getScreen();
 
         switch (m_ability) {
             case STRIKE:
-                //worldRef.addCastObject(new StrikeCastObject(casterRef));
-                break;
-            case SHOT:
-               // worldRef.addCastObject(new ShotCastObject(casterRef));
                 break;
 
         }

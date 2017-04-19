@@ -67,7 +67,6 @@ public class CharacterCreationMenu implements Screen {
 
         m_doneButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
-                //System.out.println("Clicked! Is checked: " + button.isChecked());
                 m_doneButton.setText("Wow, so shapely");
                 a.createOverworld(new Player(100, 1, m_playerColorRGB));
                 a.returnToOverworld();
@@ -122,7 +121,6 @@ public class CharacterCreationMenu implements Screen {
         m_stage.setDebugAll(true);
 
         m_playerColorHSV.r =  m_colorSlider.getPercent();
-        System.out.println(m_playerColorHSV.r + ", " +  m_colorSlider.getPercent());
 
         ExtendedShapeRenderer sr = ((Agalon) Gdx.app.getApplicationListener()).getShapeRenderer();
 
@@ -138,7 +136,6 @@ public class CharacterCreationMenu implements Screen {
         float S = m_playerColorHSV.g;
         float V = m_playerColorHSV.b;
 
-        System.out.print("(" + H + ", " + S + ", " + V + ") -> ");
 
 
         float Hdeg = H * 360;
@@ -184,7 +181,6 @@ public class CharacterCreationMenu implements Screen {
         m_playerColorRGB.g = (Gp + M);
         m_playerColorRGB.b = (Bp + M);
 
-        System.out.println("(" + m_playerColorRGB.r + ", " + m_playerColorRGB.g + ", " + m_playerColorRGB.b + ")");
 
     }
 

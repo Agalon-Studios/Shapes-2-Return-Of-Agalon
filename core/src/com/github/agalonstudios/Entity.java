@@ -25,7 +25,7 @@ public abstract class Entity {
         m_cameraAdjustedVertices = new float[vertices.length];
         m_shape = new Polygon(vertices);
 
-
+        m_fixed = true;
         m_shape.translate(x, y);
         m_rect = new Rectangle(x, y, width, height);
         m_oldAnus = new Rectangle(m_rect);
@@ -35,6 +35,7 @@ public abstract class Entity {
     }
 
     public Entity(float radius, Vector2 position, Shape shape) {
+        m_fixed = true;
         int numSides = 0;
         float baseRotation = 0;
         switch(shape) {
@@ -72,8 +73,6 @@ public abstract class Entity {
 
         m_shape.translate(position.x, position.y);
         m_shape.setRotation(baseRotation);
-
-
 
         m_ID = EntityManager.getNextValidEntityID();
         EntityManager.registerEntity(this);
