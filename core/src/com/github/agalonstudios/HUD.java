@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -33,8 +34,25 @@ public class HUD {
     private static Sprite m_HealthBar;
     private static Sprite m_AbilityBar;
     private static Button m_bookButton;
-    private static final int[] abilityButtonXPos = {300, 600, 900, 1200, 1500};
-    private static final int[] abilityButtonYPos = {0, 0, 0, 0, 0};
+
+    private static final int abilityButtonRadius = ScreenScale.scale(150);
+
+    private static final int abilityButtonOriginX = Gdx.graphics.getWidth() - abilityButtonRadius;
+    private static final int abilityButtonOriginY = 0;
+
+    private static final int[] abilityButtonXPos = {
+            abilityButtonOriginX,
+            abilityButtonOriginX - abilityButtonRadius * 2,
+            (int) (abilityButtonOriginX - MathUtils.cosDeg(45) * (abilityButtonRadius * 2)),
+            abilityButtonOriginX
+    };
+
+    private static final int[] abilityButtonYPos = {
+            abilityButtonOriginY,
+            abilityButtonOriginY,
+            (int) (abilityButtonOriginY + MathUtils.sinDeg(45) * (abilityButtonRadius * 2)),
+            abilityButtonOriginY + (abilityButtonRadius * 2)
+    };
 
 
     private static Array<Actor> m_AbilityButtons;
@@ -157,9 +175,7 @@ public class HUD {
 
     public static void setAbilityButtons(Player p) {
         if (m_AbilityButtons.get(0) != null)
-        m_stage.getActors().removeAll(m_AbilityButtons, false);
-
-
+            m_stage.getActors().removeAll(m_AbilityButtons, false);
 
         for (int i = 0; i < p.m_equippedAbilities.size; i++) {
             m_Abilities.set(i, p.m_equippedAbilities.get(i));
@@ -200,10 +216,11 @@ public class HUD {
 
 
         ret.setBounds(
-                ScreenScale.scaleWidth(abilityButtonXPos[location]),
-                ScreenScale.scaleHeight(abilityButtonYPos[location]),
-                ScreenScale.scale(150),
-                ScreenScale.scale(150));
+                abilityButtonXPos[location],
+                abilityButtonYPos[location],
+                abilityButtonRadius,
+                abilityButtonRadius
+        );
 
         return ret;
     }
@@ -221,8 +238,8 @@ public class HUD {
         temp.setBounds(
                 abilityButtonXPos[location],
                 abilityButtonYPos[location],
-                ScreenScale.scale(150),
-                ScreenScale.scale(150)
+                abilityButtonRadius,
+                abilityButtonRadius
         );
 
         return temp;
@@ -237,10 +254,10 @@ public class HUD {
 
         float pixelDiff = 9;
         er.rect(
-                ScreenScale.scale((int) (m_HealthBar.getX() + pixelDiff)),
-                ScreenScale.scale((int) (m_HealthBar.getY() + pixelDiff)),
-                ScreenScale.scale((int) ((m_HealthBar.getWidth() - 2*pixelDiff) * (player.m_health / (float) player.m_maxHealth))),
-                ScreenScale.scale((int) (m_HealthBar.getHeight() - 2*pixelDiff))
+                m_HealthBar.getX() + pixelDiff,
+                m_HealthBar.getY() + pixelDiff,
+                (m_HealthBar.getWidth() - 2*pixelDiff) * (player.m_health / (float) player.m_maxHealth),
+                m_HealthBar.getHeight() - 2*pixelDiff
         );
 
         pixelDiff *= m_AbilityBar.getScaleX();
@@ -248,10 +265,10 @@ public class HUD {
         er.setColor(Color.GREEN);
 
         er.rect(
-                ScreenScale.scale((int) (m_AbilityBar.getX() + pixelDiff)),
-                ScreenScale.scale((int) (m_AbilityBar.getY() + pixelDiff)),
-                ScreenScale.scale((int) ((m_AbilityBar.getWidth() - 2*pixelDiff) * (player.m_stamina / (float) player.m_maxStamina))),
-                ScreenScale.scale((int) (m_AbilityBar.getHeight() - 2*pixelDiff))
+                m_AbilityBar.getX() + pixelDiff,
+                m_AbilityBar.getY() + pixelDiff,
+                (m_AbilityBar.getWidth() - 2*pixelDiff) * (player.m_stamina / (float) player.m_maxStamina),
+                m_AbilityBar.getHeight() - 2*pixelDiff
         );
 
         er.end();

@@ -1,5 +1,10 @@
 package com.github.agalonstudios;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import java.util.Random;
 
 
@@ -16,9 +21,9 @@ public class Item {
     private boolean m_isEquipped;// for weapons only
 
     // enums for item type, consumable type, weapon type
-    private enum m_itemType{WEAPON, CONSUMABLE};
-    private enum m_consumableType{DAMAGE, HEALTH, ENERGY, SPEED, KNOCK}
-    private enum m_weaponType{SWORD, WAND, AXE, BOW}
+    public enum m_itemType{WEAPON, CONSUMABLE};
+    public enum m_consumableType{DAMAGE, HEALTH, ENERGY, SPEED, KNOCK}
+    public enum m_weaponType{SWORD, WAND, AXE, BOW}
 
     // types that the item will have
     private m_itemType m_type;
@@ -32,8 +37,12 @@ public class Item {
     public static final String wandNames[] = {"Wand", "Baton", "Staff", "Scepter", "Caduceus"};
     public static final String bowNames[] = {"Bow", "Longbow", "Crossbow", "Recurve"};
     public static final String endNames[] = {"Power", "Destruction", "Agalon", "Memes", "Death", "Fun", "Class", "The Elders",
-            "The Moon", "Dragons", "Brody", "Sean", "Satya", "Mahzain", "Jacob"};
+            "The Moon", "Dragons", "Brody", "Sean", "Satya", "Mahzain", "Jacob", "Kanye", "Edwin", "Safa"};
 
+    // Textures and sprite
+    private SpriteBatch m_batch;
+    private Texture m_texture;
+    private Sprite m_sprite;
 
     public Item(){
 
@@ -42,6 +51,7 @@ public class Item {
     public static Item generateWeapon(){
         Item weapon = new Item();
         weapon.m_type = m_itemType.WEAPON;
+        weapon.m_batch = new SpriteBatch();
 
         // generate the weapon type
         Random rand = new Random();
@@ -49,20 +59,31 @@ public class Item {
         switch(weaponTypeInt){
             case(0):
                 weapon.m_theWeaponType = m_weaponType.SWORD;
+                weapon.m_texture = new Texture("swordArt.png");
+                weapon.m_sprite = new Sprite(weapon.m_texture);
                 break;
             case(1):
                 weapon.m_theWeaponType = m_weaponType.WAND;
+                weapon.m_texture = new Texture("swordArt.png");
+                weapon.m_sprite = new Sprite(weapon.m_texture);
                 break;
             case(2):
                 weapon.m_theWeaponType = m_weaponType.AXE;
+                weapon.m_texture = new Texture("swordArt.png");
+                weapon.m_sprite = new Sprite(weapon.m_texture);
                 break;
             case(3):
                 weapon.m_theWeaponType = m_weaponType.BOW;
+                weapon.m_texture = new Texture("swordArt.png");
+                weapon.m_sprite = new Sprite(weapon.m_texture);
                 break;
             default:
                 weapon.m_theWeaponType = m_weaponType.SWORD;
+                weapon.m_texture = new Texture("swordArt.png");
+                weapon.m_sprite = new Sprite(weapon.m_texture);
                 break;
         }
+
         // name the weapon
         weapon.m_itemName = generateItemName(weapon.m_theWeaponType, rand);
 
@@ -91,6 +112,8 @@ public class Item {
                 consumable.m_itemName = "Damage Potion";
                 consumable.m_playerStats = new Stats(0, 0, 0, 0, 0, rand.nextFloat()/2+1, 0, rand.nextInt(10) + 10);
                 consumable.m_enemyStats = new Stats(0, 0, 0, 0, 0, 0, 0, 0);
+                consumable.m_texture = new Texture(Gdx.files.internal("potion.png"));
+                consumable.m_sprite = new Sprite(consumable.m_texture);
                 break;
             case (1):
                 consumable.m_theConsumableType = m_consumableType.HEALTH;
@@ -98,6 +121,9 @@ public class Item {
                 // TODO consumable.m_healthChange
                 consumable.m_playerStats = new Stats(0, 0, 0, 0, 0, 0, 0, 0);
                 consumable.m_enemyStats = new Stats(0, 0, 0, 0, 0, 0, 0, 0);
+
+                consumable.m_texture = new Texture(Gdx.files.internal("potion.png"));
+                consumable.m_sprite = new Sprite(consumable.m_texture);
                 break;
             case (2):
                 consumable.m_theConsumableType = m_consumableType.ENERGY;
@@ -105,21 +131,29 @@ public class Item {
                 // TODO consumable.m_energyChange
                 consumable.m_playerStats = new Stats(0, 0, 0, 0, 0, 0, 0, 0);
                 consumable.m_enemyStats = new Stats(0, 0, 0, 0, 0, 0, 0, 0);
+
+                consumable.m_texture = new Texture(Gdx.files.internal("potion.png"));
+                consumable.m_sprite = new Sprite(consumable.m_texture);
                 break;
             case (3):
                 consumable.m_theConsumableType = m_consumableType.SPEED;
                 consumable.m_itemName = "Speed Potion";
                 consumable.m_playerStats = new Stats(0, 0, 0, rand.nextFloat()/2+1, 0, 0, 0, rand.nextInt(10) + 10);
                 consumable.m_enemyStats = new Stats(0, 0, 0, 0, 0, 0, 0, 0);
+
+                consumable.m_texture = new Texture(Gdx.files.internal("potion.png"));
+                consumable.m_sprite = new Sprite(consumable.m_texture);
                 break;
             case (4):
                 consumable.m_theConsumableType = m_consumableType.KNOCK;
                 consumable.m_itemName = "Knockback Potion";
                 consumable.m_playerStats = new Stats(0, 0, 0, 0, 0, 0, rand.nextFloat()/2+1, rand.nextInt(10) + 10);
                 consumable.m_enemyStats = new Stats(0, 0, 0, 0, 0, 0, 0, 0);
+
+                consumable.m_texture = new Texture(Gdx.files.internal("potion.png"));
+                consumable.m_sprite = new Sprite(consumable.m_texture);
                 break;
         }
-
         return consumable;
     }
 
@@ -142,4 +176,9 @@ public class Item {
         int secondWord = rand.nextInt(endNames.length);
         return first[firstWord] + " of " + endNames[secondWord];
     }
+
+    public Texture getTexture(){ return m_texture;}
+    public Sprite getSprite(){ return m_sprite;}
+    public m_itemType getType() {return m_type;}
+    public String getName() {return m_itemName;}
 }
