@@ -25,8 +25,6 @@ public class Player extends Character {
     private float m_cooldownTimer;
     private float m_stats;
 
->>>>>>> d6b0978afb6eec374d62eb504fc942c4dc022fee
-
     // TODO inventory, equipped items, abilities, other properties
 
     public Player(int h, int l, Color c) {
