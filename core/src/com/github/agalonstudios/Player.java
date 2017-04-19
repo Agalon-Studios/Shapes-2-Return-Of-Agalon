@@ -18,6 +18,15 @@ public class Player extends Character {
     protected int m_stamina;
     protected int m_maxStamina;
 
+    private String[] equippedAbilities;
+    // TODO just one ability for testing, replace this with equipped abilities
+    private Ability m_ability;
+    private float m_cooldown;
+    private float m_cooldownTimer;
+    private float m_stats;
+
+>>>>>>> d6b0978afb6eec374d62eb504fc942c4dc022fee
+
     // TODO inventory, equipped items, abilities, other properties
 
     public Player(int h, int l, Color c) {
@@ -58,7 +67,12 @@ public class Player extends Character {
 
     }
 
+    public void setEquippedAbilities(String[] equippedAbilities){
 
+    }
+    public String[] getEquippedAbilities(){
+        return equippedAbilities;
+    }
     @Override
     public void update(float delta, World world) {
         super.update(delta, world);
