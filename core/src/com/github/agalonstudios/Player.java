@@ -15,7 +15,7 @@ public class Player extends Character {
     private int m_gold;
     private int m_xp;
     private Sprite m_image;
-
+    private String[] equippedAbilities;
     // TODO just one ability for testing, replace this with equipped abilities
     private Ability m_ability;
     private float m_cooldown;
@@ -50,7 +50,12 @@ public class Player extends Character {
         // TODO add constructor for stats
     }
 
+    public void setEquippedAbilities(String[] equippedAbilities){
 
+    }
+    public String[] getEquippedAbilities(){
+        return equippedAbilities;
+    }
     @Override
     public void update(float delta, World world) {
         super.update(delta, world);
