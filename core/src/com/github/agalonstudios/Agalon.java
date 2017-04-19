@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class Agalon extends Game {
@@ -15,7 +16,7 @@ public class Agalon extends Game {
     private boolean m_whichMusic;
     private Player m_player;
     private World m_currentWorld;
-
+    private SpriteBatch m_batch;
 	@Override
     public void create () {
         loadPlayer();
@@ -25,9 +26,9 @@ public class Agalon extends Game {
         ScreenScale.init(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         m_shapeRenderer = new ExtendedShapeRenderer();
-
+        m_shapeRenderer.setAutoShapeType(true);
         m_camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
+        m_batch = new SpriteBatch();
         this.setScreen(new MainMenu(this));
         //this.setScreen(m_overworld);
     }
@@ -121,6 +122,10 @@ public class Agalon extends Game {
             return true;
         else
             return false;
+    }
+
+    public SpriteBatch getSpriteBatch() {
+        return m_batch;
     }
 
     public void setPlayer(Player p) {

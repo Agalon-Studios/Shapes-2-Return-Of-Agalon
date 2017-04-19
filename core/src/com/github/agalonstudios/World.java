@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.ArrayList;
@@ -21,7 +20,8 @@ public abstract class World implements Screen {
     protected Array<Character> m_nonPlayerCharacters;
     protected Array<Player> m_playerRefArray;
     protected Array<CastObject> m_castObjects;
-    //protected QuadTree m_collisionTree;
+    protected Array<EffectArea> m_effectsOverTime;
+
 
     private static Array<Entity> refList = new Array<Entity>();
     private static List<Entity> returnObjects = new ArrayList<Entity>();
@@ -39,6 +39,7 @@ public abstract class World implements Screen {
         m_shapeRendererRef = ((Agalon) Gdx.app.getApplicationListener()).getShapeRenderer();
         m_walls = new Array<Wall>();
         m_castObjects = new Array<CastObject>();
+        m_effectsOverTime = new Array<EffectArea>();
     }
 
     public void spawnNPC(Character character) {
@@ -52,7 +53,20 @@ public abstract class World implements Screen {
 
     protected void update(float delta) {
         HUD.update(delta, m_playerRef);
+
         m_playerRef.update(delta, this);
+
+        for (int i = 0; i < m_effectsOverTime.size; i++) {
+           m_effectsOverTime.get(i).update(delta);
+            if (m_effectsOverTime.get(i).done())
+                m_effectsOverTime.removeIndex(i--);
+        }
+
+        for (int i = 0; i < m_castObjects.size; i++) {
+            m_castObjects.get(i).update(delta);
+            if (m_castObjects.get(i).done())
+                m_castObjects.removeIndex(i--);
+        }
     }
 
     @Override
@@ -72,8 +86,18 @@ public abstract class World implements Screen {
 
         m_playerRef.render();
 
+
+
+        for (EffectArea e : m_effectsOverTime) {
+            e.render();
+        }
+
+        for (CastObject o : m_castObjects) {
+            o.render();
+        }
+
         m_shapeRendererRef.end();
-        HUD.render();
+        HUD.render(m_playerRef);
     }
 
     protected static void runCollisions(Array<? extends Entity> ... entityLists) {
@@ -81,21 +105,20 @@ public abstract class World implements Screen {
     }
 
     protected static void runCollisionsNSquared(Array<? extends Entity> ... entityLists) {
-        Array<Entity> allObjects = new Array<Entity>();
-
         for (Array<? extends Entity> entityList : entityLists) {
-            for (Entity e : entityList) {
-                allObjects.add(e);
-            }
-        }
-
-        for (int e = 0; e < allObjects.size; e++) {
-            for (int o = 0; o < allObjects.size; o++) {
-                if (e == o)
-                    continue;
-
-                if (allObjects.get(e).overlaps(allObjects.get(o)))
-                    allObjects.get(e).runCollision(allObjects.get(o));
+            for (Array<? extends Entity> entityList2 : entityLists) {
+                if (!entityList.equals(entityList2)) {
+                    for (int e = 0; e < entityList.size; e++) {
+                        for (int o = 0; o < entityList2.size; o++) {
+                            if (e == o) continue;
+                            Entity e1 = entityList.get(e);
+                            Entity e2 = entityList2.get(o);
+                            if (e1.isFixed() && e2.isFixed()) continue;
+                            if (e1.overlaps(e2))
+                                e1.runCollision(e2);
+                        }
+                    }
+                }
             }
         }
     }
@@ -130,6 +153,10 @@ public abstract class World implements Screen {
 
     public void addCastObject(CastObject co) {
         m_castObjects.add(co);
+    }
+
+    public void addEffectOverTime(EffectArea eot) {
+        m_effectsOverTime.add(eot);
     }
 
     public void addCastObjects(Array<CastObject> cos) {

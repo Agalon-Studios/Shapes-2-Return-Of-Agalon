@@ -124,7 +124,7 @@ public class DungeonRoom extends World {
 
 
         for (int i = 0; i < m_castObjects.size; i++) {
-            m_castObjects.get(i).update(delta, this);
+            m_castObjects.get(i).update(delta);
             if (m_castObjects.get(i).done()) {
                 m_castObjects.removeIndex(i);
             }

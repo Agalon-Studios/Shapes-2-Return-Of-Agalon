@@ -1,6 +1,5 @@
 package com.github.agalonstudios;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
@@ -18,11 +17,11 @@ public abstract class Character extends Entity {
     protected Vector2 m_acceleration;
     protected float m_maxAcceleration;
     protected int m_directionFacing;
-    protected Array<EffectOverTime> m_effectOverTimes;
+    protected Array<EffectArea> m_effectOverTimes;
     protected Array<Float> m_cooldownTimers;
     protected Stats m_Stats;
     protected Array<Ability> m_equippedAbilities;
-
+    protected int m_maxAbilityCount;
     public Character(float radius, Vector2 center, Shape shape, int health, float ms, float ma, int l) {
         super(radius, center, shape);
         m_health = health;
@@ -30,7 +29,7 @@ public abstract class Character extends Entity {
         m_maxSpeed = ms;
         m_currentMaxSpeed = m_maxSpeed;
         m_level = l;
-        m_effectOverTimes = new Array<EffectOverTime>();
+        m_effectOverTimes = new Array<EffectArea>();
         m_velocity = new Vector2(0, 0);
         m_acceleration = new Vector2(0, 0);
         m_maxAcceleration = ma;
@@ -86,7 +85,7 @@ public abstract class Character extends Entity {
     }
 
     public void cast(int abilityNum) {
-        m_equippedAbilities.get(abilityNum).cast(this, (World) ((Agalon) Gdx.app.getApplicationListener()).getScreen());
+        m_equippedAbilities.get(abilityNum).cast(this);
     }
 
     @Override
