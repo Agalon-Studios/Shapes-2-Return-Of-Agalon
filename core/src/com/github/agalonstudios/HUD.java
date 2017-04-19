@@ -103,7 +103,7 @@ public class HUD {
 
         m_bookButton.addListener(new ClickListener() {
             public void clicked (InputEvent event, float x, float y){
-                ((Agalon) Gdx.app.getApplicationListener()).setScreen(new AbilityBook(((Agalon) Gdx.app.getApplicationListener())));
+                //((Agalon) Gdx.app.getApplicationListener()).setScreen(new AbilityBook(((Agalon) Gdx.app.getApplicationListener())));
             }
         });
 
