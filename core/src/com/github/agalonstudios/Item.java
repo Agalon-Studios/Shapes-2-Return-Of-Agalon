@@ -181,4 +181,13 @@ public class Item {
     public Sprite getSprite(){ return m_sprite;}
     public m_itemType getType() {return m_type;}
     public String getName() {return m_itemName;}
+
+    public String getInfo(Item item){
+        String info = "";
+        info += item.getName();
+        info += "\n";
+        info += "Damage mod: ";
+
+        return info;
+    }
 }

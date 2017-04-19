@@ -2,12 +2,15 @@ package com.github.agalonstudios;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
@@ -21,6 +24,9 @@ public class InventoryScreen implements Screen {
     private Array<Array<Button>> m_buttonArr;
     private Stage m_stage;
     private Button m_backButton;
+    private Label m_nameLabel;
+    private Array<Item> m_inventory;
+    private Button m_clicked;
 
     public InventoryScreen(final Agalon a){
         m_stage = new Stage();
@@ -29,7 +35,7 @@ public class InventoryScreen implements Screen {
         int screenWidth = Gdx.graphics.getWidth();
         int screenHeight = Gdx.graphics.getHeight();
 
-        Array<Item> inventory = a.getPlayer().getInventory();
+        m_inventory = a.getPlayer().getInventory();
         int numItems = a.getPlayer().getNumInventory();
 
         // stuff for skin
@@ -54,10 +60,18 @@ public class InventoryScreen implements Screen {
         for(int i = 0; i < 4; i++){
             m_buttonArr.add(new Array<Button>(4));
         }
+        // create label style
+        BitmapFont bfont = new BitmapFont();
+        final Label.LabelStyle labelStyle = new Label.LabelStyle(bfont, Color.WHITE);
+        m_nameLabel = new Label("Item Name", labelStyle);
+        m_nameLabel.setPosition(500, screenHeight-100);
+        m_stage.addActor(m_nameLabel);
+
 
         // create the buttons
         int row;
         int col;
+        // stuff for what rows
         if(numItems == 0)
             row = 0;
         else if(numItems<=4 && numItems >=1)
@@ -70,6 +84,7 @@ public class InventoryScreen implements Screen {
             row = 4;
 
         for(int i = 0; i < row; i++) {
+            // stuff for how many cols
             if(row ==1)
                 col = numItems;
             else if(row == 2 && i == 1)
@@ -82,19 +97,29 @@ public class InventoryScreen implements Screen {
                 col = 4;
 
             for(int j = 0; j < col; j++) {
-                if(inventory.get(4*i + j).getType() == Item.m_itemType.WEAPON){
+                // create the button
+                if(m_inventory.get(4*i+j).getType() == Item.m_itemType.WEAPON){
                     m_buttonArr.get(i).add(new Button(swordStyle));
                 }
                 else{
                     m_buttonArr.get(i).add(new Button(healthStyle));
                 }
 
-                Button thisButton = m_buttonArr.get(i).get(j);
+                final Button thisButton = m_buttonArr.get(i).get(j);
+                thisButton.setName(m_inventory.get(4*i+j).getName());
                 thisButton.setHeight(screenHeight / 5);
                 thisButton.setWidth(screenWidth / 4);
                 thisButton.setPosition((screenWidth*j/4), (screenHeight*(3-i)/5));
-
                 m_stage.addActor(thisButton);
+
+                thisButton.addListener(new ClickListener() {
+                    public void clicked (InputEvent event, float x, float y){
+                        m_clicked = thisButton;
+                        m_nameLabel.setText(thisButton.getName());
+                        System.out.println(m_clicked.getName());
+                        System.out.println(m_nameLabel.toString());
+                    }
+                });
             }
         }
 
@@ -119,6 +144,8 @@ public class InventoryScreen implements Screen {
         m_backButton.setBounds(0, ScreenScale.scaleHeight(-200) + Gdx.graphics.getHeight(),
                 ScreenScale.scale(200), ScreenScale.scale(200));
         m_stage.addActor(m_backButton);
+
+
     }
 
     @Override
@@ -132,7 +159,7 @@ public class InventoryScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         m_stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         m_stage.draw();
-        m_stage.setDebugAll(true);
+        //m_stage.setDebugAll(true);
     }
 
     @Override
@@ -159,5 +186,5 @@ public class InventoryScreen implements Screen {
     public void dispose() {
 
     }
-
+    public Array<Item> getInventory(){return m_inventory;}
 }
