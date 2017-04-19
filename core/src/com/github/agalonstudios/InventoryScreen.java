@@ -56,29 +56,30 @@ public class InventoryScreen implements Screen {
         // create the buttons
         int row;
         int col;
-
-        if(numItems/4 == 0 && numItems>0)
-           row = 1;
-        else if(numItems/4 == 0 && numItems == 0)
+        if(numItems == 0)
             row = 0;
+        else if(numItems<=4 && numItems >=1)
+            row = 1;
+        else if(numItems <=8 && numItems>=5)
+            row = 2;
+        else if(numItems<=12 && numItems>=9)
+            row = 3;
         else
-            row = numItems/4;
-        System.out.println(row);
+            row = 4;
 
+
+        //System.out.println("row and col: " + row + " " + col);
         for(int i = 0; i < row; i++) {
-            if (i == row && i != 0) {
-                System.out.println("1");
-                col = (numItems - row * 4);
-            }
-            else if(i == row-1 && row-1 == 0) {
-                col = (numItems);
-                System.out.println("2");
-            }
-            else {
+            if(row ==1)
+                col = numItems;
+            else if(row == 2 && i == 1)
+                col = numItems-4;
+            else if(row == 3 && i == 2)
+                col = numItems - 8;
+            else if(row == 4 && i == 3)
+                col = numItems - 12;
+            else
                 col = 4;
-                System.out.println("3");
-            }
-            System.out.println("row and col: " + row + " " + col);
             for(int j = 0; j < col; j++) {
                 System.out.println(i + " " + j);
                 if(inventory.get(4*i + j).getType() == Item.m_itemType.WEAPON){
