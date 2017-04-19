@@ -41,12 +41,15 @@ class AbilityBook implements Screen {
     private Stage m_stage;
     private Label m_equippedLabel;
     private Label m_bookLabel;
-    private Array<Ability.AbilityType> equippedAbilities;
+    private Array<Ability> equippedAbilities;
 
     public AbilityBook(final Agalon a){
         m_stage = new Stage();
         Gdx.input.setInputProcessor(m_stage);
         BitmapFont bfont = new BitmapFont();
+
+        equippedAbilities = new Array<Ability>(4);
+
 
         Skin skin = new Skin();
 
@@ -140,7 +143,7 @@ class AbilityBook implements Screen {
 
 
         // Add already equipped abilites
-       // equippedAbilities = Player.getEquippedAbilities();
+        equippedAbilities = a.getPlayer().getEquippedAbilities();
 
         // add targets for equipped abilities
         Skin emptySkin = new Skin();
@@ -168,8 +171,8 @@ class AbilityBook implements Screen {
                     Payload payload = new Payload();
                     // create copy of actor
                     TextButton copy_abilityButton1  = new TextButton(abilityNames[j] ,abilityButtonStyle);
+                    copy_abilityButton1.setName(abilityNames[j]);
                     payload.setDragActor(copy_abilityButton1);
-                    System.out.println(abilityNames[j] + " " + payload.getDragActor().getName());
                     return payload;
                 }
             });
@@ -193,7 +196,7 @@ class AbilityBook implements Screen {
                 for (int i = 0; i < abilityNames.length; i++) {
                     if (payload.getDragActor() != null &&
                             payload.getDragActor().getName().equals(abilityNames[i]))
-                        equippedAbilities.set(0, Ability.AbilityType.values()[i]);
+                        equippedAbilities.set(0, new Ability(Ability.AbilityType.values()[i]));
                 }
 
             }
@@ -216,7 +219,7 @@ class AbilityBook implements Screen {
                 for (int i = 0; i < abilityNames.length; i++) {
                     if (payload.getDragActor() != null &&
                             payload.getDragActor().getName().equals(abilityNames[i]))
-                        equippedAbilities.set(1, Ability.AbilityType.values()[i]);
+                        equippedAbilities.set(1, new Ability(Ability.AbilityType.values()[i]));
                 }
             }
         });
@@ -237,7 +240,7 @@ class AbilityBook implements Screen {
                 for (int i = 0; i < abilityNames.length; i++) {
                     if (payload.getDragActor() != null &&
                             payload.getDragActor().getName().equals(abilityNames[i]))
-                        equippedAbilities.set(2, Ability.AbilityType.values()[i]);
+                        equippedAbilities.set(2, new Ability(Ability.AbilityType.values()[i]));
                 }
             }
         });
@@ -259,7 +262,7 @@ class AbilityBook implements Screen {
                 for (int i = 0; i < abilityNames.length; i++) {
                     if (payload.getDragActor() != null &&
                             payload.getDragActor().getName().equals(abilityNames[i]))
-                        equippedAbilities.set(3, Ability.AbilityType.values()[i]);
+                        equippedAbilities.set(3, new Ability(Ability.AbilityType.values()[i]));
                 }
             }
         });

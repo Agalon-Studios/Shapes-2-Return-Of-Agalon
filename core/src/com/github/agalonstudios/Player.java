@@ -98,12 +98,14 @@ public class Player extends Character {
     }
 
 
-    public void setEquippedAbilities(Array<Ability.AbilityType> abilities) {
-        for (int i = 0; i < abilities.size; i++) {
-            m_equippedAbilities.set(i, new Ability(abilities.get(i)));
-        }
+    public void setEquippedAbilities(Array<Ability> abilities) {
+        m_equippedAbilities = abilities;
     }
 
+
+    public Array<Ability> getEquippedAbilities() {
+        return m_equippedAbilities;
+    }
 
     @Override
     public void render() {
