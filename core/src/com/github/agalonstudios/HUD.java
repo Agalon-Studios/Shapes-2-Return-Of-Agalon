@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -16,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad.TouchpadStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
+
 
 
 /**
@@ -30,10 +32,18 @@ public class HUD {
     private static Sprite m_HealthBar;
     private static Sprite m_AbilityBar;
     private static Button m_bookButton;
+    private static final int[] abilityButtonXPos = {300, 600, 900, 1200, 1500};
+    private static final int[] abilityButtonYPos = {0, 0, 0, 0, 0};
 
+
+    private static Array<Actor> m_AbilityButtons;
+    private static Array<Ability> m_Abilities;
     private HUD() { }
     static {
         hudOutputs = new HUDOutputs();
+
+        m_AbilityButtons = new Array<Actor>(6);
+        m_Abilities = new Array<Ability>(6);
 
         m_stage = new Stage();
         Gdx.input.setInputProcessor(m_stage);
@@ -131,6 +141,84 @@ public class HUD {
 
         batch.end();
 
+        drawStatusBars(player, er);
+
+        m_stage.draw();
+    }
+
+    public static void setAbilityButtons(Player p) {
+        m_stage.getActors().removeAll(m_AbilityButtons, false);
+
+
+        for (int i = 0; i < p.m_equippedAbilities.size; i++) {
+            m_Abilities.set(i, p.m_equippedAbilities.get(i));
+            switch(m_Abilities.get(i).getAbilityType()) {
+                case SELF:
+                case SELF_AREA_OF_EFFECT:
+                    Button abilityButton = makeAbilityButton(i);
+                    m_stage.addActor(abilityButton);
+                    m_AbilityButtons.set(i, abilityButton);
+                    break;
+
+                default:
+                    Touchpad abilityJoystick = makeAbilityJoyStick(i);
+                    m_stage.addActor(abilityJoystick);
+                    m_AbilityButtons.set(i, abilityJoystick);
+                    break;
+            }
+        }
+
+    }
+
+    private static Button makeAbilityButton(int location) {
+        Skin skin = new Skin();
+        skin.add("button", new Texture("pauseButton.png"));
+
+        Button.ButtonStyle style = new Button.ButtonStyle();
+        style.checked = skin.getDrawable("pauseButton");
+        style.up = skin.getDrawable("pauseButton");
+        style.down = skin.getDrawable("pauseButton");
+
+        Button ret = new Button(style);
+
+        ret.addListener(new ClickListener() {
+            public void clicked (InputEvent event, float x, float y){
+                //TODO;
+            }
+        });
+
+
+        ret.setBounds(
+                ScreenScale.scaleWidth(abilityButtonXPos[location]),
+                ScreenScale.scaleHeight(abilityButtonYPos[location]),
+                ScreenScale.scale(150),
+                ScreenScale.scale(150));
+
+        return ret;
+    }
+
+    private static Touchpad makeAbilityJoyStick(int location) {
+        Skin abilityButtonSkin = new Skin();
+        abilityButtonSkin.add("bkgd", new Texture("movementJoystickBkgd.png"));
+        abilityButtonSkin.add("knob", new Texture("movementJoystickKnob.png"));
+        Touchpad temp = new Touchpad(0,
+                new TouchpadStyle(
+                        abilityButtonSkin.getDrawable("movementJoystickBkgd"),
+                        abilityButtonSkin.getDrawable("movementJoystickKnob")
+                )
+        );
+        temp.setBounds(
+                abilityButtonXPos[location],
+                abilityButtonYPos[location],
+                ScreenScale.scale(150),
+                ScreenScale.scale(150)
+        );
+
+        return temp;
+    }
+
+
+    private static void drawStatusBars(Player player, ExtendedShapeRenderer er) {
         er.begin();
         er.set(ShapeType.Filled);
 
@@ -138,10 +226,10 @@ public class HUD {
 
         float pixelDiff = 9;
         er.rect(
-                m_HealthBar.getX() + pixelDiff,
-                m_HealthBar.getY() + pixelDiff,
-                (m_HealthBar.getWidth() - 2*pixelDiff) * (player.m_health / (float) player.m_maxHealth),
-                m_HealthBar.getHeight() - 2*pixelDiff
+                ScreenScale.scale((int) (m_HealthBar.getX() + pixelDiff)),
+                ScreenScale.scale((int) (m_HealthBar.getY() + pixelDiff)),
+                ScreenScale.scale((int) ((m_HealthBar.getWidth() - 2*pixelDiff) * (player.m_health / (float) player.m_maxHealth))),
+                ScreenScale.scale((int) (m_HealthBar.getHeight() - 2*pixelDiff))
         );
 
         pixelDiff *= m_AbilityBar.getScaleX();
@@ -149,15 +237,14 @@ public class HUD {
         er.setColor(Color.GREEN);
 
         er.rect(
-                m_AbilityBar.getX() + pixelDiff,
-                m_AbilityBar.getY() + pixelDiff,
-                (m_AbilityBar.getWidth() - 2*pixelDiff) * (player.m_stamina / (float) player.m_maxStamina),
-                m_AbilityBar.getHeight() - 2*pixelDiff
+                ScreenScale.scale((int) (m_AbilityBar.getX() + pixelDiff)),
+                ScreenScale.scale((int) (m_AbilityBar.getY() + pixelDiff)),
+                ScreenScale.scale((int) ((m_AbilityBar.getWidth() - 2*pixelDiff) * (player.m_stamina / (float) player.m_maxStamina))),
+                ScreenScale.scale((int) (m_AbilityBar.getHeight() - 2*pixelDiff))
         );
 
         er.end();
 
-        m_stage.draw();
     }
 
     public static void dispose() {
