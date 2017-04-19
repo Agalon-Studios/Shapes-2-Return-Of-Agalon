@@ -45,6 +45,11 @@ public class HUD {
         m_AbilityButtons = new Array<Actor>(6);
         m_Abilities = new Array<Ability>(6);
 
+        for (int i = 0; i < 4; i++) {
+            m_AbilityButtons.add(null);
+            m_Abilities.add(null);
+        }
+
         m_stage = new Stage();
         Gdx.input.setInputProcessor(m_stage);
 
@@ -103,7 +108,7 @@ public class HUD {
 
         m_bookButton.addListener(new ClickListener() {
             public void clicked (InputEvent event, float x, float y){
-                //((Agalon) Gdx.app.getApplicationListener()).setScreen(new AbilityBook(((Agalon) Gdx.app.getApplicationListener())));
+                ((Agalon) Gdx.app.getApplicationListener()).setScreen(new AbilityBook(((Agalon) Gdx.app.getApplicationListener())));
             }
         });
 
@@ -147,7 +152,9 @@ public class HUD {
     }
 
     public static void setAbilityButtons(Player p) {
+        if (m_AbilityButtons.get(0) != null)
         m_stage.getActors().removeAll(m_AbilityButtons, false);
+
 
 
         for (int i = 0; i < p.m_equippedAbilities.size; i++) {
@@ -175,9 +182,9 @@ public class HUD {
         skin.add("button", new Texture("pauseButton.png"));
 
         Button.ButtonStyle style = new Button.ButtonStyle();
-        style.checked = skin.getDrawable("pauseButton");
-        style.up = skin.getDrawable("pauseButton");
-        style.down = skin.getDrawable("pauseButton");
+        style.checked = skin.getDrawable("button");
+        style.up = skin.getDrawable("button");
+        style.down = skin.getDrawable("button");
 
         Button ret = new Button(style);
 
@@ -203,8 +210,8 @@ public class HUD {
         abilityButtonSkin.add("knob", new Texture("movementJoystickKnob.png"));
         Touchpad temp = new Touchpad(0,
                 new TouchpadStyle(
-                        abilityButtonSkin.getDrawable("movementJoystickBkgd"),
-                        abilityButtonSkin.getDrawable("movementJoystickKnob")
+                        abilityButtonSkin.getDrawable("bkgd"),
+                        abilityButtonSkin.getDrawable("knob")
                 )
         );
         temp.setBounds(
