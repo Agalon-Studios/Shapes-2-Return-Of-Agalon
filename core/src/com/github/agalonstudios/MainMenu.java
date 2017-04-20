@@ -14,11 +14,16 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import static com.badlogic.gdx.utils.Align.center;
+import static com.badlogic.gdx.utils.Align.right;
 
 
 /**
@@ -28,8 +33,9 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 public class MainMenu implements Screen {
 
     private Stage m_stage;
-    private Viewport m_viewport;
     private TextButton m_playButton;
+    private Label m_title;
+    private Button m_main;
 
 
     public MainMenu(final Agalon a){
@@ -69,7 +75,7 @@ public class MainMenu implements Screen {
         m_playButton  = new TextButton("PLAY",textButtonStyle);
         m_playButton.setPosition(screenWidth/5, screenHeight/2-screenWidth/10);
 
-        m_stage.addActor(m_playButton);
+
 
 
 
@@ -83,7 +89,7 @@ public class MainMenu implements Screen {
 
         TextButton m_optionsButton = new TextButton("Options", textButtonStyle);
         m_optionsButton.setPosition(screenWidth*3/5, screenHeight/2-screenWidth/10);
-        m_stage.addActor(m_optionsButton);
+
 
         m_optionsButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
@@ -91,8 +97,20 @@ public class MainMenu implements Screen {
             }
         });
 
+        Skin howToSkin = new Skin();
+        howToSkin.add("main", new Texture("mainShapes.png"));
 
+        Button.ButtonStyle main = new Button.ButtonStyle();
+        main.checked = howToSkin.getDrawable("main");
+        main.up = howToSkin.getDrawable("main");
+        main.down = howToSkin.getDrawable("main");
 
+        m_main = new Button(main);
+        m_main.setBounds(0,0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        m_stage.addActor(m_main);
+        m_stage.addActor(m_optionsButton);
+        m_stage.addActor(m_playButton);
     }
     @Override
     public void show() {
