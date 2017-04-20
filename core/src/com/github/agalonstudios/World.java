@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public abstract class World implements Screen {
     protected Array<Player> m_playerRefArray;
     protected Array<CastObject> m_castObjects;
     protected Array<EffectArea> m_effectsOverTime;
+    protected Array<DroppedItem> m_dItems;
 
 
     private static Array<Entity> refList = new Array<Entity>();
@@ -39,6 +41,9 @@ public abstract class World implements Screen {
         m_walls = new Array<Wall>();
         m_castObjects = new Array<CastObject>();
         m_effectsOverTime = new Array<EffectArea>();
+        m_dItems = new Array<DroppedItem>();
+
+        m_dItems.add(new DroppedItem(Item.generateWeapon(), new Vector2(Gdx.graphics.getWidth() - 10, Gdx.graphics.getHeight() - 10)));
     }
 
     public void spawnNPC(Character character) {
@@ -95,6 +100,10 @@ public abstract class World implements Screen {
             o.render();
         }
 
+        for (DroppedItem di : m_dItems) {
+            di.render();
+        }
+
         m_shapeRendererRef.end();
         HUD.render(m_playerRef);
     }
@@ -109,7 +118,7 @@ public abstract class World implements Screen {
           //      if (!entityList.equals(entityList2)) {
                     for (int e = 0; e < entityList.size; e++) {
                         for (int o = 0; o < entityList2.size; o++) {
-                            if (e == o) continue;
+                            if (e == o && entityList.equals(entityList2)) continue;
                             Entity e1 = entityList.get(e);
                             Entity e2 = entityList2.get(o);
                             if (e1.isFixed() && e2.isFixed()) continue;
@@ -150,6 +159,14 @@ public abstract class World implements Screen {
 //        }
 //    }
 
+    public void removeItem(DroppedItem dItem)
+    {
+        m_dItems.removeValue(dItem, true);
+    }
+
+    public void addItem(Item i, Vector2 position) {
+        m_dItems.add(new DroppedItem(i, position));
+    }
     public void addCastObject(CastObject co) {
         m_castObjects.add(co);
     }

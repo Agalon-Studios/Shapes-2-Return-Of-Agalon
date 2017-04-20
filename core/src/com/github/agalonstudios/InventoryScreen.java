@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -36,10 +37,13 @@ public class InventoryScreen implements Screen {
     private TextButton m_equipOrUse;
     private TextButton m_drop;
     private int m_numItems;
+    private int m_numDroppedItems;
 
     public InventoryScreen(final Agalon a){
         m_stage = new Stage();
         Gdx.input.setInputProcessor(m_stage);
+
+        m_numDroppedItems = 0;
 
         int screenWidth = Gdx.graphics.getWidth();
         int screenHeight = Gdx.graphics.getHeight();
@@ -193,6 +197,10 @@ public class InventoryScreen implements Screen {
 
         m_drop.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
+                m_numDroppedItems++;
+                a.getCurrentWorld().addItem(m_inventory.get(Integer.parseInt(m_clicked.getName())),
+                        new Vector2(a.getPlayer().getX() - a.getPlayer().getWidth(),
+                                a.getPlayer().getY() + m_numDroppedItems * 15));
                 removeItem(Integer.parseInt(m_clicked.getName()), a);
                 a.setScreen(new InventoryScreen(a));
             }

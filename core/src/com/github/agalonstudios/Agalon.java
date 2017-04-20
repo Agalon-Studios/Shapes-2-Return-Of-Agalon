@@ -127,6 +127,10 @@ public class Agalon extends Game {
     public SpriteBatch getSpriteBatch() {
         return m_batch;
     }
+    public World getCurrentWorld()
+    {
+        return m_currentWorld;
+    }
 
     public void setPlayer(Player p) {
         this.m_player = p;

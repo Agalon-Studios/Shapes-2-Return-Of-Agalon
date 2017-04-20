@@ -27,6 +27,7 @@ public class Player extends Character {
 
     // TODO inventory, equipped items, abilities, other properties
     private Array<Item> m_inventory;
+    private int m_itemCount;
     private int m_numInInventory;
     private Item m_equipped;
 
@@ -40,7 +41,7 @@ public class Player extends Character {
                 800,
                 l
         );
-
+        m_itemCount = 0;
         m_fixed = false;
         m_gold = 0;
         m_xp = 0;
@@ -68,7 +69,7 @@ public class Player extends Character {
         m_inventory = new Array<Item>(16);
         m_numInInventory = 0;
 
-        for(int i = 0; i < 16; i++){
+        for(int i = 0; i < 5; i++){
             m_inventory.add(Item.generateWeapon());
             System.out.println(m_inventory.get(i).getName());
             m_numInInventory++;
@@ -124,6 +125,17 @@ public class Player extends Character {
 
 
         //TODO fix this one if needed
+    }
+    public void runCollision(Entity e)
+    {
+        super.runCollision(e);
+        if(m_itemCount < 16 && e instanceof DroppedItem)
+        {
+            ((Agalon) Gdx.app.getApplicationListener()).getCurrentWorld().removeItem((DroppedItem) e);
+            m_inventory.add(((DroppedItem) e).getItem());
+            m_itemCount++;
+        }
+
     }
 
     public Array<Item> getInventory(){ return m_inventory;}

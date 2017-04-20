@@ -86,7 +86,7 @@ public class Overworld extends World {
             }
         }
 
-        runCollisions(m_playerRefArray, m_dungeonEntrances, m_trees, m_travelers, m_castObjects);
+        runCollisions(m_playerRefArray, m_dungeonEntrances, m_trees, m_travelers, m_castObjects, m_dItems);
     }
 
     @Override
