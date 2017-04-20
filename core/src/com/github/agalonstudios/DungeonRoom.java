@@ -3,7 +3,9 @@ package com.github.agalonstudios;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 /**
  * DungeonRoom
@@ -135,8 +137,6 @@ public class DungeonRoom extends World {
 
         m_shapeRendererRef.end();
 
-
-
         super.render(delta);
     }
 
@@ -150,6 +150,8 @@ public class DungeonRoom extends World {
         for (int i = 0; i < m_nonPlayerCharacters.size; i++) {
             m_nonPlayerCharacters.get(i).update(delta, this);
             if (!m_nonPlayerCharacters.get(i).alive()) {
+                m_dItems.add(new DroppedItem(MathUtils.random(0, 10) > 7 ? Item.generateWeapon() : Item.generateConsumable(),
+                        new Vector2(m_nonPlayerCharacters.get(i).getX(), m_nonPlayerCharacters.get(i).getY())));
                 m_nonPlayerCharacters.removeIndex(i);
             }
         }
@@ -174,7 +176,7 @@ public class DungeonRoom extends World {
             }
         }
 
-        runCollisions(m_nonPlayerCharacters, m_walls, m_playerRefArray, m_chests, m_castObjects);
+        runCollisions(m_nonPlayerCharacters, m_walls, m_playerRefArray, m_chests, m_castObjects, m_dItems);
     }
 
     public void movePlayerToDoorAt(int dir) {

@@ -30,8 +30,9 @@ public class Enemy1 extends Character {
 
     @Override
     public void update(float delta, World world) {
-
-        if (m_health <= 0)
+		m_health--; // TODO remove, this is to test dropping items on death
+		// before we can actually kill them
+		if (m_health <= 0)
             m_spawnPointRef.decrementLivingCount();
 
 

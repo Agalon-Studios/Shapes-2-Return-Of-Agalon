@@ -46,6 +46,8 @@ public class Overworld extends World {
             m_trees.add(new OverworldTree(MathUtils.random(-5000, 5000), MathUtils.random(placeYMax - 128, placeYMax)));
             placeYMax = (int) m_trees.get(i).getY();
         }
+
+        m_dItems.add(new DroppedItem(57, new Vector2(Gdx.graphics.getWidth() * 2 / 3, Gdx.graphics.getHeight() / 2)));
     }
 
     @Override

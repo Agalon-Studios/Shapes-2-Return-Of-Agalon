@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
@@ -17,6 +18,8 @@ public class Agalon extends Game {
     private Player m_player;
     private World m_currentWorld;
     private SpriteBatch m_batch;
+    private BitmapFont m_font;
+
 	@Override
     public void create () {
         loadPlayer();
@@ -29,8 +32,9 @@ public class Agalon extends Game {
         m_shapeRenderer.setAutoShapeType(true);
         m_camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         m_batch = new SpriteBatch();
+        m_font = new BitmapFont();
+        //this.setScreen(new Splash(this));
         this.setScreen(new MainMenu(this));
-        //this.setScreen(m_overworld);
     }
 
     private void loadPlayer() {
@@ -70,6 +74,10 @@ public class Agalon extends Game {
     public OrthographicCamera getCamera() {
         return m_camera;
     }
+
+    public BitmapFont getFont() { return m_font; }
+
+    public SpriteBatch getBatch() { return m_batch; }
 
     public Music getMusic() {
         if(m_whichMusic)

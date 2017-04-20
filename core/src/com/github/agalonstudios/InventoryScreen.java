@@ -38,6 +38,7 @@ public class InventoryScreen implements Screen {
     private TextButton m_drop;
     private int m_numItems;
     private static int m_numDroppedItems = 0;
+    private Label m_goldLabel;
 
 
     public InventoryScreen(final Agalon a) {
@@ -72,6 +73,10 @@ public class InventoryScreen implements Screen {
         Skin slotSkin = new Skin();
         slotSkin.add("sword", new Texture("swordArt.png"));
         slotSkin.add("healthPotion", new Texture("potion.png"));
+        slotSkin.add("energyPotion", new Texture("energyPotion.png"));
+        slotSkin.add("damagePotion", new Texture("damagePotion.png"));
+        slotSkin.add("speedPotion", new Texture("speedPotion.png"));
+        slotSkin.add("knockPotion", new Texture("knockPotion.png"));
 
         // for sword
         Button.ButtonStyle swordStyle = new Button.ButtonStyle();
@@ -83,6 +88,27 @@ public class InventoryScreen implements Screen {
         healthStyle.checked = slotSkin.getDrawable("healthPotion");
         healthStyle.up = slotSkin.getDrawable("healthPotion");
         healthStyle.down = slotSkin.getDrawable("healthPotion");
+        // for energy potion
+        Button.ButtonStyle energyStyle = new Button.ButtonStyle();
+        energyStyle.checked = slotSkin.getDrawable("energyPotion");
+        energyStyle.up = slotSkin.getDrawable("energyPotion");
+        energyStyle.down = slotSkin.getDrawable("energyPotion");
+        // for damage potion
+        Button.ButtonStyle damageStyle = new Button.ButtonStyle();
+        damageStyle.checked = slotSkin.getDrawable("damagePotion");
+        damageStyle.up = slotSkin.getDrawable("damagePotion");
+        damageStyle.down = slotSkin.getDrawable("damagePotion");
+        // for speed potion
+        Button.ButtonStyle speedStyle = new Button.ButtonStyle();
+        speedStyle.checked = slotSkin.getDrawable("speedPotion");
+        speedStyle.up = slotSkin.getDrawable("speedPotion");
+        speedStyle.down = slotSkin.getDrawable("speedPotion");
+        // for knock potion
+        Button.ButtonStyle knockStyle = new Button.ButtonStyle();
+        knockStyle.checked = slotSkin.getDrawable("knockPotion");
+        knockStyle.up = slotSkin.getDrawable("knockPotion");
+        knockStyle.down = slotSkin.getDrawable("knockPotion");
+
 
 
         // create the Array
@@ -90,13 +116,16 @@ public class InventoryScreen implements Screen {
         for(int i = 0; i < 4; i++){
             m_buttonArr.add(new Array<Button>(4));
         }
-        // create label style
+        // create label style and labels
         BitmapFont bfont = new BitmapFont();
         final Label.LabelStyle labelStyle = new Label.LabelStyle(bfont, Color.WHITE);
         m_nameLabel = new Label("Item Name", labelStyle);
         m_nameLabel.setPosition((screenWidth/4), (screenHeight*9/10));
         m_stage.addActor(m_nameLabel);
 
+        m_goldLabel = new Label("Gold: " + a.getPlayer().getGold(), labelStyle);
+        m_goldLabel.setPosition((screenWidth/4), (screenHeight*9/10)+50);
+        m_stage.addActor(m_goldLabel);
 
         // create the buttons
         int row;
@@ -132,7 +161,24 @@ public class InventoryScreen implements Screen {
                     m_buttonArr.get(i).add(new Button(swordStyle));
                 }
                 else{
-                    m_buttonArr.get(i).add(new Button(healthStyle));
+                    switch(m_inventory.get(4*i+j).getConsumableType()){
+                        case HEALTH:
+                            m_buttonArr.get(i).add(new Button(healthStyle));
+                            break;
+                        case ENERGY:
+                            m_buttonArr.get(i).add(new Button(energyStyle));
+                            break;
+                        case DAMAGE:
+                            m_buttonArr.get(i).add(new Button(damageStyle));
+                            break;
+                        case SPEED:
+                            m_buttonArr.get(i).add(new Button(speedStyle));
+                            break;
+                        case KNOCK:
+                            m_buttonArr.get(i).add(new Button(knockStyle));
+                            break;
+                    }
+
                 }
                 // set the button's size, pos, and info
                 final Button thisButton = m_buttonArr.get(i).get(j);
@@ -151,6 +197,10 @@ public class InventoryScreen implements Screen {
                         m_nameLabel.setText(m_inventory.get(Integer.parseInt(m_clicked.getName())).getInfo(m_inventory.get(Integer.parseInt(m_clicked.getName()))));
                         //System.out.println(m_clicked.getName());
                         //System.out.println(m_nameLabel.toString());
+                        if(m_inventory.get(Integer.parseInt(m_clicked.getName())).getType() == Item.m_itemType.CONSUMABLE)
+                            m_equipOrUse.setText("Use");
+                        else
+                            m_equipOrUse.setText("Equip");
                     }
                 });
             }
@@ -179,7 +229,7 @@ public class InventoryScreen implements Screen {
                 ScreenScale.scale(200), ScreenScale.scale(200));
         m_stage.addActor(m_backButton);
 
-        // create Equip button
+        // create Style
         Pixmap pixmap = new Pixmap(screenWidth/5, screenWidth/5, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.GREEN);
         pixmap.fill();
@@ -191,11 +241,14 @@ public class InventoryScreen implements Screen {
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
         textButtonStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
+
         textButtonStyle.checked = skin.newDrawable("white", Color.BLUE);
         textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
 
         textButtonStyle.font = skin.getFont("default");
-        TextButton m_equipOrUse = new TextButton("Equip", textButtonStyle);
+
+        // create equip button
+        m_equipOrUse = new TextButton("Equip", textButtonStyle);
         m_equipOrUse.setHeight(screenHeight / 5);
         m_equipOrUse.setWidth(screenWidth / 4);
         m_equipOrUse.setPosition((screenWidth*2/4), (screenHeight*4/5));
@@ -203,7 +256,51 @@ public class InventoryScreen implements Screen {
 
         m_equipOrUse.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
-
+                if(m_inventory.get(Integer.parseInt(m_clicked.getName())).getType() == Item.m_itemType.CONSUMABLE){
+                    switch(m_inventory.get(Integer.parseInt(m_clicked.getName())).getConsumableType()){
+                        case HEALTH:
+                            a.getPlayer().addHealth(m_inventory.get(Integer.parseInt(m_clicked.getName())).giveHealth());
+                            removeItem(Integer.parseInt(m_clicked.getName()), a);
+                            a.setScreen(new InventoryScreen(a));
+                            break;
+                        case ENERGY:
+                            a.getPlayer().addStamina(m_inventory.get(Integer.parseInt(m_clicked.getName())).giveEnergy());
+                            removeItem(Integer.parseInt(m_clicked.getName()), a);
+                            a.setScreen(new InventoryScreen(a));
+                            break;
+                        case DAMAGE:
+                            a.getPlayer().modifyStatsConsume(5, m_inventory.get(Integer.parseInt(m_clicked.getName())).getStats().getDamageChange(),
+                                    m_inventory.get(Integer.parseInt(m_clicked.getName())).getStats().getDuration());
+                            removeItem(Integer.parseInt(m_clicked.getName()), a);
+                            a.setScreen(new InventoryScreen(a));
+                            break;
+                        case SPEED:
+                            a.getPlayer().modifyStatsConsume(3, m_inventory.get(Integer.parseInt(m_clicked.getName())).getStats().getSpeedChange(),
+                                    m_inventory.get(Integer.parseInt(m_clicked.getName())).getStats().getDuration());
+                            removeItem(Integer.parseInt(m_clicked.getName()), a);
+                            a.setScreen(new InventoryScreen(a));
+                            break;
+                        case KNOCK:
+                            a.getPlayer().modifyStatsConsume(6, m_inventory.get(Integer.parseInt(m_clicked.getName())).getStats().getKnockback(),
+                                    m_inventory.get(Integer.parseInt(m_clicked.getName())).getStats().getDuration());
+                            removeItem(Integer.parseInt(m_clicked.getName()), a);
+                            a.setScreen(new InventoryScreen(a));
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else{
+                    if(a.getPlayer().getEquipped() == null) {
+                        a.getPlayer().modifyStatsWeapon(m_inventory.get(Integer.parseInt(m_clicked.getName())));
+                        a.getPlayer().setEquipped(m_inventory.get(Integer.parseInt(m_clicked.getName())));
+                    }
+                    else {
+                        a.getPlayer().demodifyStatsWeapon(a.getPlayer().getEquipped());
+                        a.getPlayer().modifyStatsWeapon(m_inventory.get(Integer.parseInt(m_clicked.getName())));
+                        a.getPlayer().setEquipped(m_inventory.get(Integer.parseInt(m_clicked.getName())));
+                    }
+                }
             }
         });
 
@@ -268,7 +365,11 @@ public class InventoryScreen implements Screen {
     public Array<Item> getInventory(){return m_inventory;}
 
     public void removeItem(int pos, final Agalon a){
-
+        // unequips the item if it is equipped
+        if(a.getPlayer().getEquipped() == m_inventory.get(pos)){
+            a.getPlayer().demodifyStatsWeapon(m_inventory.get(pos));
+            a.getPlayer().setEquipped(null);
+        }
         for(int i = pos; i < m_numItems-1; i++){
             m_inventory.set(i, m_inventory.get(i+1));
         }
