@@ -218,4 +218,7 @@ public class Item {
         }
         return info;
     }
+
+    public int giveHealth(){return m_healthChange;}
+    public int giveEnergy(){return m_energyChange;}
 }

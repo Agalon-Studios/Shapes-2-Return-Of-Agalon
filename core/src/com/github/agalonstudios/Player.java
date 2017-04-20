@@ -141,4 +141,16 @@ public class Player extends Character {
     public Array<Item> getInventory(){ return m_inventory;}
     public int getNumInventory(){ return m_numInInventory;}
     public void setNumInventory(int num){m_numInInventory = num;}
+    public void addToHealth(int health){
+        if(health + m_health > 100)
+            m_health = 100;
+        else
+            m_health += health;
+    }
+    public void addToStamina(int stamina){
+        if(stamina + m_stamina > 100)
+            m_stamina = 100;
+        else
+            m_stamina += stamina;
+    }
 }

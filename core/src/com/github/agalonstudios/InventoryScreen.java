@@ -131,9 +131,19 @@ public class InventoryScreen implements Screen {
                     public void clicked (InputEvent event, float x, float y){
                         // changes the info displayed
                         m_clicked = thisButton;
+                        System.out.println("lol");
                         m_nameLabel.setText(m_inventory.get(Integer.parseInt(m_clicked.getName())).getInfo(m_inventory.get(Integer.parseInt(m_clicked.getName()))));
-                        //System.out.println(m_clicked.getName());
+                        System.out.println(m_clicked.getName());
                         //System.out.println(m_nameLabel.toString());
+                        switch(m_inventory.get(Integer.parseInt(m_clicked.getName())).getType()){
+                            case WEAPON:
+                               m_equipOrUse.setText("Equip");
+                                break;
+                            case CONSUMABLE:
+                                m_equipOrUse.setText("Use");
+                                break;
+                        }
+
                     }
                 });
             }
@@ -161,7 +171,7 @@ public class InventoryScreen implements Screen {
                 ScreenScale.scale(200), ScreenScale.scale(200));
         m_stage.addActor(m_backButton);
 
-        // create Equip button
+        // create skins and fonts for buttons
         Pixmap pixmap = new Pixmap(screenWidth/5, screenWidth/5, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.GREEN);
         pixmap.fill();
@@ -177,7 +187,8 @@ public class InventoryScreen implements Screen {
         textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
 
         textButtonStyle.font = skin.getFont("default");
-        TextButton m_equipOrUse = new TextButton("Equip", textButtonStyle);
+        // create equip button
+        m_equipOrUse = new TextButton("Equip", textButtonStyle);
         m_equipOrUse.setHeight(screenHeight / 5);
         m_equipOrUse.setWidth(screenWidth / 4);
         m_equipOrUse.setPosition((screenWidth*2/4), (screenHeight*4/5));
@@ -185,7 +196,16 @@ public class InventoryScreen implements Screen {
 
         m_equipOrUse.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
+                if(m_equipOrUse.getText().equals("Use")){
+                    switch(m_inventory.get(Integer.parseInt(m_clicked.getName())).getConsumableType()){
+                        case HEALTH:
+                            a.getPlayer().addToHealth(m_inventory.get(Integer.parseInt(m_clicked.getName())).giveHealth());
+                            break;
+                        case ENERGY:
+                            a.getPlayer().addToHealth(m_inventory.get(Integer.parseInt(m_clicked.getName())).giveEnergy());
 
+                    }
+                }
             }
         });
 
