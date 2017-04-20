@@ -52,7 +52,7 @@ public class DungeonEntrance extends Entity {
 
         er.setColor(137/255.f, 90/255.f, 56/255.f, 1);
         er.rect(rect.x + 7 - camera.position.x, rect.y - camera.position.y, rect.width - 14, 160 - 29);
-        er.setColor(0, 0, 0, 0);
+        er.setColor(0, 0, 0, 1);
         er.rect(rect.x + 10 - camera.position.x, rect.y - camera.position.y, rect.width - 20, 160 - 32);
     }
 
