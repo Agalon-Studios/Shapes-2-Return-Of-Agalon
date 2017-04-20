@@ -77,6 +77,10 @@ public abstract class Character extends Entity {
         translate(m_velocity.x * delta, m_velocity.y * delta);
     }
 
+    public void resetVelocity() {
+        m_acceleration.x = m_acceleration.y = m_velocity.x = m_velocity.y = 0;
+    }
+
     private void updateCooldowns(float delta) {
 
         for (int i = 0; i < m_cooldownTimers.size; i++)

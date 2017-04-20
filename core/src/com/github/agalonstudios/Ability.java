@@ -87,6 +87,8 @@ public class Ability {
                 worldRef.addEffectOverTime(copyEffectArea);
                 worldRef.addEffectOverTime(copyInitialEffect);
                 break;
+            default:
+                break;
         }
     }
 
@@ -106,6 +108,26 @@ public class Ability {
 
     public float getRange() {
         return m_maxCastDistance;
+    }
+
+    public int getNum() {
+        switch (m_ability) {
+            case STRIKE:
+                return 0;
+            case CLEAVE:
+                return 1;
+            case SNIPE:
+                return 2;
+            case FLAME_BURST:
+                return 3;
+            case HEAL:
+                return 4;
+            case ICE_ARROW:
+                return 5;
+            default:
+                return -1;
+
+        }
     }
 
     public float getAreaofEffect() {

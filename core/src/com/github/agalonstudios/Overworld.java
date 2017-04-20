@@ -17,6 +17,7 @@ public class Overworld extends World {
     private Array<OverworldTree> m_trees;
     private Array<Traveler> m_travelers;
     private Vector2 m_homePlate;
+    private Array<ShopEntity> m_shopArray;
 
 
     // private Shop m_shop;
@@ -24,6 +25,9 @@ public class Overworld extends World {
 
     public Overworld(Player pRef) {
         super(pRef);
+
+        m_shopArray = new Array<ShopEntity>();
+        m_shopArray.add(new ShopEntity(new Vector2(Gdx.graphics.getWidth() / 2, -100)));
 
         m_homePlate = new Vector2(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
 
@@ -80,7 +84,7 @@ public class Overworld extends World {
             }
         }
 
-        runCollisions(m_playerRefArray, m_dungeonEntrances, m_trees, m_castObjects, m_dItems);
+        runCollisions(m_playerRefArray, m_dungeonEntrances, m_trees, m_castObjects, m_dItems, m_shopArray);
     }
 
     @Override
@@ -117,6 +121,8 @@ public class Overworld extends World {
         for (CastObject co : m_castObjects) {
             co.render();
         }
+
+        m_shopArray.get(0).render();
 
         m_shapeRendererRef.end();
 
