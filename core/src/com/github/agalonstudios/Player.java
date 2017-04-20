@@ -67,7 +67,7 @@ public class Player extends Character {
         m_inventory = new Array<Item>(16);
         m_numInInventory = 0;
 
-        for(int i = 0; i < 5; i++){
+        for(int i = 0; i < 16; i++){
             m_inventory.add(Item.generateConsumable());
             System.out.println(m_inventory.get(i).getName());
             m_numInInventory++;
@@ -209,7 +209,7 @@ public class Player extends Character {
         m_Stats.modStat(5, item.getStats().getDamageChange());
         m_Stats.modStat(6, item.getStats().getKnockback());
 
-        m_Stats.printStats();
+        // m_Stats.printStats();
     }
 
     public void demodifyStatsWeapon(Item item){
@@ -217,6 +217,8 @@ public class Player extends Character {
         m_Stats.deModStat(4, item.getStats().getDefenseChange());
         m_Stats.deModStat(5, item.getStats().getDamageChange());
         m_Stats.deModStat(6, item.getStats().getKnockback());
+
+        // m_Stats.printStats();
     }
 
     public Item getEquipped(){ return m_equipped;}
