@@ -163,8 +163,7 @@ public class HUD {
                 hudOutputs.abilityCastVectors[i].set(ref.getKnobPercentX(), ref.getKnobPercentY());
 
             }
-
-            if (m_AbilityButtons.get(i) instanceof Button) {
+            else if (m_AbilityButtons.get(i) instanceof Button) {
                 Button ref = (Button) m_AbilityButtons.get(i);
 
                 if (abilityWasJustPressed[i] && !ref.isPressed())
@@ -194,11 +193,13 @@ public class HUD {
             Ability currentAbility = player.getEquippedAbilities().get(i);
             switch(currentAbility.getType()) {
                 case DROP_AREA_OF_EFFECT:
-                    er.circle(
-                            player.getX() + hudOutputs.abilityCastVectors[i].x * currentAbility.getRange() - c.position.x,
-                            player.getY() + hudOutputs.abilityCastVectors[i].y * currentAbility.getRange() - c.position.y,
-                            currentAbility.getAreaofEffect()
-                    );
+                    if (((Touchpad)m_AbilityButtons.get(i)).isTouched()) {
+                        er.circle(
+                                player.getCentroidX() + hudOutputs.abilityCastVectors[i].x * currentAbility.getRange() - c.position.x,
+                                player.getCentroidY() + hudOutputs.abilityCastVectors[i].y * currentAbility.getRange() - c.position.y,
+                                currentAbility.getAreaofEffect()
+                        );
+                    }
             }
         }
         er.end();
