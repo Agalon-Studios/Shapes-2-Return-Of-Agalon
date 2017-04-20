@@ -118,7 +118,7 @@ public class CharacterCreationMenu implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         m_stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         m_stage.draw();
-        m_stage.setDebugAll(true);
+        //m_stage.setDebugAll(true);
 
         m_playerColorHSV.r =  m_colorSlider.getPercent();
 
