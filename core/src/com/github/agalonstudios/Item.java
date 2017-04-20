@@ -37,7 +37,8 @@ public class Item {
     public static final String wandNames[] = {"Wand", "Baton", "Staff", "Scepter", "Caduceus"};
     public static final String bowNames[] = {"Bow", "Longbow", "Crossbow", "Recurve"};
     public static final String endNames[] = {"Power", "Destruction", "Agalon", "Memes", "Death", "Fun", "Class", "The Elders",
-            "The Moon", "Dragons", "Brody", "Sean", "Satya", "Mahzain", "Jacob", "Kanye", "Edwin", "Safa", "Programming"};
+            "The Moon", "Dragons", "Brody", "Sean", "Satya", "Mahzain", "Jacob", "Kanye", "Edwin", "Safa", "Programming", "Charles",
+            "Shahram Jahani", "Pawel Wocjan", "Szumlanski", "Kuppalapale Vajravelu"};
 
     // Textures and sprite
     private SpriteBatch m_batch;

@@ -31,6 +31,7 @@ class MainMenu implements Screen {
     private Viewport m_viewport;
     private TextButton m_playButton;
 
+
     public MainMenu(final Agalon a){
 
         int screenWidth = Gdx.graphics.getWidth();

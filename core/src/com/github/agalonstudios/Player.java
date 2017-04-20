@@ -28,6 +28,7 @@ public class Player extends Character {
     // TODO inventory, equipped items, abilities, other properties
     private Array<Item> m_inventory;
     private int m_numInInventory;
+    private Item m_equipped;
 
     public Player(int h, int l, Color c) {
         super(

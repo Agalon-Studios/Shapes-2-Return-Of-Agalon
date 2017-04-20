@@ -28,6 +28,7 @@ public class InGameOptionsTab implements Screen{
     private TextButton m_backButton;
     private TextButton m_exitDung;
     private TextButton m_invButton;
+    private TextButton m_quitButton;
 
     public InGameOptionsTab(final Agalon a){
         m_stage = new Stage();
@@ -117,6 +118,16 @@ public class InGameOptionsTab implements Screen{
             }
         });
 
+        // add quit to main menu button
+        m_quitButton = new TextButton("To Main Menu", textButtonStyle);
+        m_quitButton.setPosition(screenWidth*4/5, screenHeight/2-screenWidth/10);
+        m_stage.addActor(m_quitButton);
+
+        m_quitButton.addListener(new ClickListener() {
+            public void clicked (InputEvent event, float x, float y){
+                a.setScreen(new MainMenu(a));
+            }
+        });
     }
     @Override
     public void show() {

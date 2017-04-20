@@ -19,6 +19,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 
+import static com.sun.org.apache.xalan.internal.xsltc.compiler.util.Type.Int;
+
 /**
  * Created by Peter on 4/17/2017.
  */
@@ -33,6 +35,7 @@ public class InventoryScreen implements Screen {
     private Button m_clicked;
     private TextButton m_equipOrUse;
     private TextButton m_drop;
+    private int m_numItems;
 
     public InventoryScreen(final Agalon a){
         m_stage = new Stage();
@@ -42,7 +45,7 @@ public class InventoryScreen implements Screen {
         int screenHeight = Gdx.graphics.getHeight();
 
         m_inventory = a.getPlayer().getInventory();
-        int numItems = a.getPlayer().getNumInventory();
+         m_numItems = a.getPlayer().getNumInventory();
 
         // stuff for skin
         Skin slotSkin = new Skin();
@@ -78,13 +81,13 @@ public class InventoryScreen implements Screen {
         int row;
         int col;
         // stuff for what rows
-        if(numItems == 0)
+        if(m_numItems == 0)
             row = 0;
-        else if(numItems<=4 && numItems >=1)
+        else if(m_numItems<=4 && m_numItems >=1)
             row = 1;
-        else if(numItems <=8 && numItems>=5)
+        else if(m_numItems <=8 && m_numItems>=5)
             row = 2;
-        else if(numItems<=12 && numItems>=9)
+        else if(m_numItems<=12 && m_numItems>=9)
             row = 3;
         else
             row = 4;
@@ -92,13 +95,13 @@ public class InventoryScreen implements Screen {
         for(int i = 0; i < row; i++) {
             // stuff for how many cols
             if(row ==1)
-                col = numItems;
+                col = m_numItems;
             else if(row == 2 && i == 1)
-                col = numItems-4;
+                col = m_numItems-4;
             else if(row == 3 && i == 2)
-                col = numItems - 8;
+                col = m_numItems - 8;
             else if(row == 4 && i == 3)
-                col = numItems - 12;
+                col = m_numItems - 12;
             else
                 col = 4;
 
@@ -188,9 +191,10 @@ public class InventoryScreen implements Screen {
         m_drop.setPosition((screenWidth*3/4), (screenHeight*4/5));
         m_stage.addActor(m_drop);
 
-        m_equipOrUse.addListener(new ChangeListener() {
+        m_drop.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
-
+                removeItem(Integer.parseInt(m_clicked.getName()), a);
+                a.setScreen(new InventoryScreen(a));
             }
         });
 
@@ -235,4 +239,15 @@ public class InventoryScreen implements Screen {
 
     }
     public Array<Item> getInventory(){return m_inventory;}
+
+    public void removeItem(int pos, final Agalon a){
+
+        for(int i = pos; i < m_numItems-1; i++){
+            m_inventory.set(i, m_inventory.get(i+1));
+        }
+        m_inventory.removeIndex(m_numItems-1);
+        m_numItems--;
+        a.getPlayer().setNumInventory(m_numItems);
+
+    }
 }
