@@ -157,12 +157,22 @@ public class Player extends Character {
         super.runCollision(e);
         if(m_numInInventory < 16 && e instanceof DroppedItem)
         {
+            if (((DroppedItem) e).isGold()) {
+                m_gold += ((DroppedItem) e).getAmount();
+            }
+            else {
+                m_inventory.add(((DroppedItem) e).getItem());
+                m_numInInventory++;
+            }
+
             ((Agalon) Gdx.app.getApplicationListener()).getCurrentWorld().removeItem((DroppedItem) e);
 
-            m_inventory.add(((DroppedItem) e).getItem());
-            m_numInInventory++;
         }
 
+    }
+
+    public int getGold() {
+        return m_gold;
     }
 
     public Array<Item> getInventory(){ return m_inventory;}

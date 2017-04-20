@@ -19,8 +19,7 @@ public class Splash implements Screen {
         m_background = new Texture(Gdx.files.internal("splashbkgd.png"));
 
         game = g;
-        //timer = 3.0f;
-        timer = 0.5f;
+        timer = 3.0f;
     }
 
     @Override

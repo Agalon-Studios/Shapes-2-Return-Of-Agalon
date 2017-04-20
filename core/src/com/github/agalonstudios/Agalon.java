@@ -33,7 +33,8 @@ public class Agalon extends Game {
         m_camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         m_batch = new SpriteBatch();
         m_font = new BitmapFont();
-        this.setScreen(new Splash(this));
+        //this.setScreen(new Splash(this));
+        this.setScreen(new MainMenu(this));
     }
 
     private void loadPlayer() {

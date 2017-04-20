@@ -13,12 +13,36 @@ import com.badlogic.gdx.math.Vector2;
 public class DroppedItem extends Entity
 {
     private Item item;
+    private boolean m_isGold;
+    private int m_goldAmount;
 
     public DroppedItem(Item item, Vector2 position)
     {
         super(16, position, Shape.SQUARE);
         this.item = item;
-        m_color = new Color(0, 0, 1, 1);
+        switch (item.getType()) {
+            case WEAPON:
+                m_color = new Color(189 / 255.f, 189 / 255.f, 189 / 255.f, 1);
+                break;
+            case CONSUMABLE:
+                m_color = new Color(225 / 255.f, 80 / 255.f, 80 / 255.f, 1);
+                break;
+        }
+    }
+
+    public DroppedItem(int amount, Vector2 position) {
+        super(8, position, Shape.OCTAGON);
+        m_isGold = true;
+        m_goldAmount = amount;
+        m_color = new Color(236 / 255.f, 236 / 255.f, 17 / 255.f, 1);
+    }
+
+    public boolean isGold() {
+        return m_isGold;
+    }
+
+    public int getAmount() {
+        return m_goldAmount;
     }
 
     public void runCollision(Entity other)
@@ -38,7 +62,8 @@ public class DroppedItem extends Entity
 
 
         ((Agalon) Gdx.app.getApplicationListener()).getBatch().begin();
-        ((Agalon) Gdx.app.getApplicationListener()).getFont().draw(((Agalon) (Gdx.app.getApplicationListener())).getBatch(), item.getName(),
+        ((Agalon) Gdx.app.getApplicationListener()).getFont().draw(((Agalon) (Gdx.app.getApplicationListener())).getBatch(),
+                m_isGold ? "" + m_goldAmount + " Gold" : item.getName(),
                 m_shape.getX() - 10 - camera.position.x, m_shape.getY() - 10 - camera.position.y);
         ((Agalon) Gdx.app.getApplicationListener()).getBatch().end();
     }
