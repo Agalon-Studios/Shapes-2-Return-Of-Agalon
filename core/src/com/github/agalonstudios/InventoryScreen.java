@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -342,12 +343,13 @@ public class InventoryScreen implements Screen {
         m_drop.setPosition((screenWidth*3/4), (screenHeight*4/5));
         m_stage.addActor(m_drop);
 
+
         m_drop.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
                 m_numDroppedItems++;
                 a.getCurrentWorld().addItem(m_inventory.get(Integer.parseInt(m_clicked.getName())),
-                        new Vector2(a.getPlayer().getX() - a.getPlayer().getWidth(),
-                                a.getPlayer().getY() + m_numDroppedItems * 15));
+                        new Vector2(a.getPlayer().getX() + 120 * MathUtils.cosDeg(m_numDroppedItems * 25),
+                                a.getPlayer().getY() + 120 * MathUtils.sinDeg(m_numDroppedItems * 25)));
                 removeItem(Integer.parseInt(m_clicked.getName()), a);
                 System.out.println(m_numDroppedItems + "----");
                 a.setScreen(new InventoryScreen(a));

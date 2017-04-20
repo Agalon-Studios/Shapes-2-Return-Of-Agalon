@@ -157,9 +157,9 @@ public class Player extends Character {
 
         //TODO fix this one if needed
     }
+
     public void runCollision(Entity e)
     {
-        super.runCollision(e);
         if(e instanceof DroppedItem)
         {
             if (((DroppedItem) e).isGold()) {
@@ -172,12 +172,11 @@ public class Player extends Character {
                 m_numInInventory++;
                 ((Agalon) Gdx.app.getApplicationListener()).getCurrentWorld().removeItem((DroppedItem) e);
             }
-
-
+        } else {
+            super.runCollision(e);
         }
 
     }
-
     public int getGold() {
         return m_gold;
     }
