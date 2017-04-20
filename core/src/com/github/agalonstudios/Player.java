@@ -155,17 +155,19 @@ public class Player extends Character {
     public void runCollision(Entity e)
     {
         super.runCollision(e);
-        if(m_numInInventory < 16 && e instanceof DroppedItem)
+        if(e instanceof DroppedItem)
         {
             if (((DroppedItem) e).isGold()) {
                 m_gold += ((DroppedItem) e).getAmount();
+                ((Agalon) Gdx.app.getApplicationListener()).getCurrentWorld().removeItem((DroppedItem) e);
+
             }
-            else {
+            else if (m_numInInventory < 16) {
                 m_inventory.add(((DroppedItem) e).getItem());
                 m_numInInventory++;
+                ((Agalon) Gdx.app.getApplicationListener()).getCurrentWorld().removeItem((DroppedItem) e);
             }
 
-            ((Agalon) Gdx.app.getApplicationListener()).getCurrentWorld().removeItem((DroppedItem) e);
 
         }
 
