@@ -1,6 +1,7 @@
 package com.github.agalonstudios;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -211,7 +212,7 @@ public class HUD {
             switch(currentAbility.getType()) {
                 case DROP_AREA_OF_EFFECT:
                     if (((Touchpad)m_AbilityButtons.get(i)).isTouched()) {
-                        renderDropAOE(abilityCenterX, abilityCenterY, er, player, currentAbility);
+                        renderDropAOE(abilityCenterX, abilityCenterY, er, player, c, currentAbility);
                     }
                     break;
 //                case PROJECTILE_AREA_OF_EFFECT:
@@ -247,26 +248,28 @@ public class HUD {
         );
     }
 
-    private static void renderDropAOE(float circleX, float circleY, ExtendedShapeRenderer er, Player player, Ability currentAbility) {
-
+    private static void renderDropAOE(float circleX, float circleY, ExtendedShapeRenderer er, Player player, Camera c,Ability currentAbility) {
         er.circle(circleX, circleY, currentAbility.getAreaofEffect());
         er.setColor(.5f, 0, 0, 1);
         er.set(ShapeType.Line);
         er.circle(circleX, circleY, currentAbility.getAreaofEffect());
         er.circle(circleX, circleY, currentAbility.getAreaofEffect()-1);
 
-        float fraction = (float)Math.sqrt(Math.pow(player.getCentroidX() - circleX, 2) + Math.pow(player.getCentroidY() - circleY, 2));
-        float cx = currentAbility.getAreaofEffect() * (player.getCentroidX()-circleX);
+        float ax = player.getCentroidX() - c.position.x;
+        float ay = player.getCentroidY() - c.position.y;
+
+        float fraction = (float)Math.sqrt(Math.pow(ax - circleX, 2) + Math.pow(ay - circleY, 2));
+        float cx = currentAbility.getAreaofEffect() * (ax - circleX);
         cx /= fraction;
         cx += circleX;
-        float cy = currentAbility.getAreaofEffect() * (player.getCentroidY() - circleY);
+        float cy = currentAbility.getAreaofEffect() * (ay - circleY);
         cy /= fraction;
         cy += circleY;
         er.line(
                 cx,
                 cy,
-                player.getCentroidX(),
-                player.getCentroidY()
+                ax,
+                ay
         );
     }
 
