@@ -162,6 +162,9 @@ public class Player extends Character {
         } else {
             super.runCollision(e);
         }
+        if (e instanceof ShopEntity) {
+            ((Agalon) Gdx.app.getApplicationListener()).setScreen(new ShopScreen((Agalon) Gdx.app.getApplicationListener(), (ShopEntity) e));
+        }
 
     }
     public int getGold() {

@@ -144,6 +144,10 @@ public class HUD {
     }
 
 
+    public static void reset() {
+        m_stage.unfocusAll();
+    }
+
 
     public static void update(float delta, Player player) {
         if (m_Abilities.get(0) == null)
