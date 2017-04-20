@@ -14,7 +14,7 @@ public class Agalon extends Game {
     private Overworld m_overworld;
     private Music m_overworldMusic;
     private Music m_dungeonMusic;
-    private boolean m_whichMusic;
+    private boolean m_whichMusic; // true = overworld, false = dungeon
     private Player m_player;
     private World m_currentWorld;
     private SpriteBatch m_batch;
@@ -55,8 +55,10 @@ public class Agalon extends Game {
     public void returnToOverworld() {
         this.setScreen(m_overworld);
         m_currentWorld = m_overworld;
-        this.turnOffMusic();
-        this.setMainMusic(true);
+        if(!m_whichMusic) {
+            this.turnOffMusic();
+            this.setMainMusic(true);
+        }
         Gdx.input.setInputProcessor(HUD.getStage());
         m_player.setPosition(m_overworld.getHomePlate().x, m_overworld.getHomePlate().y);
     }
