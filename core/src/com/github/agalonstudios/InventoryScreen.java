@@ -83,6 +83,11 @@ public class InventoryScreen implements Screen {
         swordStyle.checked = slotSkin.getDrawable("sword");
         swordStyle.up = slotSkin.getDrawable("sword");
         swordStyle.down = slotSkin.getDrawable("sword");
+        // for bow
+        Button.ButtonStyle bowStyle = new Button.ButtonStyle();
+        bowStyle.checked = slotSkin.getDrawable("bow");
+        bowStyle.up = slotSkin.getDrawable("bow");
+        bowStyle.down = slotSkin.getDrawable("bow");
         // for health potion
         Button.ButtonStyle healthStyle = new Button.ButtonStyle();
         healthStyle.checked = slotSkin.getDrawable("healthPotion");
