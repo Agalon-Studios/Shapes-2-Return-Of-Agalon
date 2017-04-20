@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -57,8 +58,8 @@ public class InventoryScreen implements Screen {
             System.out.println(m_inventory.get(i).getName());
         }
 
-        System.out.println(m_numItems);
-        System.out.println("was in inventory");
+        //System.out.println(m_numItems);
+        //System.out.println("was in inventory");
 
 
 
@@ -72,17 +73,36 @@ public class InventoryScreen implements Screen {
         // stuff for skin
         Skin slotSkin = new Skin();
         slotSkin.add("sword", new Texture("swordArt.png"));
+        slotSkin.add("axe", new Texture("axe.png"));
+        slotSkin.add("bow", new Texture("bow.png"));
+        slotSkin.add("wand", new Texture("wand.png"));
         slotSkin.add("healthPotion", new Texture("potion.png"));
         slotSkin.add("energyPotion", new Texture("energyPotion.png"));
         slotSkin.add("damagePotion", new Texture("damagePotion.png"));
         slotSkin.add("speedPotion", new Texture("speedPotion.png"));
         slotSkin.add("knockPotion", new Texture("knockPotion.png"));
 
+
         // for sword
         Button.ButtonStyle swordStyle = new Button.ButtonStyle();
         swordStyle.checked = slotSkin.getDrawable("sword");
         swordStyle.up = slotSkin.getDrawable("sword");
         swordStyle.down = slotSkin.getDrawable("sword");
+        // for bow
+        Button.ButtonStyle bowStyle = new Button.ButtonStyle();
+        bowStyle.checked = slotSkin.getDrawable("bow");
+        bowStyle.up = slotSkin.getDrawable("bow");
+        bowStyle.down = slotSkin.getDrawable("bow");
+        // for axe
+        Button.ButtonStyle axeStyle = new Button.ButtonStyle();
+        axeStyle.checked = slotSkin.getDrawable("axe");
+        axeStyle.up = slotSkin.getDrawable("axe");
+        axeStyle.down = slotSkin.getDrawable("axe");
+        // for wand
+        Button.ButtonStyle wandStyle = new Button.ButtonStyle();
+        wandStyle.checked = slotSkin.getDrawable("wand");
+        wandStyle.up = slotSkin.getDrawable("wand");
+        wandStyle.down = slotSkin.getDrawable("wand");
         // for health potion
         Button.ButtonStyle healthStyle = new Button.ButtonStyle();
         healthStyle.checked = slotSkin.getDrawable("healthPotion");
@@ -158,7 +178,20 @@ public class InventoryScreen implements Screen {
             for(int j = 0; j < col; j++) {
                 // create the button
                 if(m_inventory.get(4*i+j).getType() == Item.m_itemType.WEAPON){
-                    m_buttonArr.get(i).add(new Button(swordStyle));
+                    switch(m_inventory.get(4*i+j).getTheWeaponType()){
+                        case SWORD:
+                            m_buttonArr.get(i).add(new Button(swordStyle));
+                            break;
+                        case AXE:
+                            m_buttonArr.get(i).add(new Button(axeStyle));
+                            break;
+                        case WAND:
+                            m_buttonArr.get(i).add(new Button(wandStyle));
+                            break;
+                        case BOW:
+                            m_buttonArr.get(i).add(new Button(bowStyle));
+                            break;
+                    }
                 }
                 else{
                     switch(m_inventory.get(4*i+j).getConsumableType()){
@@ -310,12 +343,13 @@ public class InventoryScreen implements Screen {
         m_drop.setPosition((screenWidth*3/4), (screenHeight*4/5));
         m_stage.addActor(m_drop);
 
+
         m_drop.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
                 m_numDroppedItems++;
                 a.getCurrentWorld().addItem(m_inventory.get(Integer.parseInt(m_clicked.getName())),
-                        new Vector2(a.getPlayer().getX() - a.getPlayer().getWidth(),
-                                a.getPlayer().getY() + m_numDroppedItems * 15));
+                        new Vector2(a.getPlayer().getX() + 120 * MathUtils.cosDeg(m_numDroppedItems * 25),
+                                a.getPlayer().getY() + 120 * MathUtils.sinDeg(m_numDroppedItems * 25)));
                 removeItem(Integer.parseInt(m_clicked.getName()), a);
                 System.out.println(m_numDroppedItems + "----");
                 a.setScreen(new InventoryScreen(a));

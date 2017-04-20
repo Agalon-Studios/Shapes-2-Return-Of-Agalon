@@ -25,7 +25,23 @@ public class DroppedItem extends Entity
                 m_color = new Color(189 / 255.f, 189 / 255.f, 189 / 255.f, 1);
                 break;
             case CONSUMABLE:
-                m_color = new Color(225 / 255.f, 80 / 255.f, 80 / 255.f, 1);
+                switch (item.getConsumableType()) {
+                    case HEALTH:
+                        m_color = new Color(189 / 255.f, 189 / 255.f, 189 / 255.f, 1);
+                        break;
+                    case DAMAGE:
+                        m_color = new Color(1, 127 / 255.f, 39 / 255.f, 1);
+                        break;
+                    case ENERGY:
+                        m_color = new Color(34 / 255.f, 177 / 255.f, 76 / 255.f, 1);
+                        break;
+                    case SPEED:
+                        m_color = new Color(63 / 255.f, 72 / 255.f, 204 / 255.f, 1);
+                        break;
+                    case KNOCK:
+                        m_color = new Color(163 / 255.f, 73 / 255.f, 164 / 255.f, 1);
+                        break;
+                }
                 break;
         }
     }

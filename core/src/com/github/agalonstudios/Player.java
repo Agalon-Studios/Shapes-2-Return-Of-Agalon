@@ -19,7 +19,7 @@ public class Player extends Character {
     private Sprite m_image;
 
     protected int m_stamina;
-    protected int m_maxStamina;
+    public int m_maxStamina;
 
     // TODO just one ability for testing, replace this with equipped abilities
     private Ability m_ability;
@@ -69,7 +69,12 @@ public class Player extends Character {
         m_inventory = new Array<Item>(16);
         m_numInInventory = 0;
 
-        for(int i = 0; i < 16; i++){
+        for(int i = 0; i < 8; i++){
+            m_inventory.add(Item.generateWeapon());
+            System.out.println(m_inventory.get(i).getName());
+            m_numInInventory++;
+        }
+        for(int i = 8; i < 16; i++){
             m_inventory.add(Item.generateConsumable());
             System.out.println(m_inventory.get(i).getName());
             m_numInInventory++;
@@ -143,9 +148,9 @@ public class Player extends Character {
 
         //TODO fix this one if needed
     }
+
     public void runCollision(Entity e)
     {
-        super.runCollision(e);
         if(e instanceof DroppedItem)
         {
             if (((DroppedItem) e).isGold()) {
@@ -158,12 +163,11 @@ public class Player extends Character {
                 m_numInInventory++;
                 ((Agalon) Gdx.app.getApplicationListener()).getCurrentWorld().removeItem((DroppedItem) e);
             }
-
-
+        } else {
+            super.runCollision(e);
         }
 
     }
-
     public int getGold() {
         return m_gold;
     }
