@@ -22,10 +22,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Touchpad.TouchpadStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 
-import static com.badlogic.gdx.Gdx.gl;
-import static com.badlogic.gdx.math.Interpolation.circle;
-import static sun.audio.AudioPlayer.player;
-
 
 /**
  * Created by Satya Patel on 2/23/2017.
@@ -57,6 +53,7 @@ public class HUD {
             abilityButtonOriginX
     };
 
+    private static final String[] abilityButtonNameStarts = {"strike", "cleave", "snipe", "flame", "heal", "ice"};
     private static final int[] abilityButtonYPos = {
             abilityButtonOriginY,
             abilityButtonOriginY,
@@ -283,13 +280,13 @@ public class HUD {
             switch(m_Abilities.get(i).getType()) {
                 case SELF:
                 case SELF_AREA_OF_EFFECT:
-                    Button abilityButton = makeAbilityButton(i);
+                    Button abilityButton = makeAbilityButton(i, m_Abilities.get(i).getNum());
                     m_stage.addActor(abilityButton);
                     m_AbilityButtons.set(i, abilityButton);
                     break;
 
                 default:
-                    Touchpad abilityJoystick = makeAbilityJoyStick(i);
+                    Touchpad abilityJoystick = makeAbilityJoyStick(i, m_Abilities.get(i).getNum());
                     m_stage.addActor(abilityJoystick);
                     m_AbilityButtons.set(i, abilityJoystick);
                     break;
@@ -298,9 +295,9 @@ public class HUD {
 
     }
 
-    private static Button makeAbilityButton(int location) {
+    private static Button makeAbilityButton(int location, int abilityNum) {
         Skin skin = new Skin();
-        skin.add("button", new Texture("pauseButton.png"));
+        skin.add("button", new Texture(abilityButtonNameStarts[abilityNum] + "Back.png"));
 
         Button.ButtonStyle style = new Button.ButtonStyle();
         style.checked = skin.getDrawable("button");
@@ -326,14 +323,14 @@ public class HUD {
         return ret;
     }
 
-    private static Touchpad makeAbilityJoyStick(int location) {
-        Skin abilityButtonSkin = new Skin();
-        abilityButtonSkin.add("bkgd", new Texture("movementJoystickBkgd.png"));
-        abilityButtonSkin.add("knob", new Texture("movementJoystickKnob.png"));
+    private static Touchpad makeAbilityJoyStick(int location, int abilityNum) {
+        Skin skin = new Skin();
+        skin.add("bkgd", new Texture(abilityButtonNameStarts[abilityNum] + "Back.png"));
+        skin.add("knob", new Texture(abilityButtonNameStarts[abilityNum] + "Knob.png"));
         Touchpad temp = new Touchpad(0,
                 new TouchpadStyle(
-                        abilityButtonSkin.getDrawable("bkgd"),
-                        abilityButtonSkin.getDrawable("knob")
+                        skin.getDrawable("bkgd"),
+                        skin.getDrawable("knob")
                 )
         );
         temp.setBounds(
