@@ -111,7 +111,7 @@ public class Item {
             case (0):
                 consumable.m_theConsumableType = m_consumableType.DAMAGE;
                 consumable.m_itemName = "Damage Potion";
-                consumable.m_playerStats = new Stats(0, 0, 0, 0, 0, rand.nextFloat()/2+1, 0, rand.nextInt(10) + 10);
+                consumable.m_playerStats = new Stats(0, 0, 0, 0, 0, rand.nextFloat()+1, 0, rand.nextInt(10) + 10);
                 consumable.m_enemyStats = new Stats(0, 0, 0, 0, 0, 0, 0, 0);
                 consumable.m_texture = new Texture(Gdx.files.internal("potion.png"));
                 consumable.m_sprite = new Sprite(consumable.m_texture);
@@ -119,7 +119,7 @@ public class Item {
             case (1):
                 consumable.m_theConsumableType = m_consumableType.HEALTH;
                 consumable.m_itemName = "Health Potion";
-                // TODO consumable.m_healthChange
+                consumable.m_healthChange = rand.nextInt(90) + 10;
                 consumable.m_playerStats = new Stats(0, 0, 0, 0, 0, 0, 0, 0);
                 consumable.m_enemyStats = new Stats(0, 0, 0, 0, 0, 0, 0, 0);
 
@@ -129,7 +129,7 @@ public class Item {
             case (2):
                 consumable.m_theConsumableType = m_consumableType.ENERGY;
                 consumable.m_itemName = "Energy Potion";
-                // TODO consumable.m_energyChange
+                consumable.m_energyChange = rand.nextInt(90) + 10;
                 consumable.m_playerStats = new Stats(0, 0, 0, 0, 0, 0, 0, 0);
                 consumable.m_enemyStats = new Stats(0, 0, 0, 0, 0, 0, 0, 0);
 
@@ -139,7 +139,7 @@ public class Item {
             case (3):
                 consumable.m_theConsumableType = m_consumableType.SPEED;
                 consumable.m_itemName = "Speed Potion";
-                consumable.m_playerStats = new Stats(0, 0, 0, rand.nextFloat()/2+1, 0, 0, 0, rand.nextInt(10) + 10);
+                consumable.m_playerStats = new Stats(0, 0, 0, rand.nextFloat()+1, 0, 0, 0, rand.nextInt(10) + 10);
                 consumable.m_enemyStats = new Stats(0, 0, 0, 0, 0, 0, 0, 0);
 
                 consumable.m_texture = new Texture(Gdx.files.internal("potion.png"));
@@ -148,7 +148,7 @@ public class Item {
             case (4):
                 consumable.m_theConsumableType = m_consumableType.KNOCK;
                 consumable.m_itemName = "Knockback Potion";
-                consumable.m_playerStats = new Stats(0, 0, 0, 0, 0, 0, rand.nextFloat()/2+1, rand.nextInt(10) + 10);
+                consumable.m_playerStats = new Stats(0, 0, 0, 0, 0, 0, rand.nextFloat()+1, rand.nextInt(10) + 10);
                 consumable.m_enemyStats = new Stats(0, 0, 0, 0, 0, 0, 0, 0);
 
                 consumable.m_texture = new Texture(Gdx.files.internal("potion.png"));

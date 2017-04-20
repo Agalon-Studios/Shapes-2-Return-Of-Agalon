@@ -57,8 +57,8 @@ public class InventoryScreen implements Screen {
             System.out.println(m_inventory.get(i).getName());
         }
 
-        System.out.println(m_numItems);
-        System.out.println("was in inventory");
+        //System.out.println(m_numItems);
+        //System.out.println("was in inventory");
 
 
 
