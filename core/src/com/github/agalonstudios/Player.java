@@ -27,7 +27,6 @@ public class Player extends Character {
 
     // TODO inventory, equipped items, abilities, other properties
     private Array<Item> m_inventory;
-    private int m_itemCount;
     private int m_numInInventory;
     private Item m_equipped;
 
@@ -41,7 +40,6 @@ public class Player extends Character {
                 800,
                 l
         );
-        m_itemCount = 0;
         m_fixed = false;
         m_gold = 0;
         m_xp = 0;
@@ -129,11 +127,12 @@ public class Player extends Character {
     public void runCollision(Entity e)
     {
         super.runCollision(e);
-        if(m_itemCount < 16 && e instanceof DroppedItem)
+        if(m_numInInventory < 16 && e instanceof DroppedItem)
         {
             ((Agalon) Gdx.app.getApplicationListener()).getCurrentWorld().removeItem((DroppedItem) e);
+
             m_inventory.add(((DroppedItem) e).getItem());
-            m_itemCount++;
+            m_numInInventory++;
         }
 
     }
@@ -141,16 +140,4 @@ public class Player extends Character {
     public Array<Item> getInventory(){ return m_inventory;}
     public int getNumInventory(){ return m_numInInventory;}
     public void setNumInventory(int num){m_numInInventory = num;}
-    public void addToHealth(int health){
-        if(health + m_health > 100)
-            m_health = 100;
-        else
-            m_health += health;
-    }
-    public void addToStamina(int stamina){
-        if(stamina + m_stamina > 100)
-            m_stamina = 100;
-        else
-            m_stamina += stamina;
-    }
 }
