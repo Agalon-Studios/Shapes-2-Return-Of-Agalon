@@ -47,7 +47,7 @@ public class MainMenu implements Screen {
 
         // creating the button style
         Pixmap pixmap = new Pixmap(screenWidth/5, screenWidth/5, Pixmap.Format.RGBA8888);
-        pixmap.setColor(Color.GREEN);
+        pixmap.setColor(Color.RED);
         pixmap.fill();
 
         skin.add("white", new Texture(pixmap));
@@ -56,9 +56,9 @@ public class MainMenu implements Screen {
         skin.add("default", bfont);
 
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
-        textButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
-        textButtonStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
-        textButtonStyle.checked = skin.newDrawable("white", Color.BLUE);
+        textButtonStyle.up = skin.newDrawable("white", Color.ORANGE);
+        textButtonStyle.down = skin.newDrawable("white", Color.WHITE);
+        textButtonStyle.checked = skin.newDrawable("white", Color.DARK_GRAY);
         textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
 
         textButtonStyle.font = skin.getFont("default");
@@ -101,11 +101,10 @@ public class MainMenu implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1);
+        Gdx.gl.glClearColor(135/255f,206/255f, 235/255f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         m_stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         m_stage.draw();
-        m_stage.setDebugAll(true);
     }
 
     @Override
@@ -117,7 +116,6 @@ public class MainMenu implements Screen {
     public void pause() {
 
     }
-
     @Override
     public void resume() {
 

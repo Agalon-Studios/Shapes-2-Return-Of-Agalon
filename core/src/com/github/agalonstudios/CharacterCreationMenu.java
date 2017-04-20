@@ -51,10 +51,10 @@ public class CharacterCreationMenu implements Screen {
         skin.add("default", bfont);
 
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
-        textButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
-        textButtonStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
-        textButtonStyle.checked = skin.newDrawable("white", Color.BLUE);
-        textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
+        textButtonStyle.up = skin.newDrawable("white", Color.GOLDENROD);
+        textButtonStyle.down = skin.newDrawable("white", Color.FOREST);
+        textButtonStyle.checked = skin.newDrawable("white", Color.PURPLE);
+        textButtonStyle.over = skin.newDrawable("white", Color.PINK);
 
         textButtonStyle.font = skin.getFont("default");
 
@@ -88,9 +88,9 @@ public class CharacterCreationMenu implements Screen {
         sliderSkin.add("white", new Texture(sliderPixmap));
 
         Slider.SliderStyle sliderStyle = new Slider.SliderStyle();
-        sliderStyle.knob = skin.newDrawable("white", Color.BLUE);
-        sliderStyle.knobOver = skin.newDrawable("white", Color.BROWN);
-        sliderStyle.knobDown = skin.newDrawable("white", Color.DARK_GRAY);
+        sliderStyle.knob = skin.newDrawable("white", Color.FIREBRICK);
+        sliderStyle.knobOver = skin.newDrawable("white", Color.MAROON);
+        sliderStyle.knobDown = skin.newDrawable("white", Color.BROWN);
         sliderStyle.background = skin.newDrawable("white", Color.WHITE);
 
         sliderSkin.add("default", sliderStyle);
@@ -114,11 +114,11 @@ public class CharacterCreationMenu implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1);
+        Gdx.gl.glClearColor(153/255f, 1.0f, 153/255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         m_stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         m_stage.draw();
-        m_stage.setDebugAll(true);
+        //m_stage.setDebugAll(true);
 
         m_playerColorHSV.r =  m_colorSlider.getPercent();
 

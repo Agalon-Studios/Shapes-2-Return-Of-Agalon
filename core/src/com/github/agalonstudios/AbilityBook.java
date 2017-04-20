@@ -115,7 +115,7 @@ class AbilityBook implements Screen {
         }
         // creating the button style
         Pixmap abilityPixmap = new Pixmap(50, 50, Pixmap.Format.RGBA8888);
-        abilityPixmap.setColor(Color.BLUE);
+        abilityPixmap.setColor(Color.RED);
         abilityPixmap.fill();
 
         skin.add("white", new Texture(abilityPixmap));
@@ -123,10 +123,10 @@ class AbilityBook implements Screen {
         skin.add("default", bfont);
 
         final TextButton.TextButtonStyle abilityButtonStyle = new TextButton.TextButtonStyle();
-        abilityButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
-        abilityButtonStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
-        abilityButtonStyle.checked = skin.newDrawable("white", Color.BLUE);
-        abilityButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
+        abilityButtonStyle.up = skin.newDrawable("white", Color.ORANGE);
+        abilityButtonStyle.down = skin.newDrawable("white", Color.WHITE);
+        abilityButtonStyle.checked = skin.newDrawable("white", Color.CORAL);
+        abilityButtonStyle.over = skin.newDrawable("white", Color.LIME);
 
         abilityButtonStyle.font = skin.getFont("default");
         skin.add("default", abilityButtonStyle);
@@ -247,7 +247,7 @@ class AbilityBook implements Screen {
     }
     @Override
     public void render(float delta){
-        Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1);
+        Gdx.gl.glClearColor(204/255f, 102/255f, 1.0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         m_stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         m_stage.draw();
