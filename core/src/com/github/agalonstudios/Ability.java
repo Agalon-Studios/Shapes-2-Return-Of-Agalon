@@ -50,6 +50,7 @@ public class Ability {
                 m_effect = null;
                 m_initialEffect = new EffectArea(new Stats(10, 0, 0, 0, 0, 0, 50, 0), 0, 0, 300, a);
                 m_staminaCost = 30;
+
                 break;
             case HEAL:
                 m_type = Type.SELF;
@@ -77,13 +78,27 @@ public class Ability {
             case DROP_AREA_OF_EFFECT:
                 abilityVector.x = casterRef.getCentroidX() + getRange() * abilityVector.x;
                 abilityVector.y = casterRef.getCentroidY() + getRange() * abilityVector.y;
-               m_effectArea.setPosition(abilityVector.x, abilityVector.y);
-               m_initialEffect.setPosition(abilityVector.x, abilityVector.y);
-                worldRef.addEffectOverTime(m_effectArea);
-                worldRef.addEffectOverTime(m_initialEffect);
-                System.out.println("baaaaa");
+
+                EffectArea copyEffectArea = copyEffectArea();
+                EffectArea copyInitialEffect = copyInitialEffect();
+
+                copyEffectArea.setPosition(abilityVector.x, abilityVector.y);
+                copyInitialEffect.setPosition(abilityVector.x, abilityVector.y);
+                System.out.println(copyEffectArea.getPosition().toString());
+                worldRef.addEffectOverTime(copyEffectArea());
+                worldRef.addEffectOverTime(copyInitialEffect());
                 break;
         }
+    }
+
+    private EffectArea copyInitialEffect() {
+        return new EffectArea(m_initialEffect.getStats(), m_initialEffect.getCount(),
+                m_initialEffect.getDuration(), m_initialEffect.getRadius(), getAbilityType());
+    }
+
+    private EffectArea copyEffectArea() {
+        return new EffectArea(m_effectArea.getStats(), m_effectArea.getCount(),
+                m_effectArea.getDuration(), m_effectArea.getRadius(), getAbilityType());
     }
 
     public Type getType() {

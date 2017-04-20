@@ -48,6 +48,7 @@ public class EffectArea {
     }
 
     public void setPosition(float x, float y) {
+        effectArea.setPosition(x, y);
         m_position.set(x, y);
     }
 
@@ -71,6 +72,7 @@ public class EffectArea {
 
     public void render() {
         ExtendedShapeRenderer er = ((Agalon) Gdx.app.getApplicationListener()).getShapeRenderer();
+
         switch (m_type) {
             case FLAME_BURST:
                 er.setColor(1, 0, 0, 0.5f);
@@ -78,6 +80,23 @@ public class EffectArea {
                 break;
         }
     }
+
+    public Stats getStats() {
+        return m_effect;
+    }
+
+    public int getCount() {
+        return m_count;
+    }
+
+    public float getDuration() {
+        return m_duration;
+    }
+
+    public Vector2 getPosition() {
+        return m_position;
+    }
+
 
     public boolean done() {
         return m_isDone;
