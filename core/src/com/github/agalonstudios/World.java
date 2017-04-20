@@ -115,7 +115,6 @@ public abstract class World implements Screen {
     protected static void runCollisionsNSquared(Array<? extends Entity> ... entityLists) {
         for (Array<? extends Entity> entityList : entityLists) {
             for (Array<? extends Entity> entityList2 : entityLists) {
-          //      if (!entityList.equals(entityList2)) {
                     for (int e = 0; e < entityList.size; e++) {
                         for (int o = 0; o < entityList2.size; o++) {
                             if (e == o && entityList.equals(entityList2)) continue;
@@ -127,8 +126,9 @@ public abstract class World implements Screen {
                         }
                     }
                 }
-            //}
         }
+
+
     }
 
 //    protected static void runColliionsQuadTree(Array<? extends Entity> ... entityLists) {
@@ -167,6 +167,7 @@ public abstract class World implements Screen {
     public void addItem(Item i, Vector2 position) {
         m_dItems.add(new DroppedItem(i, position));
     }
+
     public void addCastObject(CastObject co) {
         m_castObjects.add(co);
     }

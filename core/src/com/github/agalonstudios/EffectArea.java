@@ -7,50 +7,31 @@ import com.github.agalonstudios.Ability.AbilityType;
 /**
  * Created by spr on 3/12/17.
  */
-public class EffectArea {
+public class EffectArea extends Entity {
     private Character m_characterRef;
     private int m_count;
     private float m_duration;
     private float m_radius;
-    private Vector2 m_position;
     private Stats m_effect;
-    private Polygon effectArea;
-    private float[] m_cameraAdjustedVertices;
     private AbilityType m_type;
     private float m_currentDuration;
     private boolean m_isDone;
     private float m_timeTillActive;
     private boolean m_isActive;
 
-    public EffectArea(Stats e, int count, float duration, float radius, AbilityType type) {
+    public EffectArea(Stats e, int count, float duration, Vector2 pos, float radius, AbilityType type) {
+        super(radius, pos, Shape.CIRCLE);
         m_effect = e;
         m_count = count;
         m_duration = duration;
-        m_position = new Vector2();
+
         m_radius = radius;
         m_type = type;
-        int numSides = 16;
 
-        float[] vertices = new float[numSides * 2];
-        m_cameraAdjustedVertices = new float[numSides * 2];
 
-        for (int i = 0; i < numSides; i++) {
-            vertices[i * 2] = (float) (radius + radius * Math.cos(2 * Math.PI * i / numSides));
-            vertices[i * 2 + 1] = (float) (radius + radius * Math.sin(2 * Math.PI * i / numSides));
-        }
-
-        effectArea = new Polygon(vertices);
-
-        effectArea.setOrigin(radius, radius);
-
-        effectArea.translate(m_position.x, m_position.y);
 
     }
 
-    public void setPosition(float x, float y) {
-        effectArea.setPosition(x, y);
-        m_position.set(x, y);
-    }
 
     public float getRadius() {
         return m_radius;
@@ -76,7 +57,7 @@ public class EffectArea {
         switch (m_type) {
             case FLAME_BURST:
                 er.setColor(1, 0, 0, 0.5f);
-                er.circle(m_position.x, m_position.y, m_radius);
+                er.circle(getX(), getY(), m_radius);
                 break;
         }
     }
@@ -94,8 +75,9 @@ public class EffectArea {
     }
 
     public Vector2 getPosition() {
-        return m_position;
+        return getPosition();
     }
+
 
 
     public boolean done() {

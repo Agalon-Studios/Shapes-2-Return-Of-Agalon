@@ -16,15 +16,9 @@ import static javax.swing.UIManager.get;
 public class Player extends Character {
     private int m_gold;
     private int m_xp;
-    private Sprite m_image;
 
     protected int m_stamina;
     public int m_maxStamina;
-
-    // TODO just one ability for testing, replace this with equipped abilities
-    private Ability m_ability;
-    private float m_cooldown;
-    private float m_cooldownTimer;
 
     // TODO inventory, equipped items, abilities, other properties
     private Array<Item> m_inventory;
