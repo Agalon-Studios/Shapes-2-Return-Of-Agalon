@@ -1,7 +1,9 @@
 package com.github.agalonstudios;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -19,8 +21,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Touchpad.TouchpadStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 
-import static com.badlogic.gdx.Input.Keys.M;
-
 
 /**
  * Created by Satya Patel on 2/23/2017.
@@ -34,8 +34,11 @@ public class HUD {
     private static Sprite m_HealthBar;
     private static Sprite m_AbilityBar;
     private static Button m_bookButton;
+    private static boolean[] abilityWasJustPressed = new boolean[4];
 
     private static final int abilityButtonRadius = ScreenScale.scale(150);
+
+
 
     private static final int abilityButtonOriginX = Gdx.graphics.getWidth() - abilityButtonRadius;
     private static final int abilityButtonOriginY = 0;
@@ -143,13 +146,33 @@ public class HUD {
             setAbilityButtons(player);
 
         m_stage.act(delta);
-        /*
-        Array<Actor> arr = m_stage.getActors();
-        int size = arr.size;
-        for(int i = 0; i < size; i++){
-            System.out.println(arr.get(i));
+
+        hudOutputs.reset();
+
+        for (int i = 0; i < m_AbilityButtons.size; i++) {
+            if (m_AbilityButtons.get(i) instanceof Touchpad) {
+                Touchpad ref = (Touchpad) m_AbilityButtons.get(i);
+                if (abilityWasJustPressed[i] && !ref.isTouched())
+                    hudOutputs.abilityIsUsed[i] = true;
+
+
+                abilityWasJustPressed[i] = ref.isTouched();
+
+                if (hudOutputs.abilityIsUsed[i]) continue;
+
+                hudOutputs.abilityCastVectors[i].set(ref.getKnobPercentX(), ref.getKnobPercentY());
+
+            }
+
+            if (m_AbilityButtons.get(i) instanceof Button) {
+                Button ref = (Button) m_AbilityButtons.get(i);
+
+                if (abilityWasJustPressed[i] && !ref.isPressed())
+                    hudOutputs.abilityIsUsed[i] = true;
+
+                abilityWasJustPressed[i] = ref.isPressed();
+            }
         }
-        */
 
 
 
@@ -158,19 +181,27 @@ public class HUD {
     }
 
     public static void render(Player player) {
-        SpriteBatch batch = ((Agalon) Gdx.app.getApplicationListener()).getSpriteBatch();
-        ExtendedShapeRenderer er = ((Agalon) Gdx.app.getApplicationListener()).getShapeRenderer();
-        batch.begin();
-
-        batch.draw(m_HealthBar, m_HealthBar.getX(), m_HealthBar.getY());
-
-        batch.draw(m_AbilityBar, m_AbilityBar.getX(), m_AbilityBar.getY());
-
-        batch.end();
-
-        drawStatusBars(player, er);
-
+        renderAbilityButtonOutputs(player);
+        drawStatusBars(player);
         m_stage.draw();
+    }
+
+    public static void renderAbilityButtonOutputs(Player player) {
+        ExtendedShapeRenderer er = ((Agalon) Gdx.app.getApplicationListener()).getShapeRenderer();
+        OrthographicCamera c = ((Agalon) Gdx.app.getApplicationListener()).getCamera();
+        er.begin();
+        for (int i = 0; i < m_AbilityButtons.size; i++) {
+            Ability currentAbility = player.getEquippedAbilities().get(i);
+            switch(currentAbility.getType()) {
+                case DROP_AREA_OF_EFFECT:
+                    er.circle(
+                            player.getX() + hudOutputs.abilityCastVectors[i].x * currentAbility.getRange() - c.position.x,
+                            player.getY() + hudOutputs.abilityCastVectors[i].y * currentAbility.getRange() - c.position.y,
+                            currentAbility.getAreaofEffect()
+                    );
+            }
+        }
+        er.end();
     }
 
     public static void setAbilityButtons(Player p) {
@@ -246,7 +277,17 @@ public class HUD {
     }
 
 
-    private static void drawStatusBars(Player player, ExtendedShapeRenderer er) {
+    private static void drawStatusBars(Player player) {
+        SpriteBatch batch = ((Agalon) Gdx.app.getApplicationListener()).getSpriteBatch();
+        ExtendedShapeRenderer er = ((Agalon) Gdx.app.getApplicationListener()).getShapeRenderer();
+
+
+        batch.begin();
+        batch.draw(m_HealthBar, m_HealthBar.getX(), m_HealthBar.getY());
+        batch.draw(m_AbilityBar, m_AbilityBar.getX(), m_AbilityBar.getY());
+        batch.end();
+
+
         er.begin();
         er.set(ShapeType.Filled);
 

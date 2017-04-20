@@ -76,8 +76,8 @@ public class Ability {
 
         switch (m_type) {
             case DROP_AREA_OF_EFFECT:
-                m_effectArea.setPosition(ho.abilityReleasePosition.x, ho.abilityReleasePosition.y);
-                m_initialEffect.setPosition(ho.abilityReleasePosition.x, ho.abilityReleasePosition.y);
+               // m_effectArea.setPosition(ho.abilityReleasePosition.x, ho.abilityReleasePosition.y);
+               // m_initialEffect.setPosition(ho.abilityReleasePosition.x, ho.abilityReleasePosition.y);
                 worldRef.addEffectOverTime(m_effectArea);
                 worldRef.addEffectOverTime(m_initialEffect);
                 break;
@@ -87,6 +87,15 @@ public class Ability {
 
     public Type getType() {
         return  m_type;
+    }
+
+    public float getRange() {
+        return m_maxCastDistance;
+    }
+
+    public float getAreaofEffect() {
+        if (m_initialEffect != null) return m_initialEffect.getRadius();
+        return m_effectArea.getRadius();
     }
 
     public AbilityType getAbilityType() {
