@@ -72,11 +72,15 @@ public class InventoryScreen implements Screen {
         // stuff for skin
         Skin slotSkin = new Skin();
         slotSkin.add("sword", new Texture("swordArt.png"));
+        slotSkin.add("axe", new Texture("axe.png"));
+        slotSkin.add("bow", new Texture("bow.png"));
+        slotSkin.add("wand", new Texture("wand.png"));
         slotSkin.add("healthPotion", new Texture("potion.png"));
         slotSkin.add("energyPotion", new Texture("energyPotion.png"));
         slotSkin.add("damagePotion", new Texture("damagePotion.png"));
         slotSkin.add("speedPotion", new Texture("speedPotion.png"));
         slotSkin.add("knockPotion", new Texture("knockPotion.png"));
+
 
         // for sword
         Button.ButtonStyle swordStyle = new Button.ButtonStyle();
@@ -88,6 +92,16 @@ public class InventoryScreen implements Screen {
         bowStyle.checked = slotSkin.getDrawable("bow");
         bowStyle.up = slotSkin.getDrawable("bow");
         bowStyle.down = slotSkin.getDrawable("bow");
+        // for axe
+        Button.ButtonStyle axeStyle = new Button.ButtonStyle();
+        axeStyle.checked = slotSkin.getDrawable("axe");
+        axeStyle.up = slotSkin.getDrawable("axe");
+        axeStyle.down = slotSkin.getDrawable("axe");
+        // for wand
+        Button.ButtonStyle wandStyle = new Button.ButtonStyle();
+        wandStyle.checked = slotSkin.getDrawable("wand");
+        wandStyle.up = slotSkin.getDrawable("wand");
+        wandStyle.down = slotSkin.getDrawable("wand");
         // for health potion
         Button.ButtonStyle healthStyle = new Button.ButtonStyle();
         healthStyle.checked = slotSkin.getDrawable("healthPotion");
@@ -163,7 +177,20 @@ public class InventoryScreen implements Screen {
             for(int j = 0; j < col; j++) {
                 // create the button
                 if(m_inventory.get(4*i+j).getType() == Item.m_itemType.WEAPON){
-                    m_buttonArr.get(i).add(new Button(swordStyle));
+                    switch(m_inventory.get(4*i+j).getTheWeaponType()){
+                        case SWORD:
+                            m_buttonArr.get(i).add(new Button(swordStyle));
+                            break;
+                        case AXE:
+                            m_buttonArr.get(i).add(new Button(axeStyle));
+                            break;
+                        case WAND:
+                            m_buttonArr.get(i).add(new Button(wandStyle));
+                            break;
+                        case BOW:
+                            m_buttonArr.get(i).add(new Button(bowStyle));
+                            break;
+                    }
                 }
                 else{
                     switch(m_inventory.get(4*i+j).getConsumableType()){

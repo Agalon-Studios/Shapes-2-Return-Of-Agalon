@@ -183,6 +183,7 @@ public class Item {
     public m_itemType getType() {return m_type;}
     public String getName() {return m_itemName;}
     public m_consumableType getConsumableType() { return m_theConsumableType;}
+    public m_weaponType getTheWeaponType() { return m_theWeaponType;}
     public Stats getStats() {return m_playerStats;}
 
     // returns info for the Inventory screen to display
