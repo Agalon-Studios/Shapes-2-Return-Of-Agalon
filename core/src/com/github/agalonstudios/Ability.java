@@ -3,9 +3,6 @@ package com.github.agalonstudios;
 
 import com.badlogic.gdx.Gdx;
 
-import static com.github.agalonstudios.Ability.AbilityType.CLEAVE;
-import static com.github.agalonstudios.Ability.AbilityType.CLEAVE;
-import static com.github.agalonstudios.Ability.AbilityType.ICE_ARROW;
 
 /**
  * Created by spr on 3/20/17.
@@ -46,7 +43,7 @@ public class Ability {
             case FLAME_BURST:
                 m_type = Type.DROP_AREA_OF_EFFECT;
                 m_cooldown = 5f;
-                m_maxCastDistance = 400;
+                m_maxCastDistance = 800;
                 m_effectArea = new EffectArea(new Stats(1, 0, 0, 0, 0, 0, 0, 0), 5, 2, 300, a);
                 m_effect = null;
                 m_initialEffect = new EffectArea(new Stats(10, 0, 0, 0, 0, 0, 50, 0), 0, 0, 300, a);

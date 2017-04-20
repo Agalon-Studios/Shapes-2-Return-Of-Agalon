@@ -1,7 +1,6 @@
 package com.github.agalonstudios;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -34,6 +33,8 @@ public class HUD {
     private static Sprite m_HealthBar;
     private static Sprite m_AbilityBar;
     private static Button m_bookButton;
+
+
     private static boolean[] abilityWasJustPressed = new boolean[4];
 
     private static final int abilityButtonRadius = ScreenScale.scale(150);
@@ -168,8 +169,10 @@ public class HUD {
 
                 if (abilityWasJustPressed[i] && !ref.isPressed())
                     hudOutputs.abilityIsUsed[i] = true;
+                if (ref.isPressed()) {
+                    abilityWasJustPressed[i] = true;
+                }
 
-                abilityWasJustPressed[i] = ref.isPressed();
             }
         }
 
@@ -178,6 +181,7 @@ public class HUD {
         hudOutputs.accelerationUpdate.x = m_movementJoystick.getKnobPercentX() * player.m_maxAcceleration;
         hudOutputs.accelerationUpdate.y = m_movementJoystick.getKnobPercentY() * player.m_maxAcceleration;
     }
+
 
     public static void render(Player player) {
         renderAbilityButtonOutputs(player);
@@ -188,22 +192,38 @@ public class HUD {
     public static void renderAbilityButtonOutputs(Player player) {
         ExtendedShapeRenderer er = ((Agalon) Gdx.app.getApplicationListener()).getShapeRenderer();
         OrthographicCamera c = ((Agalon) Gdx.app.getApplicationListener()).getCamera();
+
+
+
         er.begin();
+        er.setColor(1, 0, 0, .2f);
+        er.set(ShapeType.Filled);
         for (int i = 0; i < m_AbilityButtons.size; i++) {
             Ability currentAbility = player.getEquippedAbilities().get(i);
             switch(currentAbility.getType()) {
                 case DROP_AREA_OF_EFFECT:
                     if (((Touchpad)m_AbilityButtons.get(i)).isTouched()) {
-                        er.circle(
-                                player.getCentroidX() + hudOutputs.abilityCastVectors[i].x * currentAbility.getRange() - c.position.x,
-                                player.getCentroidY() + hudOutputs.abilityCastVectors[i].y * currentAbility.getRange() - c.position.y,
-                                currentAbility.getAreaofEffect()
+                        float circleX = player.getCentroidX() + hudOutputs.abilityCastVectors[i].x * currentAbility.getRange() - c.position.x;
+                        float circleY = player.getCentroidY() + hudOutputs.abilityCastVectors[i].y * currentAbility.getRange() - c.position.y;
+
+                        er.circle(circleX, circleY, currentAbility.getAreaofEffect());
+                        er.setColor(.5f, 0, 0, 1);
+                        er.set(ShapeType.Line);
+                        er.circle(circleX, circleY, currentAbility.getAreaofEffect());
+                        er.circle(circleX, circleY, currentAbility.getAreaofEffect()-1);
+                        er.line(
+                                circleX - currentAbility.getAreaofEffect() * hudOutputs.abilityCastVectors[i].x,
+                                circleY - currentAbility.getAreaofEffect() * hudOutputs.abilityCastVectors[i].y,
+                                player.getCentroidX(),
+                                player.getCentroidY()
                         );
                     }
             }
         }
         er.end();
     }
+
+
 
     public static void setAbilityButtons(Player p) {
         if (m_AbilityButtons.get(0) != null)

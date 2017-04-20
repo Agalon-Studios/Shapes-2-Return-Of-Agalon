@@ -93,7 +93,6 @@ public class DungeonRoom extends World {
 
     @Override
     public void render(float delta) {
-        delta *= 1;
         update(delta);
 
         Gdx.gl.glClearColor(137/255.f, 90/255.f, 56/255.f, 1);
