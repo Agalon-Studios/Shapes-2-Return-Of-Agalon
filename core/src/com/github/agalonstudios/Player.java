@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
+import static javax.swing.UIManager.get;
+
 
 /**
  * Created by spr on 3/12/17.
@@ -89,8 +91,6 @@ public class Player extends Character {
         m_acceleration.x = HUD.hudOutputs.accelerationUpdate.x;
         m_acceleration.y = HUD.hudOutputs.accelerationUpdate.y;
 
-
-
         if (Gdx.input.isKeyPressed((Input.Keys.ESCAPE))) {
             ((Agalon) Gdx.app.getApplicationListener()).returnToOverworld();
             this.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
@@ -98,15 +98,6 @@ public class Player extends Character {
         }
 
         handleCasting();
-
-
-
-        if (m_cooldownTimers.get(1) <= 0) {
-            if (Gdx.input.isKeyPressed(Input.Keys.NUM_2)) {
-                m_equippedAbilities.get(1).cast(this);
-                m_cooldownTimers.set(1, m_equippedAbilities.get(0).getCoolDown());
-            }
-        }
 
         // stat effect cooldowns
         for(int i = 3; i < 7; i++){
@@ -127,9 +118,9 @@ public class Player extends Character {
         for (int i = 0; i < m_equippedAbilities.size; i++) {
             if (m_cooldownTimers.get(i) <= 0) {
                 if (HUD.hudOutputs.abilityIsUsed[i]) {
-                    System.out.println(HUD.hudOutputs.abilityCastVectors[i].toString());
-                    //m_equippedAbilities.get(0).cast(this, HUD.hudOutputs);
+                    m_equippedAbilities.get(0).cast(this, HUD.hudOutputs.abilityCastVectors[i]);
                     m_cooldownTimers.set(0, m_equippedAbilities.get(0).getCoolDown());
+                    m_stamina -= m_equippedAbilities.get(0).getStaminaCost();
                 }
             }
         }

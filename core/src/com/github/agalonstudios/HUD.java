@@ -2,6 +2,7 @@ package com.github.agalonstudios;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 
@@ -19,6 +20,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad.TouchpadStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
+
+import static com.badlogic.gdx.Gdx.gl;
+import static com.badlogic.gdx.math.Interpolation.circle;
+import static sun.audio.AudioPlayer.player;
 
 
 /**
@@ -193,36 +198,77 @@ public class HUD {
         ExtendedShapeRenderer er = ((Agalon) Gdx.app.getApplicationListener()).getShapeRenderer();
         OrthographicCamera c = ((Agalon) Gdx.app.getApplicationListener()).getCamera();
 
-
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
         er.begin();
         er.setColor(1, 0, 0, .2f);
         er.set(ShapeType.Filled);
         for (int i = 0; i < m_AbilityButtons.size; i++) {
             Ability currentAbility = player.getEquippedAbilities().get(i);
+            float abilityCenterX = player.getCentroidX() + hudOutputs.abilityCastVectors[i].x * currentAbility.getRange() - c.position.x;
+            float abilityCenterY = player.getCentroidY() + hudOutputs.abilityCastVectors[i].y * currentAbility.getRange() - c.position.y;
             switch(currentAbility.getType()) {
                 case DROP_AREA_OF_EFFECT:
                     if (((Touchpad)m_AbilityButtons.get(i)).isTouched()) {
-                        float circleX = player.getCentroidX() + hudOutputs.abilityCastVectors[i].x * currentAbility.getRange() - c.position.x;
-                        float circleY = player.getCentroidY() + hudOutputs.abilityCastVectors[i].y * currentAbility.getRange() - c.position.y;
-
-                        er.circle(circleX, circleY, currentAbility.getAreaofEffect());
-                        er.setColor(.5f, 0, 0, 1);
-                        er.set(ShapeType.Line);
-                        er.circle(circleX, circleY, currentAbility.getAreaofEffect());
-                        er.circle(circleX, circleY, currentAbility.getAreaofEffect()-1);
-                        er.line(
-                                circleX - currentAbility.getAreaofEffect() * hudOutputs.abilityCastVectors[i].x,
-                                circleY - currentAbility.getAreaofEffect() * hudOutputs.abilityCastVectors[i].y,
-                                player.getCentroidX(),
-                                player.getCentroidY()
-                        );
+                        renderDropAOE(abilityCenterX, abilityCenterY, er, player, currentAbility);
                     }
+                    break;
+//                case PROJECTILE_AREA_OF_EFFECT:
+//                    if (((Touchpad)m_AbilityButtons.get(i)).isTouched()) {
+//                        renderProjAOE(abilityCenterX, abilityCenterY, er, player, currentAbility);
+//                    }
+//                    break;
             }
         }
         er.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 
+    private static void renderProjAOE(float circleX, float circleY, ExtendedShapeRenderer er, Player player, Ability currentAbility) {
+        er.circle(circleX, circleY, currentAbility.getAreaofEffect());
+        er.setColor(.5f, 0, 0, 1);
+        er.set(ShapeType.Line);
+        er.circle(circleX, circleY, currentAbility.getAreaofEffect());
+        er.circle(circleX, circleY, currentAbility.getAreaofEffect()-1);
+
+        float fraction = (float)Math.sqrt(Math.pow(player.getCentroidX() - circleX, 2) + Math.pow(player.getCentroidY() - circleY, 2));
+        float cx = currentAbility.getAreaofEffect() * (player.getCentroidX()-circleX);
+        cx /= fraction;
+        cx += circleX;
+        float cy = currentAbility.getAreaofEffect() * (player.getCentroidY() - circleY);
+        cy /= fraction;
+        cy += circleY;
+        er.line(
+                cx,
+                cy,
+                player.getCentroidX(),
+                player.getCentroidY()
+        );
+    }
+
+    private static void renderDropAOE(float circleX, float circleY, ExtendedShapeRenderer er, Player player, Ability currentAbility) {
+
+        er.circle(circleX, circleY, currentAbility.getAreaofEffect());
+        er.setColor(.5f, 0, 0, 1);
+        er.set(ShapeType.Line);
+        er.circle(circleX, circleY, currentAbility.getAreaofEffect());
+        er.circle(circleX, circleY, currentAbility.getAreaofEffect()-1);
+
+        float fraction = (float)Math.sqrt(Math.pow(player.getCentroidX() - circleX, 2) + Math.pow(player.getCentroidY() - circleY, 2));
+        float cx = currentAbility.getAreaofEffect() * (player.getCentroidX()-circleX);
+        cx /= fraction;
+        cx += circleX;
+        float cy = currentAbility.getAreaofEffect() * (player.getCentroidY() - circleY);
+        cy /= fraction;
+        cy += circleY;
+        er.line(
+                cx,
+                cy,
+                player.getCentroidX(),
+                player.getCentroidY()
+        );
+    }
 
 
     public static void setAbilityButtons(Player p) {

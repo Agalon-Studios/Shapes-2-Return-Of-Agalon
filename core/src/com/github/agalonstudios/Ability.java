@@ -2,6 +2,7 @@ package com.github.agalonstudios;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 
 
 /**
@@ -13,6 +14,7 @@ public class Ability {
     private EffectArea m_initialEffect;
     private float m_maxCastDistance;
     private float m_cooldown;
+    private int m_staminaCost;
     private AbilityType m_ability;
 
     public enum AbilityType {
@@ -47,6 +49,7 @@ public class Ability {
                 m_effectArea = new EffectArea(new Stats(1, 0, 0, 0, 0, 0, 0, 0), 5, 2, 300, a);
                 m_effect = null;
                 m_initialEffect = new EffectArea(new Stats(10, 0, 0, 0, 0, 0, 50, 0), 0, 0, 300, a);
+                m_staminaCost = 30;
                 break;
             case HEAL:
                 m_type = Type.SELF;
@@ -65,19 +68,21 @@ public class Ability {
         m_type = t;
     }
 
-    public void cast(Player casterRef, HUDOutputs ho) {
+    public void cast(Player casterRef, Vector2 abilityVector) {
         // TODO generalize
 
         World worldRef = (World) ((Agalon) Gdx.app.getApplicationListener()).getScreen();
 
         switch (m_type) {
             case DROP_AREA_OF_EFFECT:
-               // m_effectArea.setPosition(ho.abilityReleasePosition.x, ho.abilityReleasePosition.y);
-               // m_initialEffect.setPosition(ho.abilityReleasePosition.x, ho.abilityReleasePosition.y);
+                abilityVector.x = casterRef.getCentroidX() + getRange() * abilityVector.x;
+                abilityVector.y = casterRef.getCentroidY() + getRange() * abilityVector.y;
+               m_effectArea.setPosition(abilityVector.x, abilityVector.y);
+               m_initialEffect.setPosition(abilityVector.x, abilityVector.y);
                 worldRef.addEffectOverTime(m_effectArea);
                 worldRef.addEffectOverTime(m_initialEffect);
+                System.out.println("baaaaa");
                 break;
-
         }
     }
 
@@ -94,6 +99,9 @@ public class Ability {
         return m_effectArea.getRadius();
     }
 
+    public int getStaminaCost() {
+        return m_staminaCost;
+    }
     public AbilityType getAbilityType() {
         return m_ability;
     }

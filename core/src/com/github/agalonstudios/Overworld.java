@@ -89,6 +89,7 @@ public class Overworld extends World {
         update(delta);
         Gdx.gl.glClearColor(104/255.f, 219/255.f, 112/255.f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+
         m_cameraRef.position.set(m_playerRef.getX() - Gdx.graphics.getWidth() / 2, m_playerRef.getY() - Gdx.graphics.getHeight() / 2, 0);
         m_shapeRendererRef.begin(ShapeRenderer.ShapeType.Filled);
 
