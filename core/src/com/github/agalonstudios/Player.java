@@ -23,12 +23,12 @@ public class Player extends Character {
     private Ability m_ability;
     private float m_cooldown;
     private float m_cooldownTimer;
-    private float m_stats;
 
     // TODO inventory, equipped items, abilities, other properties
     private Array<Item> m_inventory;
     private int m_numInInventory;
     private Item m_equipped;
+    private float m_statCooldowns[][]; // stat mod in [i][0], duration time in [i][1]
 
     public Player(int h, int l, Color c) {
         super(
@@ -73,6 +73,12 @@ public class Player extends Character {
             m_numInInventory++;
         }
         System.out.println();
+        m_equipped = null;
+
+        m_statCooldowns = new float[8][2];
+        for(int i = 0; i < 8; i ++)
+            for(int j = 0; j<2; j++)
+                m_statCooldowns[i][j] = 0;
     }
 
     @Override
@@ -102,6 +108,19 @@ public class Player extends Character {
             if (Gdx.input.isKeyPressed(Input.Keys.NUM_2)) {
                 m_equippedAbilities.get(1).cast(this);
                 m_cooldownTimers.set(1, m_equippedAbilities.get(0).getCoolDown());
+            }
+        }
+
+        // stat effect cooldowns
+        for(int i = 3; i < 7; i++){
+                if(m_statCooldowns[i][0] > 0){
+                    if(m_statCooldowns[i][1]-delta <= 0){
+                        m_Stats.deModStat(i, m_statCooldowns[i][1]);
+                        m_statCooldowns[i][0] = 0;
+                        m_statCooldowns[i][1] = 0;
+                    }
+                    else
+                        m_statCooldowns[i][1] -= delta;
             }
         }
 
@@ -140,4 +159,47 @@ public class Player extends Character {
     public Array<Item> getInventory(){ return m_inventory;}
     public int getNumInventory(){ return m_numInInventory;}
     public void setNumInventory(int num){m_numInInventory = num;}
+    public void addHealth(int num){
+        if(num + m_health > m_maxHealth){
+            m_health = m_maxHealth;
+        }
+        else
+            m_health += num;
+    }
+    public void addStamina(int num){
+        if(num + m_stamina > m_maxStamina){
+            m_stamina = m_maxStamina;
+        }
+        else
+            m_stamina += num;
+    }
+
+    public void modifyStatsConsume(int whichStat, float effectMod, float time){
+        // stats are 0-7 of which stat they affect in stats
+        m_Stats.modStat(whichStat, effectMod);
+        m_statCooldowns[whichStat][0] = effectMod;
+        m_statCooldowns[whichStat][1] = time;
+        m_Stats.printStats();
+    }
+
+    public void modifyStatsWeapon(Item item){
+        System.out.println(item.getName());
+
+        m_Stats.modStat(3, item.getStats().getSpeedChange());
+        m_Stats.modStat(4, item.getStats().getDefenseChange());
+        m_Stats.modStat(5, item.getStats().getDamageChange());
+        m_Stats.modStat(6, item.getStats().getKnockback());
+
+        m_Stats.printStats();
+    }
+
+    public void demodifyStatsWeapon(Item item){
+        m_Stats.deModStat(3, item.getStats().getSpeedChange());
+        m_Stats.deModStat(4, item.getStats().getDefenseChange());
+        m_Stats.deModStat(5, item.getStats().getDamageChange());
+        m_Stats.deModStat(6, item.getStats().getKnockback());
+    }
+
+    public Item getEquipped(){ return m_equipped;}
+    public void setEquipped(Item item){ m_equipped = item;}
 }

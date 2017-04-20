@@ -38,6 +38,7 @@ public abstract class Character extends Entity {
         m_engaged = false;
         m_cooldownTimers = new Array<Float>();
         m_equippedAbilities = new Array<Ability>();
+        m_Stats = new Stats(1, 1, 1, 1, 1, 1, 1, 0);
     }
 
     protected void bindVelocity() {

@@ -203,7 +203,46 @@ public class InventoryScreen implements Screen {
 
         m_equipOrUse.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
-
+                if(m_inventory.get(Integer.parseInt(m_clicked.getName())).getType() == Item.m_itemType.CONSUMABLE){
+                    switch(m_inventory.get(Integer.parseInt(m_clicked.getName())).getConsumableType()){
+                        case HEALTH:
+                            a.getPlayer().addHealth(m_inventory.get(Integer.parseInt(m_clicked.getName())).giveHealth());
+                            removeItem(Integer.parseInt(m_clicked.getName()), a);
+                            break;
+                        case ENERGY:
+                            a.getPlayer().addStamina(m_inventory.get(Integer.parseInt(m_clicked.getName())).giveEnergy());
+                            removeItem(Integer.parseInt(m_clicked.getName()), a);
+                            break;
+                        case DAMAGE:
+                            a.getPlayer().modifyStatsConsume(5, m_inventory.get(Integer.parseInt(m_clicked.getName())).getStats().getDamageChange(),
+                                    m_inventory.get(Integer.parseInt(m_clicked.getName())).getStats().getDuration());
+                            removeItem(Integer.parseInt(m_clicked.getName()), a);
+                            break;
+                        case SPEED:
+                            a.getPlayer().modifyStatsConsume(3, m_inventory.get(Integer.parseInt(m_clicked.getName())).getStats().getSpeedChange(),
+                                    m_inventory.get(Integer.parseInt(m_clicked.getName())).getStats().getDuration());
+                            removeItem(Integer.parseInt(m_clicked.getName()), a);
+                            break;
+                        case KNOCK:
+                            a.getPlayer().modifyStatsConsume(6, m_inventory.get(Integer.parseInt(m_clicked.getName())).getStats().getKnockback(),
+                                    m_inventory.get(Integer.parseInt(m_clicked.getName())).getStats().getDuration());
+                            removeItem(Integer.parseInt(m_clicked.getName()), a);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else{
+                    if(a.getPlayer().getEquipped() == null) {
+                        a.getPlayer().modifyStatsWeapon(m_inventory.get(Integer.parseInt(m_clicked.getName())));
+                        a.getPlayer().setEquipped(m_inventory.get(Integer.parseInt(m_clicked.getName())));
+                    }
+                    else {
+                        a.getPlayer().demodifyStatsWeapon(a.getPlayer().getEquipped());
+                        a.getPlayer().modifyStatsWeapon(m_inventory.get(Integer.parseInt(m_clicked.getName())));
+                        a.getPlayer().setEquipped(m_inventory.get(Integer.parseInt(m_clicked.getName())));
+                    }
+                }
             }
         });
 
