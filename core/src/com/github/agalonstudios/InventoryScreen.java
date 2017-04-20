@@ -37,20 +37,37 @@ public class InventoryScreen implements Screen {
     private TextButton m_equipOrUse;
     private TextButton m_drop;
     private int m_numItems;
-    private int m_numDroppedItems;
+    private static int m_numDroppedItems = 0;
 
-    public InventoryScreen(final Agalon a){
+
+    public InventoryScreen(final Agalon a) {
         m_stage = new Stage();
         Gdx.input.setInputProcessor(m_stage);
-
-        m_numDroppedItems = 0;
 
         int screenWidth = Gdx.graphics.getWidth();
         int screenHeight = Gdx.graphics.getHeight();
 
         m_inventory = a.getPlayer().getInventory();
+
+
          m_numItems = a.getPlayer().getNumInventory();
 
+        for (int i = 0; i < m_inventory.size; i++) {
+            System.out.println(m_inventory.get(i).getName());
+        }
+
+        System.out.println(m_numItems);
+        System.out.println("was in inventory");
+
+
+
+        int numShifted = 0;
+        for (int i = 0; i < m_inventory.size; i++) {
+            if (m_inventory.get(i) == null) {
+                m_inventory.set(i, m_inventory.get(i+numShifted++));
+            }
+            if (numShifted == m_numItems) break;
+        }
         // stuff for skin
         Skin slotSkin = new Skin();
         slotSkin.add("sword", new Texture("swordArt.png"));
@@ -131,19 +148,9 @@ public class InventoryScreen implements Screen {
                     public void clicked (InputEvent event, float x, float y){
                         // changes the info displayed
                         m_clicked = thisButton;
-                        System.out.println("lol");
                         m_nameLabel.setText(m_inventory.get(Integer.parseInt(m_clicked.getName())).getInfo(m_inventory.get(Integer.parseInt(m_clicked.getName()))));
-                        System.out.println(m_clicked.getName());
+                        //System.out.println(m_clicked.getName());
                         //System.out.println(m_nameLabel.toString());
-                        switch(m_inventory.get(Integer.parseInt(m_clicked.getName())).getType()){
-                            case WEAPON:
-                               m_equipOrUse.setText("Equip");
-                                break;
-                            case CONSUMABLE:
-                                m_equipOrUse.setText("Use");
-                                break;
-                        }
-
                     }
                 });
             }
@@ -163,6 +170,7 @@ public class InventoryScreen implements Screen {
         m_backButton.addListener(new ClickListener() {
             public void clicked (InputEvent event, float x, float y){
                 a.setScreen(new InGameOptionsTab(a));
+                InventoryScreen.m_numDroppedItems = 0;
             }
         });
 
@@ -171,7 +179,7 @@ public class InventoryScreen implements Screen {
                 ScreenScale.scale(200), ScreenScale.scale(200));
         m_stage.addActor(m_backButton);
 
-        // create skins and fonts for buttons
+        // create Equip button
         Pixmap pixmap = new Pixmap(screenWidth/5, screenWidth/5, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.GREEN);
         pixmap.fill();
@@ -187,8 +195,7 @@ public class InventoryScreen implements Screen {
         textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
 
         textButtonStyle.font = skin.getFont("default");
-        // create equip button
-        m_equipOrUse = new TextButton("Equip", textButtonStyle);
+        TextButton m_equipOrUse = new TextButton("Equip", textButtonStyle);
         m_equipOrUse.setHeight(screenHeight / 5);
         m_equipOrUse.setWidth(screenWidth / 4);
         m_equipOrUse.setPosition((screenWidth*2/4), (screenHeight*4/5));
@@ -196,16 +203,7 @@ public class InventoryScreen implements Screen {
 
         m_equipOrUse.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
-                if(m_equipOrUse.getText().equals("Use")){
-                    switch(m_inventory.get(Integer.parseInt(m_clicked.getName())).getConsumableType()){
-                        case HEALTH:
-                            a.getPlayer().addToHealth(m_inventory.get(Integer.parseInt(m_clicked.getName())).giveHealth());
-                            break;
-                        case ENERGY:
-                            a.getPlayer().addToHealth(m_inventory.get(Integer.parseInt(m_clicked.getName())).giveEnergy());
 
-                    }
-                }
             }
         });
 
@@ -222,6 +220,7 @@ public class InventoryScreen implements Screen {
                         new Vector2(a.getPlayer().getX() - a.getPlayer().getWidth(),
                                 a.getPlayer().getY() + m_numDroppedItems * 15));
                 removeItem(Integer.parseInt(m_clicked.getName()), a);
+                System.out.println(m_numDroppedItems + "----");
                 a.setScreen(new InventoryScreen(a));
             }
         });
