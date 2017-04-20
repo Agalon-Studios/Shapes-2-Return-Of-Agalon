@@ -23,5 +23,24 @@ public class Stats {
         knockback = kb;
         duration = dur;
     }
+    // a method to use with Item.getInfo
+    public String weaponStatsInfo(){
+        String info = "";
+        info += "Damage mod: " + String.format("%.2f", damageChange) + ", ";
+        info += "Speed mod: " + String.format("%.2f", speedChange) + "\n";
+        info += "Knockback mod: " + String.format("%.2f", knockback) + ", ";
+        info += "Defense mod: " + String.format("%.2f", defenseChange);
+        return info;
+    }
 
+    public String consumeStatsInfo(){
+        String info = "";
+        info += "Duration: " + String.format("%.2f", duration);
+        return info;
+    }
+
+    public float getSpeedChange(){return speedChange;}
+    public float getDefenseChange() {return defenseChange;}
+    public float getKnockback() {return knockback;}
+    public float getDamageChange() { return damageChange;}
 }

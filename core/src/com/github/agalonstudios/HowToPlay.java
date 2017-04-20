@@ -25,6 +25,7 @@ public class HowToPlay implements Screen {
 
         // back button
         Skin backSkin = new Skin();
+
         backSkin.add("backButton", new Texture("backButton.png"));
 
         Button.ButtonStyle backStyle = new Button.ButtonStyle();

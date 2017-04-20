@@ -37,7 +37,7 @@ public class Item {
     public static final String wandNames[] = {"Wand", "Baton", "Staff", "Scepter", "Caduceus"};
     public static final String bowNames[] = {"Bow", "Longbow", "Crossbow", "Recurve"};
     public static final String endNames[] = {"Power", "Destruction", "Agalon", "Memes", "Death", "Fun", "Class", "The Elders",
-            "The Moon", "Dragons", "Brody", "Sean", "Satya", "Mahzain", "Jacob", "Kanye", "Edwin", "Safa"};
+            "The Moon", "Dragons", "Brody", "Sean", "Satya", "Mahzain", "Jacob", "Kanye", "Edwin", "Safa", "Programming"};
 
     // Textures and sprite
     private SpriteBatch m_batch;
@@ -181,13 +181,40 @@ public class Item {
     public Sprite getSprite(){ return m_sprite;}
     public m_itemType getType() {return m_type;}
     public String getName() {return m_itemName;}
+    public m_consumableType getConsumableType() { return m_theConsumableType;}
+    public Stats getStats() {return m_playerStats;}
 
-    public String getInfo(Item item){
+    // returns info for the Inventory screen to display
+    public static String getInfo(Item item){
         String info = "";
         info += item.getName();
         info += "\n";
-        info += "Damage mod: ";
-
+        if(item.getType() == m_itemType.WEAPON) {
+            info += item.m_playerStats.weaponStatsInfo();
+        }
+        else {
+            m_consumableType type = item.getConsumableType();
+            switch(type){
+                case HEALTH:
+                    info += item.m_healthChange;
+                    break;
+                case DAMAGE:
+                    info+= "Damage Mod: " +  String.format("%.2f", item.getStats().getDamageChange());
+                    info += ", " + item.m_playerStats.consumeStatsInfo();
+                    break;
+                case SPEED:
+                    info+= "Speed Mod: " +  String.format("%.2f", item.getStats().getSpeedChange());
+                    info += ", " + item.m_playerStats.consumeStatsInfo();
+                    break;
+                case KNOCK:
+                    info+= "Knockback Mod: " +  String.format("%.2f", item.getStats().getKnockback());
+                    info += ", " + item.m_playerStats.consumeStatsInfo();
+                    break;
+                case ENERGY:
+                    info+= "Energy: " +  item.m_energyChange;
+                    break;
+            }
+        }
         return info;
     }
 }

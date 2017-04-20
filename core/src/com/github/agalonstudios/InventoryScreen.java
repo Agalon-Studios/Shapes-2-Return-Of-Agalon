@@ -4,14 +4,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 
@@ -27,6 +31,8 @@ public class InventoryScreen implements Screen {
     private Label m_nameLabel;
     private Array<Item> m_inventory;
     private Button m_clicked;
+    private TextButton m_equipOrUse;
+    private TextButton m_drop;
 
     public InventoryScreen(final Agalon a){
         m_stage = new Stage();
@@ -64,7 +70,7 @@ public class InventoryScreen implements Screen {
         BitmapFont bfont = new BitmapFont();
         final Label.LabelStyle labelStyle = new Label.LabelStyle(bfont, Color.WHITE);
         m_nameLabel = new Label("Item Name", labelStyle);
-        m_nameLabel.setPosition(500, screenHeight-100);
+        m_nameLabel.setPosition((screenWidth/4), (screenHeight*9/10));
         m_stage.addActor(m_nameLabel);
 
 
@@ -104,9 +110,11 @@ public class InventoryScreen implements Screen {
                 else{
                     m_buttonArr.get(i).add(new Button(healthStyle));
                 }
-
+                // set the button's size, pos, and info
                 final Button thisButton = m_buttonArr.get(i).get(j);
-                thisButton.setName(m_inventory.get(4*i+j).getName());
+                //thisButton.setName(Item.getInfo(m_inventory.get(4*i+j)));
+                int pos = 4*i+j;
+                thisButton.setName(Integer.toString(pos));
                 thisButton.setHeight(screenHeight / 5);
                 thisButton.setWidth(screenWidth / 4);
                 thisButton.setPosition((screenWidth*j/4), (screenHeight*(3-i)/5));
@@ -114,10 +122,11 @@ public class InventoryScreen implements Screen {
 
                 thisButton.addListener(new ClickListener() {
                     public void clicked (InputEvent event, float x, float y){
+                        // changes the info displayed
                         m_clicked = thisButton;
-                        m_nameLabel.setText(thisButton.getName());
-                        System.out.println(m_clicked.getName());
-                        System.out.println(m_nameLabel.toString());
+                        m_nameLabel.setText(m_inventory.get(Integer.parseInt(m_clicked.getName())).getInfo(m_inventory.get(Integer.parseInt(m_clicked.getName()))));
+                        //System.out.println(m_clicked.getName());
+                        //System.out.println(m_nameLabel.toString());
                     }
                 });
             }
@@ -145,6 +154,45 @@ public class InventoryScreen implements Screen {
                 ScreenScale.scale(200), ScreenScale.scale(200));
         m_stage.addActor(m_backButton);
 
+        // create Equip button
+        Pixmap pixmap = new Pixmap(screenWidth/5, screenWidth/5, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.GREEN);
+        pixmap.fill();
+        Skin skin = new Skin();
+
+        skin.add("white", new Texture(pixmap));
+        skin.add("default", bfont);
+
+        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
+        textButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
+        textButtonStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
+        textButtonStyle.checked = skin.newDrawable("white", Color.BLUE);
+        textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
+
+        textButtonStyle.font = skin.getFont("default");
+        TextButton m_equipOrUse = new TextButton("Equip", textButtonStyle);
+        m_equipOrUse.setHeight(screenHeight / 5);
+        m_equipOrUse.setWidth(screenWidth / 4);
+        m_equipOrUse.setPosition((screenWidth*2/4), (screenHeight*4/5));
+        m_stage.addActor(m_equipOrUse);
+
+        m_equipOrUse.addListener(new ChangeListener() {
+            public void changed (ChangeEvent event, Actor actor) {
+
+            }
+        });
+
+        m_drop = new TextButton("Drop", textButtonStyle);
+        m_drop.setHeight(screenHeight / 5);
+        m_drop.setWidth(screenWidth / 4);
+        m_drop.setPosition((screenWidth*3/4), (screenHeight*4/5));
+        m_stage.addActor(m_drop);
+
+        m_equipOrUse.addListener(new ChangeListener() {
+            public void changed (ChangeEvent event, Actor actor) {
+
+            }
+        });
 
     }
 
