@@ -48,7 +48,7 @@ public class HowToPlay implements Screen {
 
         // How to play graphic
         Skin howToSkin = new Skin();
-        howToSkin.add("howToPlay", new Texture("howToPlay.png"));
+        howToSkin.add("howToPlay", new Texture("howToPlayReal.png"));
 
         Button.ButtonStyle howToStyle = new Button.ButtonStyle();
         howToStyle.checked = howToSkin.getDrawable("howToPlay");
