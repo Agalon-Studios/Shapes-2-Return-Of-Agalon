@@ -33,7 +33,7 @@ public class Player extends Character {
     public Player(int h, int l, Color c) {
         super(
                 32,
-                new Vector2(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2),
+                new Vector2(Gdx.graphics.getWidth() / 2 - 32, Gdx.graphics.getHeight() / 2 - 32),
                 Shape.SQUARE,
                 h,
                 150,
@@ -97,12 +97,9 @@ public class Player extends Character {
 
         }
 
-        if (m_cooldownTimers.get(0) <= 0) {
-            if (Gdx.input.isKeyPressed(Input.Keys.NUM_1)) {
-                m_equippedAbilities.get(0).cast(this, HUD.hudOutputs);
-                m_cooldownTimers.set(0, m_equippedAbilities.get(0).getCoolDown());
-            }
-        }
+        handleCasting();
+
+
 
         if (m_cooldownTimers.get(1) <= 0) {
             if (Gdx.input.isKeyPressed(Input.Keys.NUM_2)) {
@@ -124,6 +121,18 @@ public class Player extends Character {
             }
         }
 
+    }
+
+    private void handleCasting() {
+        for (int i = 0; i < m_equippedAbilities.size; i++) {
+            if (m_cooldownTimers.get(i) <= 0) {
+                if (HUD.hudOutputs.abilityIsUsed[i]) {
+                    System.out.println(HUD.hudOutputs.abilityCastVectors[i].toString());
+                    //m_equippedAbilities.get(0).cast(this, HUD.hudOutputs);
+                    m_cooldownTimers.set(0, m_equippedAbilities.get(0).getCoolDown());
+                }
+            }
+        }
     }
 
 

@@ -32,10 +32,10 @@ public class Item {
     private String m_itemName;
 
     // strings for weapon name generation
-    public static final String swordNames[] = {"Sword", "Blade", "Sabre", "Dagger", "Scimitar", "Rapier", "Cutlass", "Broadsword"};
+    public static final String swordNames[] = {"Sword", "Blade", "Sabre", "Dagger", "Scimitar", "Rapier", "Cutlass", "Broadsword", "Rapier"};
     public static final String axeNames[] = {"Axe", "Tomahawk", "Hatchet", "Scythe", "Cleaver"};
     public static final String wandNames[] = {"Wand", "Baton", "Staff", "Scepter", "Caduceus"};
-    public static final String bowNames[] = {"Bow", "Longbow", "Crossbow", "Recurve"};
+    public static final String bowNames[] = {"Bow", "Longbow", "Crossbow", "Recurve", "Shortbow"};
     public static final String endNames[] = {"Power", "Destruction", "Agalon", "Memes", "Death", "Fun", "Class", "The Elders",
             "The Moon", "Dragons", "Brody", "Sean", "Satya", "Mahzain", "Jacob", "Kanye", "Edwin", "Safa", "Programming", "Charles",
             "Shahram Jahani", "Pawel Wocjan", "Szumlanski", "Kuppalapale Vajravelu"};
@@ -200,15 +200,15 @@ public class Item {
                     info += item.m_healthChange;
                     break;
                 case DAMAGE:
-                    info+= "Damage Mod: " +  String.format("%.2f", item.getStats().getDamageChange());
+                    info+= "Damage Mod: " +  String.format("+%%%d", (item.getStats().getDamageChange() - 1 )* 100);
                     info += ", " + item.m_playerStats.consumeStatsInfo();
                     break;
                 case SPEED:
-                    info+= "Speed Mod: " +  String.format("%.2f", item.getStats().getSpeedChange());
+                    info+= "Speed Mod: " +  String.format("+%%%d", (item.getStats().getSpeedChange() - 1) * 100);
                     info += ", " + item.m_playerStats.consumeStatsInfo();
                     break;
                 case KNOCK:
-                    info+= "Knockback Mod: " +  String.format("%.2f", item.getStats().getKnockback());
+                    info+= "Knockback Mod: " +  String.format("+%%%d", (item.getStats().getKnockback() - 1) * 100);
                     info += ", " + item.m_playerStats.consumeStatsInfo();
                     break;
                 case ENERGY:
