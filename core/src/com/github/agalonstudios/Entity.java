@@ -15,10 +15,9 @@ public abstract class Entity {
     protected int m_ID;
     protected boolean m_fixed;
     protected Polygon m_shape;
-    protected Rectangle m_oldAnus;
-    protected Rectangle m_rect;
     private float[] m_cameraAdjustedVertices;
     protected Color m_color;
+    protected Vector2 m_centroid;
 
     public Entity(float x, float y, float width, float height) {
         float[] vertices = {0, 0, 0, height, width, height, width, 0};
@@ -27,11 +26,15 @@ public abstract class Entity {
 
         m_fixed = true;
         m_shape.translate(x, y);
-        m_rect = new Rectangle(x, y, width, height);
-        m_oldAnus = new Rectangle(m_rect);
 
         m_ID = EntityManager.getNextValidEntityID();
         EntityManager.registerEntity(this);
+
+        m_centroid = new Vector2();
+
+        ((Agalon) (Gdx.app.getApplicationListener())).getShapeRenderer().getCentroid(m_shape.getVertices(), m_centroid);
+        m_centroid.x += x;
+        m_centroid.y += y;
     }
 
     public Entity(float radius, Vector2 position, Shape shape) {
@@ -77,24 +80,26 @@ public abstract class Entity {
         m_ID = EntityManager.getNextValidEntityID();
         EntityManager.registerEntity(this);
 
-        m_rect = new Rectangle(position.x, position.y, (float) (radius * 1.8), (float) (radius * 1.8));
-        m_oldAnus = new Rectangle(m_rect);
+        m_centroid = new Vector2();
+
+        ((Agalon) (Gdx.app.getApplicationListener())).getShapeRenderer().getCentroid(m_shape.getVertices(), m_centroid);
+        m_centroid.x += position.x;
+        m_centroid.y += position.y;
 
     }
 
 
     public void setPosition(float x, float y) {
-        m_oldAnus.setPosition(m_rect.getX(), m_rect.getY());
         m_shape.setPosition(x, y);
-        m_rect.setPosition(x, y);
+        ((Agalon) Gdx.app.getApplicationListener()).getShapeRenderer().getCentroid(m_shape.getVertices(), m_centroid);
+        m_centroid.x += x;
+        m_centroid.y += y;
     }
 
     public void translate(float x, float y) {
-        m_oldAnus.setX(m_rect.getX());
-        m_oldAnus.setY(m_rect.getY());
         m_shape.translate(x, y);
-        m_rect.setX(m_rect.getX() + x);
-        m_rect.setY(m_rect.getY() + y);
+        m_centroid.x = m_centroid.x + x;
+        m_centroid.y = m_centroid.y + y;
     }
 
     public float getX() {
@@ -129,6 +134,8 @@ public abstract class Entity {
     }
 
     public void render() {
+        OrthographicCamera camera = ((Agalon) Gdx.app.getApplicationListener()).getCamera();
+
         ExtendedShapeRenderer er = ((Agalon) Gdx.app.getApplicationListener()).getShapeRenderer();
         er.setColor(m_color);
         er.polygon(getcameraAdjustedVertices());
@@ -155,7 +162,11 @@ public abstract class Entity {
         return this.m_shape;
     }
 
-    public Rectangle getRect() {
-        return m_rect;
+    public float getCentroidX() {
+        return m_centroid.x;
+    }
+
+    public float getCentroidY() {
+        return m_centroid.y;
     }
 }

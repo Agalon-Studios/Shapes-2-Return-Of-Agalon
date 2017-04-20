@@ -54,6 +54,7 @@ public class Agalon extends Game {
         this.turnOffMusic();
         this.setMainMusic(true);
         Gdx.input.setInputProcessor(HUD.getStage());
+        m_player.setPosition(m_overworld.getHomePlate().x, m_overworld.getHomePlate().y);
     }
 
     public void createOverworld(Player player) {

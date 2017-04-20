@@ -90,7 +90,16 @@ public abstract class Character extends Entity {
 
     @Override
     public void runCollision(Entity other) {
-        this.setPosition(m_oldAnus.getX(), m_oldAnus.getY());
+        float xmove, ymove;
+        xmove = this.getCentroidX() - other.getCentroidX();
+        ymove = this.getCentroidY() - other.getCentroidY();
+        float norm = (float) Math.sqrt(xmove * xmove + ymove * ymove);
+        xmove /= norm;
+        ymove /= norm;
+
+        while (this.overlaps(other)) {
+            this.translate(xmove, ymove);
+        }
     }
 
 }

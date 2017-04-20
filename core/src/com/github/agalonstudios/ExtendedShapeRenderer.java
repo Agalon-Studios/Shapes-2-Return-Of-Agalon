@@ -131,7 +131,7 @@ public class ExtendedShapeRenderer extends ShapeRenderer {
         }
     }
 
-    private void getCentroid(float[] vertices, Vector2 centroid) {
+    public void getCentroid(float[] vertices, Vector2 centroid) {
         float numSides = vertices.length / 2;
         centroid.x = vertices[0] / numSides;
         centroid.y = vertices[1] / numSides;

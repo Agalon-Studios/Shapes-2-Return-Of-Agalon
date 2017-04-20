@@ -3,6 +3,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ public class Overworld extends World {
     private Array<OverworldFlower> m_overworldFlowers;
     private Array<OverworldTree> m_trees;
     private Array<Traveler> m_travelers;
+    private Vector2 m_homePlate;
 
 
     // private Shop m_shop;
@@ -23,14 +25,13 @@ public class Overworld extends World {
     public Overworld(Player pRef) {
         super(pRef);
 
-        m_dungeonEntrances = new Array<DungeonEntrance>();
-        int numDungeons = MathUtils.random(10, 20);
-        int placeX = MathUtils.random(-1000, -500);
+        m_homePlate = new Vector2(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
 
-        for (int i = 0; i < numDungeons; i++) {
-            m_dungeonEntrances.add(new DungeonEntrance(placeX, MathUtils.random(-1000, 1000), MathUtils.random(3, 5), Theme.CAVE));
-            placeX += MathUtils.random(500, 1000);
-        }
+        m_dungeonEntrances = new Array<DungeonEntrance>();
+        m_dungeonEntrances.add(new DungeonEntrance(Gdx.graphics.getWidth() * 1 / 3, Gdx.graphics.getHeight() * 2 / 3, 3, Theme.CAVE));
+        m_dungeonEntrances.add(new DungeonEntrance(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight(), 3, Theme.CAVE));
+        m_dungeonEntrances.add(new DungeonEntrance(Gdx.graphics.getWidth() * 2 / 3, Gdx.graphics.getHeight() * 2 / 3, 3, Theme.CAVE));
+
 
         m_overworldFlowers = new Array<OverworldFlower>();
         int numFluffs = MathUtils.random(1000, 5000);
@@ -45,13 +46,6 @@ public class Overworld extends World {
             m_trees.add(new OverworldTree(MathUtils.random(-5000, 5000), MathUtils.random(placeYMax - 128, placeYMax)));
             placeYMax = (int) m_trees.get(i).getY();
         }
-
-        m_travelers = new Array<Traveler>();
-        int numTravelers = MathUtils.random(1, 50);
-        for (int i = 0; i < numTravelers; i++) {
-            m_travelers.add(new Traveler(MathUtils.random(-5000, 5000), MathUtils.random(-5000, 5000)));
-        }
-
     }
 
     @Override
@@ -76,8 +70,6 @@ public class Overworld extends World {
         for (OverworldFlower gf : m_overworldFlowers)
             gf.update(delta);
 
-        for (Traveler t : m_travelers)
-            t.update(delta);
 
         for (int i = 0; i < m_castObjects.size; i++) {
             m_castObjects.get(i).update(delta);
@@ -86,7 +78,7 @@ public class Overworld extends World {
             }
         }
 
-        runCollisions(m_playerRefArray, m_dungeonEntrances, m_trees, m_travelers, m_castObjects, m_dItems);
+        runCollisions(m_playerRefArray, m_dungeonEntrances, m_trees, m_castObjects, m_dItems);
     }
 
     @Override
@@ -129,5 +121,9 @@ public class Overworld extends World {
 
         // m_shop.render();
         // m_stashChest.render();
+    }
+
+    public Vector2 getHomePlate() {
+        return m_homePlate;
     }
 }
