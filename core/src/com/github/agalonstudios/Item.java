@@ -200,15 +200,15 @@ public class Item {
                     info += item.m_healthChange;
                     break;
                 case DAMAGE:
-                    info+= "Damage Mod: " +  String.format("+%%%d", (item.getStats().getDamageChange() - 1 )* 100);
+                    info+= "Damage Mod: " +  String.format("%.2f%%", (item.getStats().getDamageChange() - 1 )* 100);
                     info += ", " + item.m_playerStats.consumeStatsInfo();
                     break;
                 case SPEED:
-                    info+= "Speed Mod: " +  String.format("+%%%d", (item.getStats().getSpeedChange() - 1) * 100);
+                    info+= "Speed Mod: " +  String.format("%.2f%%", (item.getStats().getSpeedChange() - 1) * 100);
                     info += ", " + item.m_playerStats.consumeStatsInfo();
                     break;
                 case KNOCK:
-                    info+= "Knockback Mod: " +  String.format("+%%%d", (item.getStats().getKnockback() - 1) * 100);
+                    info+= "Knockback Mod: " +  String.format("%.2f%%", (item.getStats().getKnockback() - 1) * 100);
                     info += ", " + item.m_playerStats.consumeStatsInfo();
                     break;
                 case ENERGY:

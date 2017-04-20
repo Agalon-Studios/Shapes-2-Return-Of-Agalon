@@ -68,7 +68,7 @@ public class Player extends Character {
         m_numInInventory = 0;
 
         for(int i = 0; i < 5; i++){
-            m_inventory.add(Item.generateWeapon());
+            m_inventory.add(Item.generateConsumable());
             System.out.println(m_inventory.get(i).getName());
             m_numInInventory++;
         }

@@ -151,6 +151,10 @@ public class InventoryScreen implements Screen {
                         m_nameLabel.setText(m_inventory.get(Integer.parseInt(m_clicked.getName())).getInfo(m_inventory.get(Integer.parseInt(m_clicked.getName()))));
                         //System.out.println(m_clicked.getName());
                         //System.out.println(m_nameLabel.toString());
+                        if(m_inventory.get(Integer.parseInt(m_clicked.getName())).getType() == Item.m_itemType.CONSUMABLE)
+                            m_equipOrUse.setText("Use");
+                        else
+                            m_equipOrUse.setText("Equip");
                     }
                 });
             }
@@ -191,11 +195,12 @@ public class InventoryScreen implements Screen {
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
         textButtonStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
+        
         textButtonStyle.checked = skin.newDrawable("white", Color.BLUE);
         textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
 
         textButtonStyle.font = skin.getFont("default");
-        TextButton m_equipOrUse = new TextButton("Equip", textButtonStyle);
+        m_equipOrUse = new TextButton("Equip", textButtonStyle);
         m_equipOrUse.setHeight(screenHeight / 5);
         m_equipOrUse.setWidth(screenWidth / 4);
         m_equipOrUse.setPosition((screenWidth*2/4), (screenHeight*4/5));
@@ -208,25 +213,30 @@ public class InventoryScreen implements Screen {
                         case HEALTH:
                             a.getPlayer().addHealth(m_inventory.get(Integer.parseInt(m_clicked.getName())).giveHealth());
                             removeItem(Integer.parseInt(m_clicked.getName()), a);
+                            a.setScreen(new InventoryScreen(a));
                             break;
                         case ENERGY:
                             a.getPlayer().addStamina(m_inventory.get(Integer.parseInt(m_clicked.getName())).giveEnergy());
                             removeItem(Integer.parseInt(m_clicked.getName()), a);
+                            a.setScreen(new InventoryScreen(a));
                             break;
                         case DAMAGE:
                             a.getPlayer().modifyStatsConsume(5, m_inventory.get(Integer.parseInt(m_clicked.getName())).getStats().getDamageChange(),
                                     m_inventory.get(Integer.parseInt(m_clicked.getName())).getStats().getDuration());
                             removeItem(Integer.parseInt(m_clicked.getName()), a);
+                            a.setScreen(new InventoryScreen(a));
                             break;
                         case SPEED:
                             a.getPlayer().modifyStatsConsume(3, m_inventory.get(Integer.parseInt(m_clicked.getName())).getStats().getSpeedChange(),
                                     m_inventory.get(Integer.parseInt(m_clicked.getName())).getStats().getDuration());
                             removeItem(Integer.parseInt(m_clicked.getName()), a);
+                            a.setScreen(new InventoryScreen(a));
                             break;
                         case KNOCK:
                             a.getPlayer().modifyStatsConsume(6, m_inventory.get(Integer.parseInt(m_clicked.getName())).getStats().getKnockback(),
                                     m_inventory.get(Integer.parseInt(m_clicked.getName())).getStats().getDuration());
                             removeItem(Integer.parseInt(m_clicked.getName()), a);
+                            a.setScreen(new InventoryScreen(a));
                             break;
                         default:
                             break;
