@@ -25,7 +25,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * Created by BDog on 3/27/2017.
  */
 
-class MainMenu implements Screen {
+public class MainMenu implements Screen {
 
     private Stage m_stage;
     private Viewport m_viewport;
