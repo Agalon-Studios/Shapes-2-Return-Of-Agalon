@@ -17,7 +17,7 @@ public class Player extends Character {
     private int m_gold;
     private int m_xp;
 
-    protected int m_stamina;
+    protected float m_stamina;
     public int m_maxStamina;
 
     // TODO inventory, equipped items, abilities, other properties
@@ -111,15 +111,17 @@ public class Player extends Character {
             }
         }
 
+        m_stamina += .2f;
+        if (m_stamina > m_maxStamina) m_stamina = m_maxStamina;
     }
 
     private void handleCasting() {
         for (int i = 0; i < m_equippedAbilities.size; i++) {
             if (m_cooldownTimers.get(i) <= 0) {
-                if (HUD.hudOutputs.abilityIsUsed[i]) {
-                    m_equippedAbilities.get(0).cast(this, HUD.hudOutputs.abilityCastVectors[i]);
-                    m_cooldownTimers.set(0, m_equippedAbilities.get(0).getCoolDown());
-                    m_stamina -= m_equippedAbilities.get(0).getStaminaCost();
+                if (HUD.hudOutputs.abilityIsUsed[i] && m_stamina > m_equippedAbilities.get(i).getStaminaCost()) {
+                    m_equippedAbilities.get(i).cast(this, HUD.hudOutputs.abilityCastVectors[i]);
+                    m_cooldownTimers.set(i, m_equippedAbilities.get(i).getCoolDown());
+                    m_stamina -= m_equippedAbilities.get(i).getStaminaCost();
                 }
             }
         }
