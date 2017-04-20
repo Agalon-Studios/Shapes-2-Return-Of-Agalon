@@ -56,7 +56,7 @@ class AbilityBook implements Screen {
 
         // creating the button style
         Pixmap pixmap = new Pixmap(100, 100, Pixmap.Format.RGBA8888);
-        pixmap.setColor(Color.GREEN);
+        pixmap.setColor(Color.BLUE);
         pixmap.fill();
 
         skin.add("white", new Texture(pixmap));
@@ -64,10 +64,10 @@ class AbilityBook implements Screen {
         skin.add("default", bfont);
 
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
-        textButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
-        textButtonStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
+        textButtonStyle.up = skin.newDrawable("white", Color.WHITE);
+        textButtonStyle.down = skin.newDrawable("white", Color.LIGHT_GRAY);
         textButtonStyle.checked = skin.newDrawable("white", Color.BLUE);
-        textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
+        textButtonStyle.over = skin.newDrawable("white", Color.DARK_GRAY);
 
         textButtonStyle.font = skin.getFont("default");
 
@@ -114,22 +114,22 @@ class AbilityBook implements Screen {
             }
         }
         // creating the button style
-        Pixmap abilityPixmap = new Pixmap(50, 50, Pixmap.Format.RGBA8888);
+        Pixmap abilityPixmap = new Pixmap(100, 100, Pixmap.Format.RGBA8888);
         abilityPixmap.setColor(Color.RED);
         abilityPixmap.fill();
+        Skin abilitySkin = new Skin();
+        abilitySkin.add("white", new Texture(abilityPixmap));
 
-        skin.add("white", new Texture(abilityPixmap));
-
-        skin.add("default", bfont);
+        abilitySkin.add("default", bfont);
 
         final TextButton.TextButtonStyle abilityButtonStyle = new TextButton.TextButtonStyle();
-        abilityButtonStyle.up = skin.newDrawable("white", Color.ORANGE);
-        abilityButtonStyle.down = skin.newDrawable("white", Color.WHITE);
-        abilityButtonStyle.checked = skin.newDrawable("white", Color.CORAL);
-        abilityButtonStyle.over = skin.newDrawable("white", Color.LIME);
+        abilityButtonStyle.up = abilitySkin.newDrawable("white", Color.ORANGE);
+        abilityButtonStyle.down = abilitySkin.newDrawable("white", Color.WHITE);
+        abilityButtonStyle.checked = abilitySkin.newDrawable("white", Color.CORAL);
+        abilityButtonStyle.over = abilitySkin.newDrawable("white", Color.LIME);
 
-        abilityButtonStyle.font = skin.getFont("default");
-        skin.add("default", abilityButtonStyle);
+        abilityButtonStyle.font = abilitySkin.getFont("default");
+        abilitySkin.add("default", abilityButtonStyle);
 
         // adding the ability button
         int numAbilities = abilityNames.length;
