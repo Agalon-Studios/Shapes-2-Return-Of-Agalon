@@ -23,8 +23,6 @@ import com.badlogic.gdx.utils.Array;
 
 import java.util.ArrayList;
 
-import static com.badlogic.gdx.Input.Keys.J;
-import static com.badlogic.gdx.Input.Keys.M;
 import static javax.swing.UIManager.get;
 
 /**
@@ -37,19 +35,14 @@ class AbilityBook implements Screen {
     private Array<TextButton> m_abilityButtons;
     private static final String[] abilityNames = {
             "Strike", "Cleave", "Snipe", "Flame Burst",
-            "Ice Arrow", "Heal"
+            "Ice Arrow", "a"
     };
 
     private Stage m_stage;
     private Label m_equippedLabel;
     private Label m_bookLabel;
     private Array<Ability> equippedAbilities;
-    private Array<Target> targets;
-    private Array<Source> sources;
-    private Array<Payload> payloads;
 
-    private final int[] targetPosX = {250, 250, 250, 250};
-    private final int[] targetPosY = {600, 500, 400, 300};
     public AbilityBook(final Agalon a){
         m_stage = new Stage();
         Gdx.input.setInputProcessor(m_stage);
@@ -57,9 +50,6 @@ class AbilityBook implements Screen {
 
         equippedAbilities = new Array<Ability>(4);
 
-        sources = new Array<Source>();
-        payloads = new Array<Payload>();
-        targets = new Array<Target>();
 
         Skin skin = new Skin();
 
@@ -146,7 +136,6 @@ class AbilityBook implements Screen {
 
         for (int i = 0; i < numAbilities; i++) {
             TextButton abilityButton = new TextButton(abilityNames[i], abilityButtonStyle);
-            abilityButton.setName(abilityNames[i]);
             abilityButton.setPosition(startingPos[i * 2], startingPos[i * 2 + 1]);
             m_stage.addActor(abilityButton);
             m_abilityButtons.add(abilityButton);
@@ -159,118 +148,129 @@ class AbilityBook implements Screen {
         // add targets for equipped abilities
         Skin emptySkin = new Skin();
         emptySkin.add("targetBox", new Texture("targetBox.png"));
-
+        final Image targetBox1 = new Image(emptySkin, "targetBox");
+        targetBox1.setPosition(250,600);
+        m_stage.addActor(targetBox1);
+        final Image targetBox2 = new Image(emptySkin, "targetBox");
+        targetBox2.setPosition(250,500);
+        m_stage.addActor(targetBox2);
+        final Image targetBox3 = new Image(emptySkin, "targetBox");
+        targetBox3.setPosition(250,400);
+        m_stage.addActor(targetBox3);
+        final Image targetBox4 = new Image(emptySkin, "targetBox");
+        targetBox4.setPosition(250,300);
+        m_stage.addActor(targetBox4);
 
         // Make Button Drag/Drop-able
-        final DragAndDrop dragAndDrop = new DragAndDrop();
+        DragAndDrop dragAndDrop = new DragAndDrop();
 
         for (int i = 0; i < m_abilityButtons.size; i++) {
             final int j = i;
-
-            Source temp = new Source(m_abilityButtons.get(i)){
+            dragAndDrop.addSource(new Source(m_abilityButtons.get(i)){
                 public Payload dragStart (InputEvent event, float x, float y, int pointer) {
                     Payload payload = new Payload();
                     // create copy of actor
-                    TextButton copy_abilityButton  = new TextButton(abilityNames[j] ,abilityButtonStyle);
-                    copy_abilityButton.setName(abilityNames[j]);
-                    payload.setDragActor(copy_abilityButton);
+                    TextButton copy_abilityButton1  = new TextButton(abilityNames[j] ,abilityButtonStyle);
+                    copy_abilityButton1.setName(abilityNames[j]);
+                    payload.setDragActor(copy_abilityButton1);
                     return payload;
                 }
-            };
-
-            payloads.add(temp.dragStart(null, 0, 0, 0));
-            sources.add(temp);
-
-            dragAndDrop.addSource(temp);
-        }
-
-
-        for (int i = 0; i < 4; i++) {
-            final Image targetBox = new Image(emptySkin, "targetBox");
-            targetBox.setPosition(targetPosX[i], targetPosY[i]);
-            m_stage.addActor(targetBox);
-            targets.add(new Target(targetBox) {
-                public boolean drag (Source source, Payload payload, float x, float y, int pointer) {
-                    return true;
-                }
-
-                public void reset (Source source, Payload payload) {
-                    // called when payload is no longer over the target (by drop or move)
-                }
-
-                public void drop (Source source, Payload payload, float x, float y, int pointer) {
-                    // called when payload is dropped on target
-                    // replace TargetBox with ability button
-                    payload.getDragActor().setPosition(targetBox.getX(),targetBox.getY());
-                    m_stage.addActor(payload.getDragActor());
-                    for (int i = 0; i < abilityNames.length; i++) {
-                        if (payload.getDragActor() != null &&
-                                payload.getDragActor().getName().equals(abilityNames[i]))
-                            equippedAbilities.set(0, new Ability(Ability.AbilityType.values()[i]));
-                    }
-
-                }
             });
-            dragAndDrop.addTarget(targets.get(i));
         }
 
-        Array<Ability> playerAbilities = a.getPlayer().getEquippedAbilities();
 
-        for (int i = 0; i < playerAbilities.size; i++) {
-            String temp = abilityNames[getAbilityNumber(playerAbilities.get(i).getAbilityType())];
-
-            for (int j = 0; j < m_abilityButtons.size; j++) {
-                if (temp.equals(m_abilityButtons.get(j).getName())) {
-                    targets.get(i).drop(sources.get(i), payloads.get(i), targetPosX[i], targetPosY[i], 0);
-
-                }
-                System.out.println(targetPosX[i] + " " + targetPosY[i]);
+        dragAndDrop.addTarget(new Target(targetBox1) {
+            public boolean drag (Source source, Payload payload, float x, float y, int pointer) {
+                return true;
             }
-        }
 
+            public void reset (Source source, Payload payload) {
+                // called when payload is no longer over the target (by drop or move)
+            }
+
+            public void drop (Source source, Payload payload, float x, float y, int pointer) {
+                // called when payload is dropped on target
+                // replace TargetBox with ability button
+                payload.getDragActor().setPosition(targetBox1.getX(),targetBox1.getY());
+                m_stage.addActor(payload.getDragActor());
+                for (int i = 0; i < abilityNames.length; i++) {
+                    if (payload.getDragActor() != null &&
+                            payload.getDragActor().getName().equals(abilityNames[i]))
+                        equippedAbilities.set(0, new Ability(Ability.AbilityType.values()[i]));
+                }
+
+            }
+        });
+        dragAndDrop.addTarget(new Target(targetBox2) {
+            public boolean drag (Source source, Payload payload, float x, float y, int pointer) {
+                return true;
+            }
+
+            public void reset (Source source, Payload payload) {
+                // called when payload is no longer over the target (by drop or move)
+            }
+
+            public void drop (Source source, Payload payload, float x, float y, int pointer) {
+                // called when payload is dropped on target
+                // replace TargetBox with ability button
+                payload.getDragActor().setPosition(targetBox2.getX(),targetBox2.getY());
+                m_stage.addActor(payload.getDragActor());
+
+                for (int i = 0; i < abilityNames.length; i++) {
+                    if (payload.getDragActor() != null &&
+                            payload.getDragActor().getName().equals(abilityNames[i]))
+                        equippedAbilities.set(1, new Ability(Ability.AbilityType.values()[i]));
+                }
+            }
+        });
+        dragAndDrop.addTarget(new Target(targetBox3) {
+            public boolean drag (Source source, Payload payload, float x, float y, int pointer) {
+                return true;
+            }
+
+            public void reset (Source source, Payload payload) {
+                // called when payload is no longer over the target (by drop or move)
+            }
+
+            public void drop (Source source, Payload payload, float x, float y, int pointer) {
+                // called when payload is dropped on target
+                // replace TargetBox with ability button
+                payload.getDragActor().setPosition(targetBox3.getX(),targetBox3.getY());
+                m_stage.addActor(payload.getDragActor());
+                for (int i = 0; i < abilityNames.length; i++) {
+                    if (payload.getDragActor() != null &&
+                            payload.getDragActor().getName().equals(abilityNames[i]))
+                        equippedAbilities.set(2, new Ability(Ability.AbilityType.values()[i]));
+                }
+            }
+        });
+        dragAndDrop.addTarget(new Target(targetBox4) {
+            public boolean drag (Source source, Payload payload, float x, float y, int pointer) {
+                return true;
+            }
+
+            public void reset (Source source, Payload payload) {
+                // called when payload is no longer over the target (by drop or move)
+            }
+
+            public void drop (Source source, Payload payload, float x, float y, int pointer) {
+                // called when payload is dropped on target
+                // replace TargetBox with ability button
+                payload.getDragActor().setPosition(targetBox4.getX(),targetBox4.getY());
+                m_stage.addActor(payload.getDragActor());
+
+                for (int i = 0; i < abilityNames.length; i++) {
+                    if (payload.getDragActor() != null &&
+                            payload.getDragActor().getName().equals(abilityNames[i]))
+                        equippedAbilities.set(3, new Ability(Ability.AbilityType.values()[i]));
+                }
+            }
+        });
     }
     // Can't remove abilities because copy of ability isn't set as a drag source
     @Override
     public void show(){
 
-    }
-
-    public static int getAbilityNumber(Ability.AbilityType abilityType) {
-        switch(abilityType) {
-            case STRIKE:
-                return 0;
-            case CLEAVE:
-                return 1;
-            case SNIPE:
-                return 2;
-            case FLAME_BURST:
-                return 3;
-            case ICE_ARROW:
-                return 4;
-            case HEAL:
-                return 5;
-            default:
-                return 6;
-        }
-    }
-
-    public static Ability.AbilityType getAbilityTypefromNum(int i) {
-        switch(i) {
-            case 0:
-                return Ability.AbilityType.STRIKE;
-            case 1:
-                return Ability.AbilityType.CLEAVE;
-            case 2:
-                return Ability.AbilityType.SNIPE;
-            case 3:
-                return Ability.AbilityType.FLAME_BURST;
-            case 4:
-                return Ability.AbilityType.ICE_ARROW;
-            case 5:
-                return Ability.AbilityType.HEAL;
-            default:
-                return Ability.AbilityType.HEAL;
-        }
     }
     @Override
     public void render(float delta){
