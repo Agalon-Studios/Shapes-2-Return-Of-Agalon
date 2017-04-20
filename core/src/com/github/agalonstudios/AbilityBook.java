@@ -182,6 +182,7 @@ class AbilityBook implements Screen {
                     TextButton copy_abilityButton1  = new TextButton(abilityNames[j] ,abilityButtonStyle);
                     copy_abilityButton1.setName(abilityNames[j]);
                     payload.setDragActor(copy_abilityButton1);
+                    m_abilityButtons.get(j).toBack();
                     return payload;
                 }
             });
