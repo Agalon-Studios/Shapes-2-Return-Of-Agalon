@@ -35,7 +35,7 @@ class AbilityBook implements Screen {
     private Array<TextButton> m_abilityButtons;
     private static final String[] abilityNames = {
             "Strike", "Cleave", "Snipe", "Flame Burst",
-            "Ice Arrow", "a"
+            "Ice Arrow", "Heal"
     };
 
     private Stage m_stage;

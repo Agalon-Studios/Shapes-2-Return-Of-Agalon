@@ -51,8 +51,8 @@ public class EffectArea {
         m_position.set(x, y);
     }
 
-    public void setCharacterRef(Character c) {
-        this.m_characterRef = c;
+    public float getRadius() {
+        return m_radius;
     }
 
     public void update(float delta) {
