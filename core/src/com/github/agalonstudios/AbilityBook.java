@@ -42,6 +42,7 @@ class AbilityBook implements Screen {
     private Label m_equippedLabel;
     private Label m_bookLabel;
     private Array<Ability> equippedAbilities;
+    private Array<Image> m_targetBoxes;
 
     public AbilityBook(final Agalon a){
         m_stage = new Stage();
@@ -145,21 +146,29 @@ class AbilityBook implements Screen {
         // Add already equipped abilites
         equippedAbilities = a.getPlayer().getEquippedAbilities();
 
-        // add targets for equipped abilities
+
+        // make targetbox skin
         Skin emptySkin = new Skin();
         emptySkin.add("targetBox", new Texture("targetBox.png"));
-        final Image targetBox1 = new Image(emptySkin, "targetBox");
-        targetBox1.setPosition(250,600);
-        m_stage.addActor(targetBox1);
-        final Image targetBox2 = new Image(emptySkin, "targetBox");
-        targetBox2.setPosition(250,500);
-        m_stage.addActor(targetBox2);
-        final Image targetBox3 = new Image(emptySkin, "targetBox");
-        targetBox3.setPosition(250,400);
-        m_stage.addActor(targetBox3);
-        final Image targetBox4 = new Image(emptySkin, "targetBox");
-        targetBox4.setPosition(250,300);
-        m_stage.addActor(targetBox4);
+        m_targetBoxes = new Array<Image>(numAbilities+4);
+
+        // add targets for equipped abilities
+        for(int i = 0; i < 4; i++) {
+            final Image targetBox = new Image(emptySkin, "targetBox");
+            targetBox.setPosition(250, 600-(i*100));
+            m_stage.addActor(targetBox);
+            m_targetBoxes.add(targetBox);
+            m_targetBoxes.get(i).toBack();
+        }
+
+        // adding targets for available abilities
+        for(int i = 0; i < numAbilities; i++){
+            final Image targetBox = new Image(emptySkin, "targetBox");
+            targetBox.setPosition(startingPos[i * 2], startingPos[i * 2 + 1]);
+            m_stage.addActor(targetBox);
+            m_targetBoxes.add(targetBox);
+            m_targetBoxes.get(i+4).toBack();
+        }
 
         // Make Button Drag/Drop-able
         DragAndDrop dragAndDrop = new DragAndDrop();
@@ -178,96 +187,59 @@ class AbilityBook implements Screen {
             });
         }
 
-
-        dragAndDrop.addTarget(new Target(targetBox1) {
-            public boolean drag (Source source, Payload payload, float x, float y, int pointer) {
-                return true;
-            }
-
-            public void reset (Source source, Payload payload) {
-                // called when payload is no longer over the target (by drop or move)
-            }
-
-            public void drop (Source source, Payload payload, float x, float y, int pointer) {
-                // called when payload is dropped on target
-                // replace TargetBox with ability button
-                payload.getDragActor().setPosition(targetBox1.getX(),targetBox1.getY());
-                m_stage.addActor(payload.getDragActor());
-                for (int i = 0; i < abilityNames.length; i++) {
-                    if (payload.getDragActor() != null &&
-                            payload.getDragActor().getName().equals(abilityNames[i]))
-                        equippedAbilities.set(0, new Ability(Ability.AbilityType.values()[i]));
+        // indicate targets for equipped abilities
+        for (int i = 0; i < 4; i++) {
+            final int j = i;
+            dragAndDrop.addTarget(new Target(m_targetBoxes.get(i)){
+                public boolean drag (Source source, Payload payload, float x, float y, int pointer) {
+                    return true;
                 }
 
-            }
-        });
-        dragAndDrop.addTarget(new Target(targetBox2) {
-            public boolean drag (Source source, Payload payload, float x, float y, int pointer) {
-                return true;
-            }
-
-            public void reset (Source source, Payload payload) {
-                // called when payload is no longer over the target (by drop or move)
-            }
-
-            public void drop (Source source, Payload payload, float x, float y, int pointer) {
-                // called when payload is dropped on target
-                // replace TargetBox with ability button
-                payload.getDragActor().setPosition(targetBox2.getX(),targetBox2.getY());
-                m_stage.addActor(payload.getDragActor());
-
-                for (int i = 0; i < abilityNames.length; i++) {
-                    if (payload.getDragActor() != null &&
-                            payload.getDragActor().getName().equals(abilityNames[i]))
-                        equippedAbilities.set(1, new Ability(Ability.AbilityType.values()[i]));
+                public void reset (Source source, Payload payload) {
+                    // called when payload is no longer over the target (by drop or move)
                 }
-            }
-        });
-        dragAndDrop.addTarget(new Target(targetBox3) {
-            public boolean drag (Source source, Payload payload, float x, float y, int pointer) {
-                return true;
-            }
 
-            public void reset (Source source, Payload payload) {
-                // called when payload is no longer over the target (by drop or move)
-            }
+                public void drop (Source source, Payload payload, float x, float y, int pointer) {
+                    // called when payload is dropped on target
+                    // move ability to box
+                        source.getActor().setPosition(m_targetBoxes.get(j).getX(),m_targetBoxes.get(j).getY());
+                        m_stage.addActor(source.getActor());
+                        source.getActor().toFront();
 
-            public void drop (Source source, Payload payload, float x, float y, int pointer) {
-                // called when payload is dropped on target
-                // replace TargetBox with ability button
-                payload.getDragActor().setPosition(targetBox3.getX(),targetBox3.getY());
-                m_stage.addActor(payload.getDragActor());
-                for (int i = 0; i < abilityNames.length; i++) {
-                    if (payload.getDragActor() != null &&
-                            payload.getDragActor().getName().equals(abilityNames[i]))
-                        equippedAbilities.set(2, new Ability(Ability.AbilityType.values()[i]));
+                    // add ability to equipped ability list
+                        for (int k = 0; k < abilityNames.length; k++) {
+                            if (payload.getDragActor() != null &&
+                                    payload.getDragActor().getName().equals(abilityNames[k]))
+                                equippedAbilities.set(j, new Ability(Ability.AbilityType.values()[k]));
+                        }
                 }
-            }
-        });
-        dragAndDrop.addTarget(new Target(targetBox4) {
-            public boolean drag (Source source, Payload payload, float x, float y, int pointer) {
-                return true;
-            }
-
-            public void reset (Source source, Payload payload) {
-                // called when payload is no longer over the target (by drop or move)
-            }
-
-            public void drop (Source source, Payload payload, float x, float y, int pointer) {
-                // called when payload is dropped on target
-                // replace TargetBox with ability button
-                payload.getDragActor().setPosition(targetBox4.getX(),targetBox4.getY());
-                m_stage.addActor(payload.getDragActor());
-
-                for (int i = 0; i < abilityNames.length; i++) {
-                    if (payload.getDragActor() != null &&
-                            payload.getDragActor().getName().equals(abilityNames[i]))
-                        equippedAbilities.set(3, new Ability(Ability.AbilityType.values()[i]));
+            });
+        }
+        // indicate targets for available abilities
+        for (int i = 4; i < m_abilityButtons.size+4; i++) {
+            final int j = i;
+            dragAndDrop.addTarget(new Target(m_targetBoxes.get(i)){
+                public boolean drag (Source source, Payload payload, float x, float y, int pointer) {
+                    return true;
                 }
-            }
-        });
+
+                public void reset (Source source, Payload payload) {
+                    // called when payload is no longer over the target (by drop or move)
+                }
+
+                public void drop (Source source, Payload payload, float x, float y, int pointer) {
+                    // called when payload is dropped on target
+                    // move ability to box
+                        source.getActor().setPosition(m_targetBoxes.get(j).getX(),m_targetBoxes.get(j).getY());
+                        m_stage.addActor(source.getActor());
+                        source.getActor().toFront();
+
+                       //remove ability based on where source came from, only if source is in equipped pos
+                }
+            });
+        }
     }
-    // Can't remove abilities because copy of ability isn't set as a drag source
+    // TODO: add info when ability button is pressed and remove abilities when dragged to right side
     @Override
     public void show(){
 
