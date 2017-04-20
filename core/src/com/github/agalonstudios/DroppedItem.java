@@ -78,6 +78,7 @@ public class DroppedItem extends Entity
 
 
         ((Agalon) Gdx.app.getApplicationListener()).getBatch().begin();
+        ((Agalon) Gdx.app.getApplicationListener()).getFont().setColor(1, 1, 1, 1);
         ((Agalon) Gdx.app.getApplicationListener()).getFont().draw(((Agalon) (Gdx.app.getApplicationListener())).getBatch(),
                 m_isGold ? "" + m_goldAmount + " Gold" : item.getName(),
                 m_shape.getX() - 10 - camera.position.x, m_shape.getY() - 10 - camera.position.y);
