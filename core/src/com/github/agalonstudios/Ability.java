@@ -46,9 +46,9 @@ public class Ability {
                 m_type = Type.DROP_AREA_OF_EFFECT;
                 m_cooldown = 5f;
                 m_maxCastDistance = 800;
-                m_effectArea = new EffectArea(new Stats(1, 0, 0, 0, 0, 0, 0, 0), 5, 2, 300, a);
+                m_effectArea = new EffectArea(new Stats(1, 0, 0, 0, 0, 0, 0, 0), 5 , 2, new Vector2(), 300, a);
                 m_effect = null;
-                m_initialEffect = new EffectArea(new Stats(10, 0, 0, 0, 0, 0, 50, 0), 0, 0, 300, a);
+                m_initialEffect = new EffectArea(new Stats(10, 0, 0, 0, 0, 0, 50, 0), 0, 0, new Vector2(), 300, a);
                 m_staminaCost = 30;
 
                 break;
@@ -79,26 +79,25 @@ public class Ability {
                 abilityVector.x = casterRef.getCentroidX() + getRange() * abilityVector.x;
                 abilityVector.y = casterRef.getCentroidY() + getRange() * abilityVector.y;
 
-                EffectArea copyEffectArea = copyEffectArea();
-                EffectArea copyInitialEffect = copyInitialEffect();
+                EffectArea copyEffectArea = copyEffectArea(abilityVector);
+                EffectArea copyInitialEffect = copyInitialEffect(abilityVector);
 
                 copyEffectArea.setPosition(abilityVector.x, abilityVector.y);
                 copyInitialEffect.setPosition(abilityVector.x, abilityVector.y);
-                System.out.println(copyEffectArea.getPosition().toString());
-                worldRef.addEffectOverTime(copyEffectArea());
-                worldRef.addEffectOverTime(copyInitialEffect());
+                worldRef.addEffectOverTime(copyEffectArea);
+                worldRef.addEffectOverTime(copyInitialEffect);
                 break;
         }
     }
 
-    private EffectArea copyInitialEffect() {
+    private EffectArea copyInitialEffect(Vector2 abilityVector) {
         return new EffectArea(m_initialEffect.getStats(), m_initialEffect.getCount(),
-                m_initialEffect.getDuration(), m_initialEffect.getRadius(), getAbilityType());
+                m_initialEffect.getDuration(), abilityVector, m_initialEffect.getRadius(), getAbilityType());
     }
 
-    private EffectArea copyEffectArea() {
+    private EffectArea copyEffectArea(Vector2 abilityVector) {
         return new EffectArea(m_effectArea.getStats(), m_effectArea.getCount(),
-                m_effectArea.getDuration(), m_effectArea.getRadius(), getAbilityType());
+                m_effectArea.getDuration(), abilityVector, m_effectArea.getRadius(), getAbilityType());
     }
 
     public Type getType() {

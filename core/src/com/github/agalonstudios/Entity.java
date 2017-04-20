@@ -37,6 +37,7 @@ public abstract class Entity {
         m_centroid.y += y;
     }
 
+
     public Entity(float radius, Vector2 position, Shape shape) {
         m_fixed = true;
         int numSides = 0;
@@ -55,7 +56,7 @@ public abstract class Entity {
                 break;
             case CIRCLE:
                 //TODO make this work
-                numSides = 4;
+                numSides = 16;
                 break;
             case OCTAGON:
                 numSides = 8;
@@ -156,6 +157,10 @@ public abstract class Entity {
     public boolean overlaps(Entity e) {
         return Intersector.overlapConvexPolygons(this.getShape(), e.getShape());
         //return m_rect.overlaps(e.getRect());
+    }
+
+    public boolean overlaps(EffectArea eot) {
+        return Intersector.overlapConvexPolygons(this.getShape(), eot.getShape());
     }
 
     public Polygon getShape() {
