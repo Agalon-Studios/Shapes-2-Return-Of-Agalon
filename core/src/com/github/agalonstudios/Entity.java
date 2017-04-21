@@ -156,8 +156,12 @@ public abstract class Entity {
 
     public boolean overlaps(Entity e) {
         return Intersector.overlapConvexPolygons(this.getShape(), e.getShape());
+        //return m_rect.overlaps(e.getRect());
     }
 
+    public boolean overlaps(EffectArea eot) {
+        return Intersector.overlapConvexPolygons(this.getShape(), eot.getShape());
+    }
 
     public Polygon getShape() {
         return this.m_shape;

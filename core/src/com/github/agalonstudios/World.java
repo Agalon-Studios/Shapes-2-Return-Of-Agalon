@@ -125,6 +125,7 @@ public abstract class World implements Screen {
 
     protected static void runCollisionsNSquared(Array<? extends Entity> ... entityLists) {
         for (Array<? extends Entity> entityList : entityLists) {
+
             for (Array<? extends Entity> entityList2 : entityLists) {
                     for (int e = 0; e < entityList.size; e++) {
                         for (int o = 0; o < entityList2.size; o++) {
@@ -132,8 +133,10 @@ public abstract class World implements Screen {
                             Entity e1 = entityList.get(e);
                             Entity e2 = entityList2.get(o);
                             if (e1.isFixed() && e2.isFixed()) continue;
-                            if (e1.overlaps(e2))
+                            if (e1.overlaps(e2)) {
+                                if (e1 instanceof EffectArea) System.out.println("woo");
                                 e1.runCollision(e2);
+                            }
                         }
                     }
                 }

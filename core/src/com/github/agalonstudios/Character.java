@@ -7,7 +7,7 @@ import com.badlogic.gdx.utils.Array;
  * Created by spr on 3/12/17.
  */
 public abstract class Character extends Entity {
-    protected int m_health;
+    protected float m_health;
     protected int m_maxHealth;
     protected float m_maxSpeed;
     protected float m_currentMaxSpeed;
@@ -73,6 +73,8 @@ public abstract class Character extends Entity {
     public void update(float delta, World world) {
         updateCooldowns(delta);
 
+
+
         m_velocity.x += m_acceleration.x * delta * m_Stats.speedChange;
         m_velocity.y += m_acceleration.y * delta * m_Stats.speedChange;
 
@@ -81,6 +83,7 @@ public abstract class Character extends Entity {
 
         bindVelocity();
 
+        m_health += .1;
         if (m_health > m_maxHealth)
             m_health = m_maxHealth;
 
@@ -118,6 +121,7 @@ public abstract class Character extends Entity {
 
     @Override
     public void runCollision(Entity other) {
+        if (other instanceof EffectArea) return;
         float xmove, ymove;
         xmove = this.getCentroidX() - other.getCentroidX();
         ymove = this.getCentroidY() - other.getCentroidY();

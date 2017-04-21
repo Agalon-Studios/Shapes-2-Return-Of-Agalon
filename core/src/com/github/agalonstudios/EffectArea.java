@@ -2,6 +2,7 @@ package com.github.agalonstudios;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.github.agalonstudios.Ability.AbilityType;
 /**
@@ -18,18 +19,16 @@ public class EffectArea extends Entity {
     private boolean m_isDone;
     private float m_timeTillActive;
     private boolean m_isActive;
+    private boolean isTranslated;
 
     public EffectArea(Stats e, int count, float duration, Vector2 pos, float radius, AbilityType type) {
         super(radius, pos, Shape.CIRCLE);
         m_effect = e;
         m_count = count;
         m_duration = duration;
-
+        this.translate(radius, radius);
         m_radius = radius;
         m_type = type;
-
-
-
     }
 
 
@@ -38,8 +37,14 @@ public class EffectArea extends Entity {
     }
 
     public void update(float delta) {
+        if (!isTranslated) {
+            isTranslated = true;
+           m_shape.translate(-getRadius(), -getRadius());
+        }
         m_currentDuration += delta;
         m_timeTillActive += delta;
+
+
 
         m_isActive = false;
         if (m_timeTillActive >= m_duration / m_count) {
@@ -58,7 +63,7 @@ public class EffectArea extends Entity {
         switch (m_type) {
             case FLAME_BURST:
                 er.setColor(1, 0, 0, 0.5f);
-                er.circle(getX() - c.position.x, getY() - c.position.y, m_radius);
+                er.borderedCircle(getX() + getRadius() - c.position.x, getY() + getRadius() - c.position.y, m_radius, Color.RED);
                 break;
         }
     }
@@ -83,18 +88,6 @@ public class EffectArea extends Entity {
     public void runCollision(Entity e) {
         if (m_isActive && e instanceof Character && e != m_characterRef) {
             ((Character) e).apply(m_effect);
-
-            float xmove, ymove;
-            xmove = e.getCentroidX() - this.getCentroidX();
-            ymove = e.getCentroidY() - this.getCentroidY();
-            float norm = (float) Math.sqrt(xmove * xmove + ymove * ymove);
-            xmove /= norm;
-            ymove /= norm;
-
-            xmove *= m_effect.knockback * m_currentDuration / m_duration;
-            ymove *= m_effect.knockback * m_currentDuration / m_duration;
-
-            e.translate(xmove, ymove);
         }
     }
 

@@ -180,7 +180,7 @@ public class DungeonRoom extends World {
             }
         }
 
-        runCollisions(m_nonPlayerCharacters, m_walls, m_playerRefArray, m_chests, m_castObjects, m_dItems);
+        runCollisions(m_nonPlayerCharacters, m_walls, m_playerRefArray, m_chests, m_castObjects, m_effectsOverTime, m_dItems);
     }
 
     public void movePlayerToDoorAt(int dir) {
