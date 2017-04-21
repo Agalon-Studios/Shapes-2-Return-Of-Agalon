@@ -87,6 +87,7 @@ public abstract class Character extends Entity {
         if (m_health > m_maxHealth)
             m_health = m_maxHealth;
 
+        if (m_health < 0) m_health = 0;
         translate(m_velocity.x * delta, m_velocity.y * delta);
     }
 
@@ -122,6 +123,14 @@ public abstract class Character extends Entity {
     @Override
     public void runCollision(Entity other) {
         if (other instanceof EffectArea) return;
+
+        if (other instanceof Player)
+            if (this instanceof Character)
+            ((Player) other).m_health -= 5;
+        if (this instanceof Player)
+            if (other instanceof Character)
+            m_health -= 5;
+
         float xmove, ymove;
         xmove = this.getCentroidX() - other.getCentroidX();
         ymove = this.getCentroidY() - other.getCentroidY();
