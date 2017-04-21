@@ -158,6 +158,10 @@ public class Player extends Character {
 
     public void runCollision(Entity e)
     {
+        if (e instanceof Character) {
+            m_health -= 3;
+        }
+
         if(e instanceof DroppedItem)
         {
             if (((DroppedItem) e).isGold()) {
