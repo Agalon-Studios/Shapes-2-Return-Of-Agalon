@@ -161,6 +161,7 @@ public class Player extends Character {
                 m_numInInventory++;
                 ((Agalon) Gdx.app.getApplicationListener()).getCurrentWorld().removeItem((DroppedItem) e);
             }
+            return;
         }
         if (e instanceof ShopEntity) {
             ((Agalon) Gdx.app.getApplicationListener()).setScreen(new ShopScreen((Agalon) Gdx.app.getApplicationListener(), (ShopEntity) e));

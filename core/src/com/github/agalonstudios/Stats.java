@@ -26,9 +26,9 @@ public class Stats {
     // a method to use with Item.getInfo
     public String weaponStatsInfo(){
         String info = "";
-        info += "Damage mod: " + String.format("%.2f", damageChange) + ", ";
+        info += "Damage mod: " + String.format("%.2f", damageChange) + "\n";
         info += "Speed mod: " + String.format("%.2f", speedChange) + "\n";
-        info += "Knockback mod: " + String.format("%.2f", knockback) + ", ";
+        info += "Knockback mod: " + String.format("%.2f", knockback) + "\n";
         info += "Defense mod: " + String.format("%.2f", defenseChange);
         return info;
     }
