@@ -342,18 +342,16 @@ public class ShopScreen implements Screen {
         m_sellButton.setPosition((screenWidth*2/4), (screenHeight*4/5));
         m_sellButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
-                if (shop.getShopSize() >= 16 || m_clicked == null)
+                if (m_clicked == null || shop.getShopSize() >= 16)
                     return;
                 m_shopInventory.add(m_playerInventory.get(Integer.parseInt(m_clicked.getName())));
+                a.getPlayer().addGold(m_playerInventory.get(Integer.parseInt(m_clicked.getName())).getWorth());
                 m_playerInventory.removeIndex(Integer.parseInt(m_clicked.getName()));
 
-                a.getPlayer().addGold(m_playerInventory.get(Integer.parseInt(m_clicked.getName())).getWorth());
-                m_goldLabel = new Label("Gold: " + a.getPlayer().getGold(), labelStyle);
                 a.getPlayer().decrementNumInInvy();
                 shop.incrementItemCount();
 
                 a.setScreen(new ShopScreen(a, shop));
-
             }
         });
         m_stage.addActor(m_sellButton);
@@ -364,13 +362,12 @@ public class ShopScreen implements Screen {
         m_buyButton.setPosition(screenWidth*2/4, screenHeight*4/5);
         m_buyButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
-                if (a.getPlayer().getGold() < m_shopInventory.get(Integer.parseInt(m_clicked.getName())).getWorth()
-                        || a.getPlayer().getNumInventory() >= 16 || m_clicked == null)
+                if (m_clicked == null || a.getPlayer().getGold() < m_shopInventory.get(Integer.parseInt(m_clicked.getName())).getWorth()
+                        || a.getPlayer().getNumInventory() >= 16)
                     return;
                 a.getPlayer().loseGold(m_shopInventory.get(Integer.parseInt(m_clicked.getName())).getWorth());
                 m_playerInventory.add(m_shopInventory.get(Integer.parseInt(m_clicked.getName())));
                 m_shopInventory.removeIndex(Integer.parseInt(m_clicked.getName()));
-                m_goldLabel = new Label("Gold: " + a.getPlayer().getGold(), labelStyle);
                 a.getPlayer().incrementNumInInvy();
                 shop.decrementItemCount();
 

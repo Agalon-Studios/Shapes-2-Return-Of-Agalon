@@ -89,5 +89,9 @@ public class Stats {
                             defenseChange + " " + damageChange + " " + knockback + " " + duration);
     }
 
+    public float total() {
+        return  speedChange + defenseChange + damageChange + knockback + duration;
+    }
+
 
 }

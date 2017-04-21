@@ -23,20 +23,25 @@ public class CastObject extends Entity {
         );
     }
 
+    public Character getCaster() {
+        return m_casterRef;
+    }
+
     @Override
     public void runCollision(Entity other) {
         if (!other.equals(m_casterRef)) {
             if (other instanceof Character) {
                 m_isDone = true;
+                System.out.println("t h i s h a p p e n e d");
                 ((Character) other).apply(m_castInfo.effect);
             }
         }
     }
 
     public void update(float delta) {
-        World world = ((World) ((Agalon) Gdx.app.getApplicationListener()).getScreen());
+        World world = ((Agalon) Gdx.app.getApplicationListener()).getCurrentWorld();
 
-
+        this.translate(m_castInfo.speed * delta * m_castInfo.direction.x, m_castInfo.speed * delta * m_castInfo.direction.y);
 
 
         if (m_distanceTraveled >= m_castInfo.maxDistance) m_isDone = true;

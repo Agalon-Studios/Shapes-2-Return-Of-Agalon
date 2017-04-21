@@ -81,9 +81,11 @@ public abstract class World implements Screen {
     public void render(float delta) {
         update(delta);
 
+        ((Agalon) Gdx.app.getApplicationListener()).getShapeRenderer().begin();
         for (CastObject co : m_castObjects) {
             co.render();
         }
+        ((Agalon) Gdx.app.getApplicationListener()).getShapeRenderer().end();
 
         m_shapeRendererRef.begin(ShapeRenderer.ShapeType.Filled);
         m_shapeRendererRef.setColor(137/255.f, 90/255.f, 56/255.f, 1);
@@ -101,10 +103,6 @@ public abstract class World implements Screen {
 
         for (EffectArea e : m_effectsOverTime) {
             e.render();
-        }
-
-        for (CastObject o : m_castObjects) {
-            o.render();
         }
 
         for (DroppedItem di : m_dItems) {
@@ -141,8 +139,6 @@ public abstract class World implements Screen {
                     }
                 }
         }
-
-
     }
 
 //    protected static void runColliionsQuadTree(Array<? extends Entity> ... entityLists) {

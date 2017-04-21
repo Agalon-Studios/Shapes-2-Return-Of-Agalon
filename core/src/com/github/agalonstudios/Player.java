@@ -63,16 +63,17 @@ public class Player extends Character {
         m_inventory = new Array<Item>(16);
         m_numInInventory = 0;
 
-        for(int i = 0; i < 8; i++){
-            m_inventory.add(Item.generateWeapon());
-            System.out.println(m_inventory.get(i).getName());
-            m_numInInventory++;
-        }
-        for(int i = 8; i < 16; i++){
+        m_inventory.add(Item.generateWeapon());
+        m_numInInventory++;
+        m_inventory.add(Item.generateConsumable());
+        m_inventory.add(Item.generateConsumable());
+        m_numInInventory += 2;
+
+        for (int i = 0; i < 9; i++) {
             m_inventory.add(Item.generateConsumable());
-            System.out.println(m_inventory.get(i).getName());
             m_numInInventory++;
         }
+
         System.out.println();
         m_equipped = null;
 
@@ -102,7 +103,7 @@ public class Player extends Character {
         for(int i = 3; i < 7; i++){
                 if(m_statCooldowns[i][0] > 0){
                     if(m_statCooldowns[i][1]-delta <= 0){
-                        m_Stats.deModStat(i, m_statCooldowns[i][1]);
+                        m_Stats.deModStat(i, m_statCooldowns[i][0]);
                         m_statCooldowns[i][0] = 0;
                         m_statCooldowns[i][1] = 0;
                     }
@@ -118,9 +119,8 @@ public class Player extends Character {
     private void handleCasting() {
         for (int i = 0; i < m_equippedAbilities.size; i++) {
             if (m_cooldownTimers.get(i) <= 0) {
-                if (HUD.hudOutputs.abilityIsUsed[i] && m_stamina >= m_equippedAbilities.get(i).getStaminaCost()) {
+                if (HUD.hudOutputs.abilityIsUsed[i] && m_stamina > m_equippedAbilities.get(i).getStaminaCost()) {
                     m_equippedAbilities.get(i).cast(this, HUD.hudOutputs.abilityCastVectors[i]);
-                    System.out.println(i);
                     m_cooldownTimers.set(i, m_equippedAbilities.get(i).getCoolDown());
                     m_stamina -= m_equippedAbilities.get(i).getStaminaCost();
                     HUD.hudOutputs.abilityIsUsed[i] = false;
@@ -158,10 +158,18 @@ public class Player extends Character {
 
     public void runCollision(Entity e)
     {
+<<<<<<< HEAD
         if (e instanceof Character) {
             m_health -= 3;
         }
 
+=======
+        if (e instanceof CastObject) {
+            if (((CastObject) e).getCaster() == this) {
+                return;
+            }
+        }
+>>>>>>> abf62f48cb92042c6074a64497760118ea9f8283
         if(e instanceof DroppedItem)
         {
             if (((DroppedItem) e).isGold()) {
