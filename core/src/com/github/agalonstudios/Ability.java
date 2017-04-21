@@ -65,8 +65,12 @@ public class Ability {
                 break;
             case ICE_ARROW:
                 m_type = Type.PROJECTILE_AREA_OF_EFFECT;
-                m_projectileSpeed = 20.f;
-
+                m_maxCastDistance = 600;
+                m_projectileSpeed = 40.f;
+                m_effect = new Stats(0, 30, 0, -.6f, 0, 0, 0, 8);
+                m_effectArea = new EffectArea(new Stats(10, 0, 0, 0, 0, 0, 0, 0), 5 , 2, new Vector2(), 150, a);
+                m_initialEffect = null;
+                m_staminaCost = 40;
                 break;
             case STRIKE:
                 m_type = Type.SELF_AREA_OF_EFFECT;
@@ -105,10 +109,10 @@ public class Ability {
                         new Rectangle(casterRef.getCentroidX(), casterRef.getCentroidY(), 5, 5), null, null, m_effect, new Vector2(abilityVector))));
                 break;
             case PROJECTILE_AREA_OF_EFFECT:
-//                worldRef.addCastObject(new CastObject(casterRef, new CastInfo(m_projectileSpeed, m_maxCastDistance,
-//                        new Rectangle(casterRef.getX(), casterRef.getY(), 5, 5),
-//                        m_effectArea, m_initialEffect,
-//                        m_effect, abilityVector)));
+                worldRef.addCastObject(new CastObject(casterRef, new CastInfo(m_projectileSpeed, m_maxCastDistance,
+                        new Rectangle(casterRef.getCentroidX(), casterRef.getCentroidY(), 20, 20),
+                        m_effectArea, m_initialEffect,
+                        m_effect, new Vector2(abilityVector))));
             default:
                 break;
         }

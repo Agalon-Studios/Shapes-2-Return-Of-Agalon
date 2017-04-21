@@ -3,8 +3,12 @@ package com.github.agalonstudios;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector2;
 import com.github.agalonstudios.Ability.AbilityType;
+
+import static com.badlogic.gdx.Input.Keys.C;
+
 /**
  * Created by spr on 3/12/17.
  */
@@ -60,12 +64,21 @@ public class EffectArea extends Entity {
         Camera c = ((Agalon) Gdx.app.getApplicationListener()).getCamera();
         ExtendedShapeRenderer er = ((Agalon) Gdx.app.getApplicationListener()).getShapeRenderer();
 
+       // float alpha = (m_duration -m_currentDuration) / m_duration;
+
+        //Gdx.gl.glEnable(GL20.GL_BLEND);
+        //Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
         switch (m_type) {
             case FLAME_BURST:
-                er.setColor(1, 0, 0, 0.5f);
-                er.borderedCircle(getX() + getRadius() - c.position.x, getY() + getRadius() - c.position.y, m_radius, Color.RED);
+                er.borderedCircle(getX() + getRadius() - c.position.x, getY() + getRadius() - c.position.y, m_radius, new Color(Color.RED.r, Color.RED.g, Color.RED.b, 1));
+                break;
+            case ICE_ARROW:
+                er.borderedCircle(getX() + getRadius() - c.position.x, getY() + getRadius() - c.position.y, m_radius, new Color(Color.CYAN.r, Color.CYAN.g, Color.CYAN.b, 1));
                 break;
         }
+        //Gdx.gl.glDisable(GL20.GL_BLEND);
+
     }
 
     public Stats getStats() {

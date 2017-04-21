@@ -83,7 +83,8 @@ public abstract class Character extends Entity {
 
         bindVelocity();
 
-        m_health += .1;
+        if (!(this instanceof Player))
+            m_health += .1;
         if (m_health > m_maxHealth)
             m_health = m_maxHealth;
 
