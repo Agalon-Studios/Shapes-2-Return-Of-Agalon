@@ -122,6 +122,7 @@ public abstract class Character extends Entity {
 
     @Override
     public void runCollision(Entity other) {
+        if (other instanceof  Player) ((Player) other).m_health -= .5;
         if (other instanceof CastObject) return;
         if (other instanceof EffectArea) return;
         float xmove, ymove;

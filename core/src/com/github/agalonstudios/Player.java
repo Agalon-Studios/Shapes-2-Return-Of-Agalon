@@ -114,6 +114,8 @@ public class Player extends Character {
 
         m_stamina += .2f;
         if (m_stamina > m_maxStamina) m_stamina = m_maxStamina;
+        if (m_health <= 0)
+            ((Agalon) Gdx.app.getApplicationListener()).setScreen(new com.github.agalonstudios.DeathScreen(((Agalon) Gdx.app.getApplicationListener())));
     }
 
     private void handleCasting() {
