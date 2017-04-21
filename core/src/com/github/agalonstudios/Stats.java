@@ -67,6 +67,7 @@ public class Stats {
     public void deModStat(int stat, float mod){
         switch(stat){
             case(3):
+                System.out.println(speedChange + " " + mod);
                 speedChange = speedChange/mod;
                 break;
             case(4):
