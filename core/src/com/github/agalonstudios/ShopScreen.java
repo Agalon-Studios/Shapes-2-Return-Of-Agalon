@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
+import com.sun.org.apache.xalan.internal.xsltc.util.IntegerArray;
 
 /**
  * Created by mahzain on 4/20/17.
@@ -35,7 +36,7 @@ public class ShopScreen implements Screen {
     private int m_shopItemCount;
     private int m_inventoryItemCount;
     private Button m_clicked;
-    private ShopEntity m_shop;
+    private Label m_goldLabel;
 
     public ShopScreen(final Agalon a, final ShopEntity shop)
     {
@@ -126,6 +127,9 @@ public class ShopScreen implements Screen {
             m_shopArr.add(new Array<Button>(4));
             m_inventoryArr.add(new Array<Button>(4));
         }
+
+
+
         BitmapFont bfont = new BitmapFont();
         final Label.LabelStyle labelStyle = new Label.LabelStyle(bfont, Color.WHITE);
         m_nameLabel = new Label("Item Name", labelStyle);
@@ -204,11 +208,17 @@ public class ShopScreen implements Screen {
                         m_nameLabel.setText(m_playerInventory.get(Integer.parseInt(m_clicked.getName())).getInfo(m_playerInventory.get(Integer.parseInt(m_clicked.getName()))));
                         //System.out.println(m_clicked.getName());
                         //System.out.println(m_nameLabel.toString());
+                        m_buyButton.toBack();
+                        m_sellButton.toFront();
                     }
                 });
             }
         }
         int rowShop, colShop;
+
+        m_goldLabel = new Label("Gold: " + a.getPlayer().getGold(), labelStyle);
+        m_goldLabel.setPosition(0, screenHeight * 4/5);
+        m_stage.addActor(m_goldLabel);
 
         System.out.println(m_shopItemCount);
         if(m_shopItemCount % 4 == 0)
@@ -283,6 +293,8 @@ public class ShopScreen implements Screen {
                         m_nameLabel.setText(m_shopInventory.get(Integer.parseInt(m_clicked.getName())).getInfo(m_shopInventory.get(Integer.parseInt(m_clicked.getName()))));
                         //System.out.println(m_clicked.getName());
                         //System.out.println(m_nameLabel.toString());
+                        m_sellButton.toBack();
+                        m_buyButton.toFront();
                     }
                 });
             }
@@ -325,28 +337,52 @@ public class ShopScreen implements Screen {
         textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
 
         textButtonStyle.font = skin.getFont("default");
-        TextButton m_buyButton = new TextButton("Buy", textButtonStyle);
-        m_buyButton.setHeight(screenHeight / 5);
-        m_buyButton.setWidth(screenWidth / 4);
-        m_buyButton.setPosition((screenWidth*2/4), (screenHeight*4/5));
-        m_stage.addActor(m_buyButton);
 
-        m_buyButton.addListener(new ChangeListener() {
-            public void changed (ChangeEvent event, Actor actor) {
-
-            }
-        });
-        TextButton m_sellButton = new TextButton("Sell", textButtonStyle);
+        m_sellButton = new TextButton("Sell", textButtonStyle);
         m_sellButton.setHeight(screenHeight / 5);
         m_sellButton.setWidth(screenWidth / 4);
         m_sellButton.setPosition((screenWidth*2/4), (screenHeight*4/5));
-        m_stage.addActor(m_sellButton);
-
         m_sellButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
+                if (shop.getShopSize() >= 16)
+                    return;
+                m_shopInventory.add(m_playerInventory.get(Integer.parseInt(m_clicked.getName())));
+                m_playerInventory.removeIndex(Integer.parseInt(m_clicked.getName()));
+
+                a.getPlayer().addGold(m_playerInventory.get(Integer.parseInt(m_clicked.getName())).getWorth());
+                m_goldLabel = new Label("Gold: " + a.getPlayer().getGold(), labelStyle);
+                a.getPlayer().decrementNumInInvy();
+                shop.incrementItemCount();
+
+                a.setScreen(new ShopScreen(a, shop));
 
             }
         });
+        m_stage.addActor(m_sellButton);
+
+        m_buyButton = new TextButton("Buy", textButtonStyle);
+        m_buyButton.setHeight(screenHeight / 5);
+        m_buyButton.setWidth(screenWidth / 4);
+        m_buyButton.setPosition(screenWidth*2/4, screenHeight*4/5);
+        m_buyButton.addListener(new ChangeListener() {
+            public void changed (ChangeEvent event, Actor actor) {
+                if (a.getPlayer().getGold() < m_shopInventory.get(Integer.parseInt(m_clicked.getName())).getWorth()
+                        || a.getPlayer().getNumInventory() >= 16)
+                    return;
+                a.getPlayer().loseGold(m_shopInventory.get(Integer.parseInt(m_clicked.getName())).getWorth());
+                m_playerInventory.add(m_shopInventory.get(Integer.parseInt(m_clicked.getName())));
+                m_shopInventory.removeIndex(Integer.parseInt(m_clicked.getName()));
+                m_goldLabel = new Label("Gold: " + a.getPlayer().getGold(), labelStyle);
+                a.getPlayer().incrementNumInInvy();
+                shop.decrementItemCount();
+
+                a.setScreen(new ShopScreen(a, shop));
+            }
+        });
+
+        m_stage.addActor(m_buyButton);
+
+
 
 
 

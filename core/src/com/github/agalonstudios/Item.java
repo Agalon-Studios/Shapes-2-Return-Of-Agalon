@@ -30,6 +30,7 @@ public class Item {
     private m_consumableType m_theConsumableType;
     private m_weaponType m_theWeaponType;
     private String m_itemName;
+    private int m_worth;
 
     // strings for weapon name generation
     public static final String swordNames[] = {"Sword", "Blade", "Sabre", "Dagger", "Scimitar", "Rapier", "Cutlass", "Broadsword", "Rapier"};
@@ -53,6 +54,8 @@ public class Item {
         Item weapon = new Item();
         weapon.m_type = m_itemType.WEAPON;
         weapon.m_batch = new SpriteBatch();
+
+        weapon.m_worth = 45;
 
         // generate the weapon type
         Random rand = new Random();
@@ -102,6 +105,8 @@ public class Item {
     public static Item generateConsumable() {
         Item consumable = new Item();
         consumable.m_type = m_itemType.CONSUMABLE;
+
+        consumable.m_worth = 32;
 
         // generate consumable type
         Random rand = new Random();
@@ -206,19 +211,22 @@ public class Item {
                     break;
                 case SPEED:
                     info+= "Speed Mod: " +  String.format("%.2f%%", (item.getStats().getSpeedChange() - 1) * 100);
-                    info += "\n" + item.m_playerStats.consumeStatsInfo();
+                    info += ", " + item.m_playerStats.consumeStatsInfo();
                     break;
                 case KNOCK:
                     info+= "Knockback Mod: " +  String.format("%.2f%%", (item.getStats().getKnockback() - 1) * 100);
-                    info += "\n" + item.m_playerStats.consumeStatsInfo();
+                    info += ", " + item.m_playerStats.consumeStatsInfo();
                     break;
                 case ENERGY:
                     info+= "Energy: " +  item.m_energyChange;
                     break;
             }
         }
+        info += "\nValue: " + item.getWorth();
         return info;
     }
+
+    public int getWorth() { return m_worth; }
 
     public int giveHealth(){return m_healthChange;}
     public int giveEnergy(){return m_energyChange;}

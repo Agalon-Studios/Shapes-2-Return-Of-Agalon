@@ -14,14 +14,14 @@ import com.badlogic.gdx.utils.Array;
 
 public class ShopEntity extends Entity {
     private Array<Item> shopInventory;
-    private int itemCount;
+    private int m_itemCount;
     public ShopEntity(Vector2 position)
     {
         super(100, position, Shape.OCTAGON);
         m_color = new Color(236 / 255.f, 207 / 255.f, 116 / 255.f, 1);
         shopInventory = generateShopInventory();
 
-        itemCount = shopInventory.size;
+        m_itemCount = shopInventory.size;
     }
 
     public void runCollision(Entity e)
@@ -53,7 +53,15 @@ public class ShopEntity extends Entity {
     }
     public int getShopSize()
     {
-        return itemCount;
+        return m_itemCount;
+    }
+
+    public void incrementItemCount() {
+        m_itemCount++;
+    }
+
+    public void decrementItemCount() {
+        m_itemCount--;
     }
 
     @Override

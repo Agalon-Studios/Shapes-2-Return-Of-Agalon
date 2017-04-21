@@ -146,6 +146,15 @@ public class Player extends Character {
         //TODO fix this one if needed
     }
 
+    // shut up its fine loooool
+    public void incrementNumInInvy() {
+        m_numInInventory++;
+    }
+
+    public void decrementNumInInvy() {
+        m_numInInventory--;
+    }
+
     public void runCollision(Entity e)
     {
         if(e instanceof DroppedItem)
@@ -176,6 +185,10 @@ public class Player extends Character {
     public int getGold() {
         return m_gold;
     }
+
+    public void addGold(int amt) { m_gold += amt; }
+
+    public void loseGold(int amt) { m_gold -= amt; }
 
     public Array<Item> getInventory(){ return m_inventory;}
     public int getNumInventory(){ return m_numInInventory;}
