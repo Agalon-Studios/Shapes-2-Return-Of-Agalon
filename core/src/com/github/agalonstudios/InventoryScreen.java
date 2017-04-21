@@ -346,13 +346,18 @@ public class InventoryScreen implements Screen {
 
         m_drop.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
-                m_numDroppedItems++;
-                a.getCurrentWorld().addItem(m_inventory.get(Integer.parseInt(m_clicked.getName())),
-                        new Vector2(a.getPlayer().getX() + 120 * MathUtils.cosDeg(m_numDroppedItems * 25),
-                                a.getPlayer().getY() + 120 * MathUtils.sinDeg(m_numDroppedItems * 25)));
-                removeItem(Integer.parseInt(m_clicked.getName()), a);
-                System.out.println(m_numDroppedItems + "----");
-                a.setScreen(new InventoryScreen(a));
+                if(m_clicked == null){
+                    //intentionally left blank
+                }
+                else {
+                    m_numDroppedItems++;
+                    a.getCurrentWorld().addItem(m_inventory.get(Integer.parseInt(m_clicked.getName())),
+                            new Vector2(a.getPlayer().getX() + 120 * MathUtils.cosDeg(m_numDroppedItems * 25),
+                                    a.getPlayer().getY() + 120 * MathUtils.sinDeg(m_numDroppedItems * 25)));
+                    removeItem(Integer.parseInt(m_clicked.getName()), a);
+                    System.out.println(m_numDroppedItems + "----");
+                    a.setScreen(new InventoryScreen(a));
+                }
             }
         });
 
