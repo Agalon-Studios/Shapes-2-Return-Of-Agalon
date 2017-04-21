@@ -15,7 +15,7 @@ public class Enemy3 extends Character {
     private float moveTime;
 
     public Enemy3(float x, float y, int l, EnemySpawnPoint sp) {
-        super(32, new Vector2(x, y), Shape.TRIANGLE, 800, 50, 7, 2);
+        super(64, new Vector2(x, y), Shape.TRIANGLE, 800, 50, 7, 2);
         //m_fixed = false;
         m_spawnPointRef = sp;
         m_directionFacing = MathUtils.random(0, 1);
