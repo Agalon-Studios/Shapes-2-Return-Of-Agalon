@@ -42,8 +42,8 @@ public abstract class World implements Screen {
         m_castObjects = new Array<CastObject>();
         m_effectsOverTime = new Array<EffectArea>();
         m_dItems = new Array<DroppedItem>();
+        m_nonPlayerCharacters = new Array<Character>();
 
-        m_dItems.add(new DroppedItem(Item.generateWeapon(), new Vector2(Gdx.graphics.getWidth() - 10, Gdx.graphics.getHeight() - 10)));
     }
 
     public void spawnNPC(Character character) {
@@ -71,12 +71,19 @@ public abstract class World implements Screen {
             if (m_castObjects.get(i).done())
                 m_castObjects.removeIndex(i--);
         }
+
+        for (int i = 0; i < m_nonPlayerCharacters.size; i++) {
+            m_nonPlayerCharacters.get(i).update(delta, this);
+        }
     }
 
     @Override
     public void render(float delta) {
         update(delta);
 
+        for (CastObject co : m_castObjects) {
+            co.render();
+        }
 
         m_shapeRendererRef.begin(ShapeRenderer.ShapeType.Filled);
         m_shapeRendererRef.setColor(137/255.f, 90/255.f, 56/255.f, 1);
@@ -102,6 +109,10 @@ public abstract class World implements Screen {
 
         for (DroppedItem di : m_dItems) {
             di.render();
+        }
+
+        for (Character c : m_nonPlayerCharacters) {
+            c.render();
         }
 
         m_shapeRendererRef.end();

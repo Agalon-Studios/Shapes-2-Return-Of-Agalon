@@ -25,7 +25,6 @@ public class DungeonRoom extends World {
         m_doors = new Array<Door>();
         m_enemySpawnPoints = new Array<EnemySpawnPoint>();
         m_chests = new Array<Chest>();
-        m_nonPlayerCharacters = new Array<Character>();
         m_theme = plan.getTheme();
         m_dungeonRef = d;
         m_innerWalls = new Array<Wall>();
@@ -157,6 +156,11 @@ public class DungeonRoom extends World {
         }
 
 
+        for (int i = 0; i < m_chests.size; i++) {
+            if (m_chests.get(i).done()) {
+                m_chests.removeIndex(i);
+            }
+        }
 
         for (int i = 0; i < m_castObjects.size; i++) {
             m_castObjects.get(i).update(delta);
