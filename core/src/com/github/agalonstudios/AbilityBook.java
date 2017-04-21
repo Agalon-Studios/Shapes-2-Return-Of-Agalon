@@ -170,6 +170,14 @@ class AbilityBook implements Screen {
             m_targetBoxes.get(i+4).toBack();
         }
 
+        // add background target
+        Skin backgroundSkin = new Skin();
+        backgroundSkin.add("background", new Texture("Transparent.png"));
+        final Image background = new Image(backgroundSkin, "background");
+        background.setBounds(0,0,Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        m_stage.addActor(background);
+        background.toBack();
+
         // Make Button Drag/Drop-able
         DragAndDrop dragAndDrop = new DragAndDrop();
 
@@ -239,6 +247,23 @@ class AbilityBook implements Screen {
                 }
             });
         }
+        dragAndDrop.addTarget(new Target(background){
+            public boolean drag (Source source, Payload payload, float x, float y, int pointer) {
+                return true;
+            }
+
+            public void reset (Source source, Payload payload) {
+                // called when payload is no longer over the target (by drop or move)
+            }
+
+            public void drop (Source source, Payload payload, float x, float y, int pointer) {
+                // called when payload is dropped on target
+                // keep source where it is
+                source.getActor().setPosition(source.getActor().getX(), source.getActor().getY());
+                m_stage.addActor(source.getActor());
+                source.getActor().toFront();
+            }
+        });
     }
     // TODO: add info when ability button is pressed and remove abilities when dragged to right side
     @Override
