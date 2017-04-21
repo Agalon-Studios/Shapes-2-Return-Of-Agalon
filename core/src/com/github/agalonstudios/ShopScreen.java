@@ -40,8 +40,6 @@ public class ShopScreen implements Screen {
 
     public ShopScreen(final Agalon a, final ShopEntity shop)
     {
-        // TODO GET THE ITEM COUNTS SO YOU CAN ACTUALLY CODE THIS
-
         m_stage = new Stage();
         Gdx.input.setInputProcessor(m_stage);
         int screenWidth = Gdx.graphics.getWidth();
