@@ -97,6 +97,10 @@ public class Item {
         weapon.m_enemyStats = new Stats(0, 0, 0, rand.nextFloat() / 2 + .5f, rand.nextFloat() / 2 + .5f,
                 rand.nextFloat() / 2 + .5f, rand.nextFloat() / 2 + .5f, 0);
 
+        float value = weapon.m_playerStats.total() + weapon.m_enemyStats.total() - 9;
+
+        weapon.m_worth = (int) (20 * value);
+
         weapon.m_isEquipped = false;
         return weapon;
     }

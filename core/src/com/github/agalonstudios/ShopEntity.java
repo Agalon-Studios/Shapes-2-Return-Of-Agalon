@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
@@ -31,7 +32,7 @@ public class ShopEntity extends Entity {
     public Array<Item> generateShopInventory()
     {
         Array<Item> inventory = new Array<Item>();
-        int size = (int)(Math.random()* 15 + 1);
+        int size = (int)(MathUtils.random(3, 8));
         int itemType;
         for(int i = 0; i < size; i++)
         {

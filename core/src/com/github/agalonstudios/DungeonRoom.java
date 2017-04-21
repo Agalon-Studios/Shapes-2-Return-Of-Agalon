@@ -149,8 +149,12 @@ public class DungeonRoom extends World {
         for (int i = 0; i < m_nonPlayerCharacters.size; i++) {
             m_nonPlayerCharacters.get(i).update(delta, this);
             if (!m_nonPlayerCharacters.get(i).alive()) {
-                m_dItems.add(new DroppedItem(MathUtils.random(0, 10) > 7 ? Item.generateWeapon() : Item.generateConsumable(),
-                        new Vector2(m_nonPlayerCharacters.get(i).getX(), m_nonPlayerCharacters.get(i).getY())));
+                if (MathUtils.random(5) < 4)
+                    m_dItems.add(new DroppedItem(MathUtils.random(0, 10) > 7 ? Item.generateWeapon() : Item.generateConsumable(),
+                            new Vector2(m_nonPlayerCharacters.get(i).getX(), m_nonPlayerCharacters.get(i).getY())));
+                else
+                    m_dItems.add(new DroppedItem(MathUtils.random(3, 20),
+                            new Vector2(m_nonPlayerCharacters.get(i).getX(), m_nonPlayerCharacters.get(i).getY())));
                 m_nonPlayerCharacters.removeIndex(i);
             }
         }
