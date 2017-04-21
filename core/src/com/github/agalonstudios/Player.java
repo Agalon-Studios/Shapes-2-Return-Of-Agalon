@@ -63,17 +63,18 @@ public class Player extends Character {
         m_inventory = new Array<Item>(16);
         m_numInInventory = 0;
 
-        for(int i = 0; i < 8; i++){
+        /*for(int i = 0; i < 8; i++){
             m_inventory.add(Item.generateWeapon());
             System.out.println(m_inventory.get(i).getName());
             m_numInInventory++;
         }
-        for(int i = 8; i < 16; i++){
+        */
+        for(int i = 0; i < 16; i++){
             m_inventory.add(Item.generateConsumable());
-            System.out.println(m_inventory.get(i).getName());
+            //System.out.println(m_inventory.get(i).getName());
             m_numInInventory++;
         }
-        System.out.println();
+        //System.out.println();
         m_equipped = null;
 
         m_statCooldowns = new float[8][2];
@@ -101,13 +102,14 @@ public class Player extends Character {
         // stat effect cooldowns
         for(int i = 3; i < 7; i++){
                 if(m_statCooldowns[i][0] > 0){
-                    if(m_statCooldowns[i][1]-delta <= 0){
-                        m_Stats.deModStat(i, m_statCooldowns[i][1]);
+                    if(m_statCooldowns[i][1]-delta < 0){
+                        m_Stats.deModStat(i, m_statCooldowns[i][0]);
                         m_statCooldowns[i][0] = 0;
                         m_statCooldowns[i][1] = 0;
                     }
                     else
                         m_statCooldowns[i][1] -= delta;
+
             }
         }
 
@@ -118,7 +120,8 @@ public class Player extends Character {
     private void handleCasting() {
         for (int i = 0; i < m_equippedAbilities.size; i++) {
             if (m_cooldownTimers.get(i) <= 0) {
-                if (HUD.hudOutputs.abilityIsUsed[i] && m_stamina > m_equippedAbilities.get(i).getStaminaCost()) {
+                if (HUD.hudOutputs.abilityIsUsed[i] && m_stamina >= m_equippedAbilities.get(i).getStaminaCost()) {
+                    System.out.println("imhealingfam");
                     m_equippedAbilities.get(i).cast(this, HUD.hudOutputs.abilityCastVectors[i]);
                     m_cooldownTimers.set(i, m_equippedAbilities.get(i).getCoolDown());
                     m_stamina -= m_equippedAbilities.get(i).getStaminaCost();
@@ -217,7 +220,6 @@ public class Player extends Character {
     }
 
     public void modifyStatsWeapon(Item item){
-        System.out.println(item.getName());
 
         m_Stats.modStat(3, item.getStats().getSpeedChange());
         m_Stats.modStat(4, item.getStats().getDefenseChange());

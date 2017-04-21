@@ -22,6 +22,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Touchpad.TouchpadStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 
+import static sun.audio.AudioPlayer.player;
+
 
 /**
  * Created by Satya Patel on 2/23/2017.
@@ -157,6 +159,7 @@ public class HUD {
 
         hudOutputs.reset();
 
+
         for (int i = 0; i < m_AbilityButtons.size; i++) {
             if (m_AbilityButtons.get(i) instanceof Touchpad) {
                 Touchpad ref = (Touchpad) m_AbilityButtons.get(i);
@@ -175,13 +178,9 @@ public class HUD {
                 Button ref = (Button) m_AbilityButtons.get(i);
 
                 if (abilityWasJustPressed[i] && !ref.isPressed()) {
-                    System.out.println("imhealingfam");
                     hudOutputs.abilityIsUsed[i] = true;
                 }
-
-                if (ref.isPressed()) {
-                    abilityWasJustPressed[i] = true;
-                }
+                    abilityWasJustPressed[i] = ref.isPressed();
 
             }
         }
