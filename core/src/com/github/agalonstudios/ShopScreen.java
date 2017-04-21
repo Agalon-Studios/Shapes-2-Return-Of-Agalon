@@ -344,6 +344,9 @@ public class ShopScreen implements Screen {
             public void changed (ChangeEvent event, Actor actor) {
                 if (m_clicked == null || shop.getShopSize() >= 16)
                     return;
+                // TODO if equipped item set equipped to null
+                if (a.getPlayer().getEquipped() == m_playerInventory.get(Integer.parseInt(m_clicked.getName())))
+                    a.getPlayer().setEquipped(null);
                 m_shopInventory.add(m_playerInventory.get(Integer.parseInt(m_clicked.getName())));
                 a.getPlayer().addGold(m_playerInventory.get(Integer.parseInt(m_clicked.getName())).getWorth());
                 m_playerInventory.removeIndex(Integer.parseInt(m_clicked.getName()));

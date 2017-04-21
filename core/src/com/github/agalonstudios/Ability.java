@@ -45,6 +45,7 @@ public class Ability {
             case SNIPE:
                 m_type = Type.PROJECTILE;
                 m_effect = new Stats(0, 40, 0, 0, 0, 0, 0, 0);
+                m_staminaCost = 5;
                 m_projectileSpeed = 70.f;
                 m_maxCastDistance = 3000;
                 break;
@@ -85,6 +86,10 @@ public class Ability {
 
     public void cast(Player casterRef, Vector2 abilityVector) {
         // TODO generalize
+        Vector2 normalized = new Vector2(abilityVector);
+        float norm = (float) Math.sqrt(abilityVector.x * abilityVector.x + abilityVector.y + abilityVector.y);
+        normalized.x /= norm;
+        normalized.y /= norm;
 
         World worldRef = (World) ((Agalon) Gdx.app.getApplicationListener()).getScreen();
 
@@ -106,7 +111,7 @@ public class Ability {
                 break;
             case PROJECTILE:
                 worldRef.addCastObject(new CastObject(casterRef, new CastInfo(m_projectileSpeed, m_maxCastDistance,
-                        new Rectangle(casterRef.getCentroidX(), casterRef.getCentroidY(), 5, 5), null, null, m_effect, new Vector2(abilityVector))));
+                        new Rectangle(casterRef.getCentroidX(), casterRef.getCentroidY(), 5, 5), null, null, m_effect, new Vector2(normalized))));
                 break;
             case PROJECTILE_AREA_OF_EFFECT:
                 worldRef.addCastObject(new CastObject(casterRef, new CastInfo(m_projectileSpeed, m_maxCastDistance,

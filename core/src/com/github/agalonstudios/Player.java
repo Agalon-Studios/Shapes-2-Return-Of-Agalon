@@ -218,6 +218,14 @@ public class Player extends Character {
             m_stamina += num;
     }
 
+    public Item getEquippedItem() {
+        return m_equipped;
+    }
+
+    public void setEquippedItem(Item i) {
+        m_equipped = i;
+    }
+
     public void modifyStatsConsume(int whichStat, float effectMod, float time){
         // stats are 0-7 of which stat they affect in stats
         m_Stats.modStat(whichStat, effectMod);
