@@ -19,6 +19,8 @@ public class Overworld extends World {
     private Vector2 m_homePlate;
     private Array<ShopEntity> m_shopArray;
 
+    private EnemySpawnPoint esp;
+
 
     // private Shop m_shop;
     // private Chest m_stashChest;
@@ -52,6 +54,8 @@ public class Overworld extends World {
         }
 
         m_dItems.add(new DroppedItem(57, new Vector2(Gdx.graphics.getWidth() * 2 / 3, Gdx.graphics.getHeight() / 2)));
+
+        esp = new EnemySpawnPoint(new EnemySpawnPointItem(10, 500, EnemyType.ENEMY_2), Gdx.graphics.getWidth() * 2 / 3, Gdx.graphics.getHeight() / 2);
     }
 
     @Override
@@ -76,6 +80,8 @@ public class Overworld extends World {
         for (OverworldFlower gf : m_overworldFlowers)
             gf.update(delta);
 
+        if (m_playerRef.overlaps(esp))
+               esp.spawnEnemies(this);
 
         for (int i = 0; i < m_castObjects.size; i++) {
             m_castObjects.get(i).update(delta);
@@ -118,9 +124,6 @@ public class Overworld extends World {
         for (DungeonEntrance d : m_dungeonEntrances)
             d.render();
 
-        for (CastObject co : m_castObjects) {
-            co.render();
-        }
 
         m_shopArray.get(0).render();
 
