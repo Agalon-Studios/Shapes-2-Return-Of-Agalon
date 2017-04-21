@@ -206,11 +206,11 @@ public class Item {
                     break;
                 case SPEED:
                     info+= "Speed Mod: " +  String.format("%.2f%%", (item.getStats().getSpeedChange() - 1) * 100);
-                    info += ", " + item.m_playerStats.consumeStatsInfo();
+                    info += "\n" + item.m_playerStats.consumeStatsInfo();
                     break;
                 case KNOCK:
                     info+= "Knockback Mod: " +  String.format("%.2f%%", (item.getStats().getKnockback() - 1) * 100);
-                    info += ", " + item.m_playerStats.consumeStatsInfo();
+                    info += "\n" + item.m_playerStats.consumeStatsInfo();
                     break;
                 case ENERGY:
                     info+= "Energy: " +  item.m_energyChange;

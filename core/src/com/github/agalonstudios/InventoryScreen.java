@@ -40,6 +40,7 @@ public class InventoryScreen implements Screen {
     private int m_numItems;
     private static int m_numDroppedItems = 0;
     private Label m_goldLabel;
+    private Label m_equippedLabel;
 
 
     public InventoryScreen(final Agalon a) {
@@ -146,6 +147,16 @@ public class InventoryScreen implements Screen {
         m_goldLabel = new Label("Gold: " + a.getPlayer().getGold(), labelStyle);
         m_goldLabel.setPosition((screenWidth/4), (screenHeight*9/10)+50);
         m_stage.addActor(m_goldLabel);
+
+        m_equippedLabel = new Label("Equipped Item", labelStyle);
+        m_equippedLabel.setPosition((screenWidth*1/10), (screenHeight*9/10));
+        if(a.getPlayer().getEquipped() != null){
+            m_equippedLabel.setText(a.getPlayer().getEquipped().getInfo(a.getPlayer().getEquipped()));
+        }
+        m_stage.addActor(m_equippedLabel);
+
+
+
 
         // create the buttons
         int row;
@@ -333,6 +344,7 @@ public class InventoryScreen implements Screen {
                         a.getPlayer().modifyStatsWeapon(m_inventory.get(Integer.parseInt(m_clicked.getName())));
                         a.getPlayer().setEquipped(m_inventory.get(Integer.parseInt(m_clicked.getName())));
                     }
+                    m_equippedLabel.setText(m_inventory.get(Integer.parseInt(m_clicked.getName())).getInfo(m_inventory.get(Integer.parseInt(m_clicked.getName()))));
                 }
             }
         });
