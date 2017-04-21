@@ -342,7 +342,7 @@ public class ShopScreen implements Screen {
         m_sellButton.setPosition((screenWidth*2/4), (screenHeight*4/5));
         m_sellButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
-                if (shop.getShopSize() >= 16)
+                if (shop.getShopSize() >= 16 || m_clicked == null)
                     return;
                 m_shopInventory.add(m_playerInventory.get(Integer.parseInt(m_clicked.getName())));
                 m_playerInventory.removeIndex(Integer.parseInt(m_clicked.getName()));
@@ -365,7 +365,7 @@ public class ShopScreen implements Screen {
         m_buyButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
                 if (a.getPlayer().getGold() < m_shopInventory.get(Integer.parseInt(m_clicked.getName())).getWorth()
-                        || a.getPlayer().getNumInventory() >= 16)
+                        || a.getPlayer().getNumInventory() >= 16 || m_clicked == null)
                     return;
                 a.getPlayer().loseGold(m_shopInventory.get(Integer.parseInt(m_clicked.getName())).getWorth());
                 m_playerInventory.add(m_shopInventory.get(Integer.parseInt(m_clicked.getName())));
