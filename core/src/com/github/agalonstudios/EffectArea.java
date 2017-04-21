@@ -78,15 +78,26 @@ public class EffectArea extends Entity {
         return getPosition();
     }
 
+    @Override
+    public void runCollision(Entity e) {
+        if (m_isActive && e instanceof Character && e != m_characterRef) {
+            ((Character) e).apply(m_effect);
 
+            float xmove, ymove;
+            xmove = e.getCentroidX() - this.getCentroidX();
+            ymove = e.getCentroidY() - this.getCentroidY();
+            float norm = (float) Math.sqrt(xmove * xmove + ymove * ymove);
+            xmove /= norm;
+            ymove /= norm;
+
+            xmove *= m_effect.knockback * m_currentDuration / m_duration;
+            ymove *= m_effect.knockback * m_currentDuration / m_duration;
+
+            e.translate(xmove, ymove);
+        }
+    }
 
     public boolean done() {
         return m_isDone;
-    }
-
-    public void runCollision(Entity o) {
-        if (m_isActive) {
-
-        }
     }
 }
