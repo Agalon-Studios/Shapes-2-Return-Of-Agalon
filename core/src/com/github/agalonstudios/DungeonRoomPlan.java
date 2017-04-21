@@ -249,7 +249,16 @@ public class DungeonRoomPlan {
 
     // TODO make proper
     private EnemyType pickEnemyType(int difficulty, Theme theme) {
-        return MathUtils.random(1) == 1 ? EnemyType.ENEMY_1 : EnemyType.ENEMY_2;
+        switch(MathUtils.random(2)){
+            case (0):
+                return EnemyType.ENEMY_1;
+            case(1):
+                return EnemyType.ENEMY_2;
+            case(2):
+                return EnemyType.ENEMY_3;
+            default:
+                return EnemyType.ENEMY_1;
+        }
     }
 
     public boolean hasDoorInThe(int dir) {
