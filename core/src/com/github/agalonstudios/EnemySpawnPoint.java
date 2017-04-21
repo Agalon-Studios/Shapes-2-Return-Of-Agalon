@@ -66,6 +66,11 @@ public class EnemySpawnPoint extends Entity {
                     world.spawnNPC(new Enemy2(boundingRectangle.x + boundingRectangle.width / 2 + MathUtils.random(-20, 20),
                             boundingRectangle.y + boundingRectangle.height / 2 + MathUtils.random(-20, 20), 1, this));
                 break;
+            case ENEMY_3:
+                for (int i = 0; i < m_enemiesToSpawn; i++)
+                    world.spawnNPC(new Enemy3(boundingRectangle.x + boundingRectangle.width / 2 + MathUtils.random(-20, 20),
+                            boundingRectangle.y + boundingRectangle.height / 2 + MathUtils.random(-20, 20), 1, this));
+                break;
         }
         m_spawned = true;
 
