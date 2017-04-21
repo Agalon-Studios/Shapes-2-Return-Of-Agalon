@@ -119,9 +119,8 @@ public class Player extends Character {
     private void handleCasting() {
         for (int i = 0; i < m_equippedAbilities.size; i++) {
             if (m_cooldownTimers.get(i) <= 0) {
-                if (HUD.hudOutputs.abilityIsUsed[i] && m_stamina >= m_equippedAbilities.get(i).getStaminaCost()) {
+                if (HUD.hudOutputs.abilityIsUsed[i] && m_stamina > m_equippedAbilities.get(i).getStaminaCost()) {
                     m_equippedAbilities.get(i).cast(this, HUD.hudOutputs.abilityCastVectors[i]);
-                    System.out.println(i);
                     m_cooldownTimers.set(i, m_equippedAbilities.get(i).getCoolDown());
                     m_stamina -= m_equippedAbilities.get(i).getStaminaCost();
                     HUD.hudOutputs.abilityIsUsed[i] = false;
@@ -159,6 +158,11 @@ public class Player extends Character {
 
     public void runCollision(Entity e)
     {
+        if (e instanceof CastObject) {
+            if (((CastObject) e).getCaster() == this) {
+                return;
+            }
+        }
         if(e instanceof DroppedItem)
         {
             if (((DroppedItem) e).isGold()) {

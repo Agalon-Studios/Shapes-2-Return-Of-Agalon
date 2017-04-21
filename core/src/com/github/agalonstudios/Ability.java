@@ -2,6 +2,7 @@ package com.github.agalonstudios;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 
@@ -16,6 +17,8 @@ public class Ability {
     private float m_cooldown;
     private int m_staminaCost;
     private AbilityType m_ability;
+
+    private float m_projectileSpeed;
 
     public enum AbilityType {
         STRIKE, CLEAVE, SNIPE, FLAME_BURST, HEAL, ICE_ARROW
@@ -41,6 +44,9 @@ public class Ability {
                 break;
             case SNIPE:
                 m_type = Type.PROJECTILE;
+                m_effect = new Stats(0, 40, 0, 0, 0, 0, 0, 0);
+                m_projectileSpeed = 70.f;
+                m_maxCastDistance = 3000;
                 break;
             case FLAME_BURST:
                 m_type = Type.DROP_AREA_OF_EFFECT;
@@ -59,6 +65,8 @@ public class Ability {
                 break;
             case ICE_ARROW:
                 m_type = Type.PROJECTILE_AREA_OF_EFFECT;
+                m_projectileSpeed = 20.f;
+
                 break;
             case STRIKE:
                 m_type = Type.SELF_AREA_OF_EFFECT;
@@ -91,8 +99,16 @@ public class Ability {
                 break;
             case SELF:
                 casterRef.apply(m_effect);
-
                 break;
+            case PROJECTILE:
+                worldRef.addCastObject(new CastObject(casterRef, new CastInfo(m_projectileSpeed, m_maxCastDistance,
+                        new Rectangle(casterRef.getCentroidX(), casterRef.getCentroidY(), 5, 5), null, null, m_effect, new Vector2(abilityVector))));
+                break;
+            case PROJECTILE_AREA_OF_EFFECT:
+//                worldRef.addCastObject(new CastObject(casterRef, new CastInfo(m_projectileSpeed, m_maxCastDistance,
+//                        new Rectangle(casterRef.getX(), casterRef.getY(), 5, 5),
+//                        m_effectArea, m_initialEffect,
+//                        m_effect, abilityVector)));
             default:
                 break;
         }

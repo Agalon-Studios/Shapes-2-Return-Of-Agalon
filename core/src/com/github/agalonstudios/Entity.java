@@ -24,6 +24,8 @@ public abstract class Entity {
         m_cameraAdjustedVertices = new float[vertices.length];
         m_shape = new Polygon(vertices);
 
+        m_color = Color.MAGENTA;
+
         m_fixed = true;
         m_shape.translate(x, y);
 
@@ -42,6 +44,9 @@ public abstract class Entity {
         m_fixed = true;
         int numSides = 0;
         float baseRotation = 0;
+
+        m_color = Color.MAGENTA;
+
         switch(shape) {
             case TRIANGLE:
                 numSides = 3;
