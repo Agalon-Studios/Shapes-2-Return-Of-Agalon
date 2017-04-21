@@ -55,7 +55,7 @@ public class Player extends Character {
         m_maxStamina = 100;
         m_stamina = 100;
         m_maxHealth = 100;
-        m_health = 100;
+        m_health = 50;
         m_maxAbilityCount = 4;
 
 
@@ -122,6 +122,7 @@ public class Player extends Character {
                     m_equippedAbilities.get(i).cast(this, HUD.hudOutputs.abilityCastVectors[i]);
                     m_cooldownTimers.set(i, m_equippedAbilities.get(i).getCoolDown());
                     m_stamina -= m_equippedAbilities.get(i).getStaminaCost();
+                    HUD.hudOutputs.abilityIsUsed[i] = false;
                 }
             }
         }

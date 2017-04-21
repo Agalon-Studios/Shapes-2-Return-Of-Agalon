@@ -87,4 +87,6 @@ public class Stats {
         System.out.println(meleeDamage + " " + rangeDamage + " " + mageDamage + " " + speedChange + " " +
                             defenseChange + " " + damageChange + " " + knockback + " " + duration);
     }
+
+
 }

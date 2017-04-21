@@ -17,11 +17,11 @@ public abstract class Character extends Entity {
     protected Vector2 m_acceleration;
     protected float m_maxAcceleration;
     protected int m_directionFacing;
-    protected Array<EffectArea> m_effectOverTimes;
     protected Array<Float> m_cooldownTimers;
     protected Stats m_Stats;
     protected Array<Ability> m_equippedAbilities;
     protected int m_maxAbilityCount;
+    protected Array<Stats> m_currentEffects;
     public Character(float radius, Vector2 center, Shape shape, int health, float ms, float ma, int l) {
         super(radius, center, shape);
         m_health = health;
@@ -29,7 +29,6 @@ public abstract class Character extends Entity {
         m_maxSpeed = ms;
         m_currentMaxSpeed = m_maxSpeed;
         m_level = l;
-        m_effectOverTimes = new Array<EffectArea>();
         m_velocity = new Vector2(0, 0);
         m_acceleration = new Vector2(0, 0);
         m_maxAcceleration = ma;
@@ -38,16 +37,18 @@ public abstract class Character extends Entity {
         m_engaged = false;
         m_cooldownTimers = new Array<Float>();
         m_equippedAbilities = new Array<Ability>();
-        m_Stats = new Stats(1, 1, 1, 1, 1, 1, 1, 0);
+        m_Stats = new Stats(0, 0, 0, 1, 1, 1, 1, 0);
+
+        m_currentEffects = new Array<Stats>();
     }
 
     protected void bindVelocity() {
         m_velocity.x *= .95;
         m_velocity.y *= .95;
         float currentVelocity = (float) Math.sqrt(m_velocity.x * m_velocity.x + m_velocity.y * m_velocity.y);
-        if (currentVelocity >  m_currentMaxSpeed) {
-            m_velocity.x *= (m_currentMaxSpeed / currentVelocity);
-            m_velocity.y *= (m_currentMaxSpeed / currentVelocity);
+        if (currentVelocity >  m_currentMaxSpeed * m_Stats.speedChange) {
+            m_velocity.x *= (m_currentMaxSpeed * m_Stats.speedChange / currentVelocity);
+            m_velocity.y *= (m_currentMaxSpeed * m_Stats.speedChange / currentVelocity);
         }
     }
 
@@ -58,8 +59,11 @@ public abstract class Character extends Entity {
     }
 
     public void apply(Stats e) {
-       // m_health -= e.m_meleeDamage + e.m_rangeDamage + e.m_mageDamage;
-        // TODO do all of these
+        m_Stats.speedChange += e.speedChange;
+        m_Stats.damageChange += e.damageChange;
+        m_Stats.defenseChange += e.defenseChange;
+        m_health -= e.mageDamage + e.rangeDamage + e.meleeDamage;
+        m_currentEffects.add(e);
     }
 
     public int getDirectionFacing() {
@@ -69,12 +73,31 @@ public abstract class Character extends Entity {
     public void update(float delta, World world) {
         updateCooldowns(delta);
 
-        m_velocity.x += m_acceleration.x * delta;
-        m_velocity.y += m_acceleration.y * delta;
+        m_velocity.x += m_acceleration.x * delta * m_Stats.speedChange;
+        m_velocity.y += m_acceleration.y * delta * m_Stats.speedChange;
+
+
+        updateStats();
 
         bindVelocity();
 
+        if (m_health > m_maxHealth)
+            m_health = m_maxHealth;
+
         translate(m_velocity.x * delta, m_velocity.y * delta);
+    }
+
+    private void updateStats() {
+        for (int i = 0; i < m_currentEffects.size; i++) {
+           Stats e = m_currentEffects.get(i);
+            if (e.duration <= 0) {
+                m_currentEffects.removeIndex(i--);
+                m_Stats.speedChange -= e.speedChange;
+                m_Stats.damageChange -= e.damageChange;
+                m_Stats.defenseChange -= e.defenseChange;
+            }
+
+        }
     }
 
     public void resetVelocity() {

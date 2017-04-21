@@ -50,10 +50,12 @@ public class Ability {
                 m_effect = null;
                 m_initialEffect = new EffectArea(new Stats(10, 0, 0, 0, 0, 0, 50, 0), 0, 0, new Vector2(), 300, a);
                 m_staminaCost = 30;
-
                 break;
             case HEAL:
                 m_type = Type.SELF;
+                m_effect = new Stats(-10, 0, 0, 0, 0, 0, 0, 0);
+                m_staminaCost = 100;
+                m_cooldown = 10f;
                 break;
             case ICE_ARROW:
                 m_type = Type.PROJECTILE_AREA_OF_EFFECT;
@@ -86,6 +88,10 @@ public class Ability {
                 copyInitialEffect.setPosition(abilityVector.x, abilityVector.y);
                 worldRef.addEffectOverTime(copyEffectArea);
                 worldRef.addEffectOverTime(copyInitialEffect);
+                break;
+            case SELF:
+                casterRef.apply(m_effect);
+
                 break;
             default:
                 break;

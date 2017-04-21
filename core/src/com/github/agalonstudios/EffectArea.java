@@ -1,7 +1,7 @@
 package com.github.agalonstudios;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 import com.github.agalonstudios.Ability.AbilityType;
 /**
@@ -52,12 +52,13 @@ public class EffectArea extends Entity {
     }
 
     public void render() {
+        Camera c = ((Agalon) Gdx.app.getApplicationListener()).getCamera();
         ExtendedShapeRenderer er = ((Agalon) Gdx.app.getApplicationListener()).getShapeRenderer();
 
         switch (m_type) {
             case FLAME_BURST:
                 er.setColor(1, 0, 0, 0.5f);
-                er.circle(getX(), getY(), m_radius);
+                er.circle(getX() - c.position.x, getY() - c.position.y, m_radius);
                 break;
         }
     }

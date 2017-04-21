@@ -15,7 +15,6 @@ public class Overworld extends World {
     private Array<DungeonEntrance> m_dungeonEntrances;
     private Array<OverworldFlower> m_overworldFlowers;
     private Array<OverworldTree> m_trees;
-    private Array<Traveler> m_travelers;
     private Vector2 m_homePlate;
     private Array<ShopEntity> m_shopArray;
 

@@ -174,16 +174,17 @@ public class HUD {
             else if (m_AbilityButtons.get(i) instanceof Button) {
                 Button ref = (Button) m_AbilityButtons.get(i);
 
-                if (abilityWasJustPressed[i] && !ref.isPressed())
+                if (abilityWasJustPressed[i] && !ref.isPressed()) {
+                    System.out.println("imhealingfam");
                     hudOutputs.abilityIsUsed[i] = true;
+                }
+
                 if (ref.isPressed()) {
                     abilityWasJustPressed[i] = true;
                 }
 
             }
         }
-
-
 
         hudOutputs.accelerationUpdate.x = m_movementJoystick.getKnobPercentX() * player.m_maxAcceleration;
         hudOutputs.accelerationUpdate.y = m_movementJoystick.getKnobPercentY() * player.m_maxAcceleration;

@@ -89,10 +89,10 @@ public class Item {
         weapon.m_itemName = generateItemName(weapon.m_theWeaponType, rand);
 
         // generate its stats for speed, defense, damage, knockback
-        weapon.m_playerStats = new Stats(0, 0, 0, rand.nextFloat()/2+1, rand.nextFloat()/2+1,
-                rand.nextFloat()/2+1, rand.nextFloat()/2+1, 0);
-        weapon.m_enemyStats = new Stats(0, 0, 0, rand.nextFloat()/2+1, rand.nextFloat()/2+1,
-                rand.nextFloat()/2+1, rand.nextFloat()/2+1, 0);
+        weapon.m_playerStats = new Stats(0, 0, 0, rand.nextFloat() * 2 + 1, rand.nextFloat() * 2 + 1,
+                rand.nextFloat() * 2 + 1, rand.nextFloat() * 2 + 1, 0);
+        weapon.m_enemyStats = new Stats(0, 0, 0, rand.nextFloat() / 2 + .5f, rand.nextFloat() / 2 + .5f,
+                rand.nextFloat() / 2 + .5f, rand.nextFloat() / 2 + .5f, 0);
 
         weapon.m_isEquipped = false;
         return weapon;
