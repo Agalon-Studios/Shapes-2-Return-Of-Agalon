@@ -46,9 +46,12 @@ public class DeathScreen implements Screen {
 
         timer -= delta;
 
-        if (timer <= 0)
+        if (timer <= 0) {
             game.setScreen(new MainMenu(game));
-
+            game.turnOffMusic();
+            game.switchPlaying();
+            game.setMainMusic(true);
+        }
 
     }
 
