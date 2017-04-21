@@ -156,13 +156,17 @@ public class Player extends Character {
         m_numInInventory--;
     }
 
-    public void runCollision(Entity e)
-    {
+    public void runCollision(Entity e) {
+
+        if (e instanceof Character)
+            m_health -= 3;
+
         if (e instanceof CastObject) {
             if (((CastObject) e).getCaster() == this) {
                 return;
             }
         }
+
         if(e instanceof DroppedItem)
         {
             if (((DroppedItem) e).isGold()) {

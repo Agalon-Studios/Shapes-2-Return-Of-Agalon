@@ -56,7 +56,7 @@ public class Ability {
                 m_effectArea = new EffectArea(new Stats(10, 0, 0, 0, 0, 0, 0, 0), 5 , 2, new Vector2(), 300, a);
                 m_effect = null;
                 m_initialEffect = new EffectArea(new Stats(100, 0, 0, 0, 0, 0, 50, 0), 0, 0, new Vector2(), 300, a);
-                m_staminaCost = 30;
+                m_staminaCost = 60;
                 break;
             case HEAL:
                 m_type = Type.SELF;
