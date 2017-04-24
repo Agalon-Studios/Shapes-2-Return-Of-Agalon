@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class Agalon extends Game {
-	private ExtendedShapeRenderer m_shapeRenderer;
+    private ExtendedShapeRenderer m_shapeRenderer;
     private OrthographicCamera m_camera;
     private Overworld m_overworld;
     private Music m_overworldMusic;
@@ -22,8 +22,6 @@ public class Agalon extends Game {
 
 	@Override
     public void create () {
-        loadPlayer();
-
         setMainMusic(true);
 
         ScreenScale.init(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -35,10 +33,6 @@ public class Agalon extends Game {
         m_font = new BitmapFont();
         //this.setScreen(new Splash(this));
         this.setScreen(new MainMenu(this));
-    }
-
-    private void loadPlayer() {
-        // if savedata load from save data
     }
 
     public void changeToWorld(World w) {
